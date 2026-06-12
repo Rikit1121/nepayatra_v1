@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Himalayan Atlas palette */
+    --atlas-blue: 215 52% 22%;
+    --atlas-blue-light: 215 45% 35%;
+    --atlas-saffron: 34 88% 52%;
+    --atlas-stone: 220 9% 46%;
+    --atlas-mist: 220 16% 96%;
+    --atlas-snow: 210 25% 99%;
+
+    --background: var(--atlas-snow);
+    --foreground: 215 35% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 35% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 35% 14%;
+    --primary: var(--atlas-blue);
+    --primary-foreground: var(--atlas-snow);
+    --secondary: var(--atlas-mist);
+    --secondary-foreground: 215 35% 18%;
+    --muted: var(--atlas-mist);
+    --muted-foreground: var(--atlas-stone);
+    --accent: 34 88% 96%;
+    --accent-foreground: 34 70% 28%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 14% 88%;
+    --input: 220 14% 88%;
+    --ring: var(--atlas-blue);
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --atlas-blue: 215 45% 55%;
+    --atlas-blue-light: 215 40% 65%;
+    --atlas-saffron: 34 85% 58%;
+    --atlas-stone: 220 12% 65%;
+    --atlas-mist: 220 18% 14%;
+    --atlas-snow: 210 20% 98%;
+
+    --background: 215 35% 8%;
+    --foreground: 210 25% 96%;
+    --card: 215 30% 11%;
+    --card-foreground: 210 25% 96%;
+    --popover: 215 30% 11%;
+    --popover-foreground: 210 25% 96%;
+    --primary: var(--atlas-blue);
+    --primary-foreground: 215 35% 10%;
+    --secondary: 220 18% 16%;
+    --secondary-foreground: 210 25% 96%;
+    --muted: 220 18% 16%;
+    --muted-foreground: var(--atlas-stone);
+    --accent: 34 40% 18%;
+    --accent-foreground: 34 85% 75%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 16% 20%;
+    --input: 220 16% 20%;
+    --ring: var(--atlas-blue);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    overflow-x: hidden;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .atlas-dest-image-wrap {
+    @apply relative aspect-[4/3] w-full overflow-hidden bg-muted;
+  }
+  .atlas-dest-image-wrap img {
+    @apply h-full w-full object-cover;
+  }
+  .atlas-dest-image-scrim {
+    @apply pointer-events-none absolute inset-0 bg-gradient-to-t from-[hsl(215_52%_12%/0.55)] via-transparent to-transparent;
+  }
+  .atlas-dest-badge {
+    @apply absolute left-3 top-3 z-10 border-0 bg-[hsl(var(--atlas-blue))]/90 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm;
+  }
+  .atlas-route-summary-accent {
+    @apply border-l-4 border-l-[hsl(var(--atlas-blue))] pl-4;
+  }
+  .atlas-timeline-dot {
+    @apply h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--atlas-blue))];
+  }
+}
+
+/* MapLibre canvases must stay inside their containers. */
+.maplibregl-map {
+  max-width: 100%;
+}
+
+.nepayatra-popup .maplibregl-popup-content {
+  @apply rounded-xl p-0 shadow-xl ring-1 ring-black/5;
+}
