@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Facebook, Instagram, Youtube, Twitter, Mail, Phone } from 'lucide-react'
 import { getSiteSettings } from '@/lib/site-settings'
 import { SITE } from '@/lib/site-config'
+import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 import { SiteLogo } from '@/components/public/site-logo'
 
 const FOOTER_SECTIONS = [
@@ -50,7 +51,7 @@ export async function SiteFooter() {
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/background2.jpg"
+          src={SITE_BACKGROUNDS.footer}
           alt=""
           aria-hidden
           className="h-full w-full object-cover object-center"

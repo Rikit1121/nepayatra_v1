@@ -6,8 +6,10 @@ import { SearchInput } from '@/components/public/search-input'
 import { BorderCrossingCard } from '@/components/public/cards'
 import { EmptyState, CardGridSkeleton } from '@/components/public/states'
 import { AdvisorCta } from '@/components/public/advisor-cta'
+import { SectionBackground } from '@/components/public/section-background'
 import { getBorderCrossings } from '@/lib/supabase/queries'
 import { SITE } from '@/lib/site-config'
+import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 
 export const revalidate = 3600
 
@@ -62,16 +64,22 @@ export default async function BorderCrossingsPage({ searchParams }: PageProps) {
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Border Crossings' }]} />
       </PageHero>
 
-      <div className="container py-8">
-        <div className="max-w-md">
-          <SearchInput placeholder="Search by town (e.g. Raxaul, Sunauli)…" />
+      <SectionBackground
+        imageSrc={SITE_BACKGROUNDS.listings}
+        overlayClassName="bg-[#f8fafc]/94"
+        imageClassName="opacity-30 saturate-[0.75]"
+      >
+        <div className="container py-8">
+          <div className="max-w-md">
+            <SearchInput placeholder="Search by town (e.g. Raxaul, Sunauli)…" />
+          </div>
+          <div className="mt-8">
+            <Suspense key={q} fallback={<CardGridSkeleton />}>
+              <CrossingsGrid search={q} />
+            </Suspense>
+          </div>
         </div>
-        <div className="mt-8">
-          <Suspense key={q} fallback={<CardGridSkeleton />}>
-            <CrossingsGrid search={q} />
-          </Suspense>
-        </div>
-      </div>
+      </SectionBackground>
 
       <AdvisorCta context="choosing a border crossing" />
     </>

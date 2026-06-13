@@ -13,9 +13,9 @@ export interface Journey {
 }
 
 const CARD_ACCENTS = [
-  'border-[hsl(var(--atlas-blue))]/20 bg-[hsl(var(--atlas-blue))]/[0.04]',
-  'border-[hsl(var(--atlas-saffron))]/25 bg-[hsl(var(--atlas-saffron))]/[0.04]',
-  'border-emerald-300/30 bg-emerald-50/60',
+  'border-[hsl(var(--atlas-blue))]/20 bg-[hsl(var(--atlas-blue))]/[0.06] shadow-sm backdrop-blur-sm',
+  'border-[hsl(var(--atlas-saffron))]/25 bg-[hsl(var(--atlas-saffron))]/[0.08] shadow-sm backdrop-blur-sm',
+  'border-emerald-300/30 bg-emerald-50/70 shadow-sm backdrop-blur-sm',
 ]
 
 export function JourneysCarousel({ journeys }: { journeys: Journey[] }) {

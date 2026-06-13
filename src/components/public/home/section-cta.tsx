@@ -16,7 +16,7 @@ export function SectionCta({ message, buttonLabel, href, className }: SectionCta
     <div
       className={cn(
         'mt-10 flex flex-col gap-4 rounded-xl border border-[hsl(var(--atlas-blue))]/15',
-        'bg-[hsl(var(--atlas-blue))]/[0.04] p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6',
+        'bg-[hsl(var(--atlas-blue))]/[0.05] p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-6',
         className
       )}
     >

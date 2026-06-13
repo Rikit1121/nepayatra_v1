@@ -16,6 +16,7 @@ import {
 } from '@/lib/supabase/queries'
 import { slugify } from '@/lib/utils'
 import { SITE } from '@/lib/site-config'
+import { resolveBorderCrossingImage } from '@/lib/local-images'
 
 export const revalidate = 3600
 
@@ -54,6 +55,7 @@ export default async function BorderCrossingDetailPage({ params }: PageProps) {
   if (!crossing) notFound()
 
   const nearby = await getNearbyDestinations(crossing.latitude, crossing.longitude, 4)
+  const crossingImage = resolveBorderCrossingImage(slug)
 
   const hasCoords = crossing.latitude != null && crossing.longitude != null
   const nearbyMarkers: DestinationMapMarker[] = nearby.map((d) => ({
@@ -105,6 +107,17 @@ export default async function BorderCrossingDetailPage({ params }: PageProps) {
           )}
         </div>
       </section>
+
+      {crossingImage ? (
+        <div className="container py-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={crossingImage}
+            alt={`${crossing.crossing_name} border crossing`}
+            className="aspect-[21/9] w-full rounded-xl object-cover"
+          />
+        </div>
+      ) : null}
 
       <div className="container grid gap-10 py-8 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-8">

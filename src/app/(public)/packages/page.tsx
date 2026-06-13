@@ -6,8 +6,10 @@ import { FilterSelect } from '@/components/public/filter-select'
 import { PackageCard } from '@/components/public/cards'
 import { EmptyState, CardGridSkeleton } from '@/components/public/states'
 import { AdvisorCta } from '@/components/public/advisor-cta'
+import { SectionBackground } from '@/components/public/section-background'
 import { getPackages } from '@/lib/supabase/queries'
 import { PACKAGE_DIFFICULTY_LABELS, SITE } from '@/lib/site-config'
+import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 
 export const revalidate = 3600
 
@@ -66,20 +68,26 @@ export default async function PackagesPage({ searchParams }: PageProps) {
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Suggested Trips' }]} />
       </PageHero>
 
-      <div className="container py-8">
-        <div className="max-w-xs">
-          <FilterSelect
-            paramKey="difficulty"
-            placeholder="All difficulty levels"
-            options={DIFFICULTY_OPTIONS}
-          />
+      <SectionBackground
+        imageSrc={SITE_BACKGROUNDS.listings}
+        overlayClassName="bg-[#f8fafc]/94"
+        imageClassName="opacity-30 saturate-[0.75]"
+      >
+        <div className="container py-8">
+          <div className="max-w-xs">
+            <FilterSelect
+              paramKey="difficulty"
+              placeholder="All difficulty levels"
+              options={DIFFICULTY_OPTIONS}
+            />
+          </div>
+          <div className="mt-8">
+            <Suspense key={difficulty} fallback={<CardGridSkeleton />}>
+              <PackagesGrid difficulty={difficulty} />
+            </Suspense>
+          </div>
         </div>
-        <div className="mt-8">
-          <Suspense key={difficulty} fallback={<CardGridSkeleton />}>
-            <PackagesGrid difficulty={difficulty} />
-          </Suspense>
-        </div>
-      </div>
+      </SectionBackground>
 
       <AdvisorCta context="choosing a suggested trip" />
     </>

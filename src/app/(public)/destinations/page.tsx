@@ -7,8 +7,10 @@ import { FilterSelect } from '@/components/public/filter-select'
 import { DestinationCard } from '@/components/public/cards'
 import { EmptyState, CardGridSkeleton } from '@/components/public/states'
 import { AdvisorCta } from '@/components/public/advisor-cta'
+import { SectionBackground } from '@/components/public/section-background'
 import { getDestinations } from '@/lib/supabase/queries'
 import { DESTINATION_CATEGORY_LABELS, PROVINCE_LABELS, SITE } from '@/lib/site-config'
+import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 
 export const revalidate = 3600
 
@@ -80,21 +82,27 @@ export default async function DestinationsPage({ searchParams }: PageProps) {
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Destinations' }]} />
       </PageHero>
 
-      <div className="container py-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="flex-1">
-            <SearchInput placeholder="Search destinations…" />
+      <SectionBackground
+        imageSrc={SITE_BACKGROUNDS.listings}
+        overlayClassName="bg-[#f8fafc]/94"
+        imageClassName="opacity-30 saturate-[0.75]"
+      >
+        <div className="container py-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="flex-1">
+              <SearchInput placeholder="Search destinations…" />
+            </div>
+            <FilterSelect paramKey="category" placeholder="All categories" options={CATEGORY_OPTIONS} />
+            <FilterSelect paramKey="province" placeholder="All provinces" options={PROVINCE_OPTIONS} />
           </div>
-          <FilterSelect paramKey="category" placeholder="All categories" options={CATEGORY_OPTIONS} />
-          <FilterSelect paramKey="province" placeholder="All provinces" options={PROVINCE_OPTIONS} />
-        </div>
 
-        <div className="mt-8">
-          <Suspense key={`${q}-${category}-${province}`} fallback={<CardGridSkeleton />}>
-            <DestinationsGrid search={q} category={category} province={province} />
-          </Suspense>
+          <div className="mt-8">
+            <Suspense key={`${q}-${category}-${province}`} fallback={<CardGridSkeleton />}>
+              <DestinationsGrid search={q} category={category} province={province} />
+            </Suspense>
+          </div>
         </div>
-      </div>
+      </SectionBackground>
 
       <AdvisorCta context="choosing destinations" />
     </>

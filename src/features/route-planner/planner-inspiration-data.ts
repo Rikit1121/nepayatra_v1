@@ -1,6 +1,7 @@
 import type { PlannerDestination, PlannerTravelStyle } from '@/lib/route-planner/types'
 import { CATEGORY_DEFAULT_DAYS } from '@/lib/route-planner/config'
 import { DESTINATION_CATEGORY_LABELS } from '@/lib/site-config'
+import { resolveDestinationImage } from '@/lib/local-images'
 
 export interface InspirationCard {
   id: string
@@ -11,24 +12,13 @@ export interface InspirationCard {
   description: string
 }
 
-const CATEGORY_IMAGE_ID: Record<string, string> = {
-  religious: 'photo-1585350584893-6bc7e17b6e4d',
-  cultural: 'photo-1558618666-fcd25c85cd64',
-  adventure: 'photo-1486911278844-a81c5267e227',
-  trekking: 'photo-1540202404-a2f29016b523',
-  wildlife: 'photo-1518877593221-1f28583780b4',
-  scenic: 'photo-1544735716-392fe2489ffa',
-  heritage: 'photo-1588392382834-a891154bca4d',
-}
-
-const DEFAULT_IMAGE_ID = 'photo-1506905925346-21bda4d32df4'
-
-function unsplashUrl(id: string, w = 800) {
-  return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`
-}
-
-function destinationImage(category: string) {
-  return unsplashUrl(CATEGORY_IMAGE_ID[category] ?? DEFAULT_IMAGE_ID)
+const ROUTE_STYLE_IMAGES: Record<PlannerTravelStyle, string> = {
+  adventure: '/images/Annapurna-base-camp-trek-8-days.jpg',
+  religious: '/images/Pashupatinath.webp',
+  wildlife: '/images/Chitwan.jpg',
+  scenic: '/images/pokhara.jpg',
+  family: '/images/Kathmandu.jpg',
+  mixed: '/images/sarangkot.webp',
 }
 
 function recommendedDaysFor(category: string) {
@@ -40,7 +30,7 @@ function destinationToCard(d: PlannerDestination): InspirationCard {
   return {
     id: d.id,
     title: d.name,
-    imageUrl: destinationImage(d.category),
+    imageUrl: resolveDestinationImage(d.slug, d.category, null),
     styleBadge: DESTINATION_CATEGORY_LABELS[d.category] ?? d.category,
     recommendedDays: recommendedDaysFor(d.category),
     description: d.short_description,
@@ -80,20 +70,11 @@ function pickDestinations(destinations: PlannerDestination[], slugs: string[]): 
   return picked.map(destinationToCard)
 }
 
-const ROUTE_STYLE_IMAGES: Record<PlannerTravelStyle, string> = {
-  adventure: 'photo-1486911278844-a81c5267e227',
-  religious: 'photo-1585350584893-6bc7e17b6e4d',
-  wildlife: 'photo-1518877593221-1f28583780b4',
-  scenic: 'photo-1544735716-392fe2489ffa',
-  family: 'photo-1558618666-fcd25c85cd64',
-  mixed: 'photo-1506905925346-21bda4d32df4',
-}
-
 const ROUTE_INSPIRATION: InspirationCard[] = [
   {
     id: 'route-adventure',
     title: 'Adventure Route',
-    imageUrl: unsplashUrl(ROUTE_STYLE_IMAGES.adventure),
+    imageUrl: ROUTE_STYLE_IMAGES.adventure,
     styleBadge: 'Adventure',
     recommendedDays: '8–12 days',
     description: 'Pokhara, Annapurna viewpoints and high-altitude trekking bases.',
@@ -101,7 +82,7 @@ const ROUTE_INSPIRATION: InspirationCard[] = [
   {
     id: 'route-pilgrimage',
     title: 'Pilgrimage Route',
-    imageUrl: unsplashUrl(ROUTE_STYLE_IMAGES.religious),
+    imageUrl: ROUTE_STYLE_IMAGES.religious,
     styleBadge: 'Religious',
     recommendedDays: '6–9 days',
     description: 'Kathmandu, Lumbini and Janakpur — Nepal\'s most sacred sites.',
@@ -109,7 +90,7 @@ const ROUTE_INSPIRATION: InspirationCard[] = [
   {
     id: 'route-wildlife',
     title: 'Wildlife Route',
-    imageUrl: unsplashUrl(ROUTE_STYLE_IMAGES.wildlife),
+    imageUrl: ROUTE_STYLE_IMAGES.wildlife,
     styleBadge: 'Wildlife',
     recommendedDays: '5–8 days',
     description: 'Chitwan and Bardia — jungle safaris and river plains.',
@@ -117,7 +98,7 @@ const ROUTE_INSPIRATION: InspirationCard[] = [
   {
     id: 'route-scenic',
     title: 'Scenic Route',
-    imageUrl: unsplashUrl(ROUTE_STYLE_IMAGES.scenic),
+    imageUrl: ROUTE_STYLE_IMAGES.scenic,
     styleBadge: 'Scenic',
     recommendedDays: '7–10 days',
     description: 'Kathmandu, Pokhara and lakeside Himalayan viewpoints.',
@@ -125,7 +106,7 @@ const ROUTE_INSPIRATION: InspirationCard[] = [
   {
     id: 'route-family',
     title: 'Family Route',
-    imageUrl: unsplashUrl(ROUTE_STYLE_IMAGES.family),
+    imageUrl: ROUTE_STYLE_IMAGES.family,
     styleBadge: 'Family',
     recommendedDays: '6–8 days',
     description: 'Easy cities, gentle hills and national parks for all ages.',
@@ -133,7 +114,7 @@ const ROUTE_INSPIRATION: InspirationCard[] = [
   {
     id: 'route-mixed',
     title: 'Highlights Route',
-    imageUrl: unsplashUrl(ROUTE_STYLE_IMAGES.mixed),
+    imageUrl: ROUTE_STYLE_IMAGES.mixed,
     styleBadge: 'Mixed',
     recommendedDays: '7–14 days',
     description: 'A balanced first trip — culture, scenery and a taste of everything.',

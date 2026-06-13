@@ -19,6 +19,7 @@ import { FaqAccordion } from '@/components/public/faq-accordion'
 import { AdvisorCta } from '@/components/public/advisor-cta'
 
 import { getSiteSettings } from '@/lib/site-settings'
+import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 
 import {
 
@@ -134,6 +135,8 @@ export default async function HomePage() {
 
         subheadline={settings.homepage_hero_subheadline}
 
+        heroImageUrl={settings.homepage_hero_image_url}
+
         destinations={mapDestinations}
 
         borders={mapBorders}
@@ -181,6 +184,8 @@ export default async function HomePage() {
           viewAllHref="/destinations"
 
           tone="muted"
+
+          backgroundImage={SITE_BACKGROUNDS.featuredDestinations}
 
           stagger
 
@@ -234,7 +239,7 @@ export default async function HomePage() {
 
           tone="white"
 
-          backgroundImage="/images/background3.jpg"
+          backgroundImage={SITE_BACKGROUNDS.travelGuides}
 
           stagger
 
@@ -273,6 +278,8 @@ export default async function HomePage() {
           viewAllHref="/packages"
 
           tone="muted"
+
+          backgroundImage={SITE_BACKGROUNDS.suggestedTrips}
 
           stagger
 

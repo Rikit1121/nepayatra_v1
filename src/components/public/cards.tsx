@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { MapPin, Clock, ArrowRight, Milestone, BookOpen } from 'lucide-react'
@@ -13,28 +14,13 @@ import {
   PACKAGE_DIFFICULTY_LABELS,
   KB_CATEGORY_LABELS,
 } from '@/lib/site-config'
+import { resolveDestinationImage, resolvePackageImage, resolveBorderCrossingImage, categoryFallbackImage } from '@/lib/local-images'
 import type {
   Destination,
   Package,
   KnowledgeBaseArticle,
   BorderCrossing,
 } from '@/lib/supabase/types'
-
-const CATEGORY_IMAGE_ID: Record<string, string> = {
-  religious: 'photo-1585350584893-6bc7e17b6e4d',
-  cultural: 'photo-1558618666-fcd25c85cd64',
-  adventure: 'photo-1486911278844-a81c5267e227',
-  trekking: 'photo-1540202404-a2f29016b523',
-  wildlife: 'photo-1518877593221-1f28583780b4',
-  scenic: 'photo-1544735716-392fe2489ffa',
-  heritage: 'photo-1588392382834-a891154bca4d',
-}
-
-const DEFAULT_IMAGE_ID = 'photo-1506905925346-21bda4d32df4'
-
-function unsplashUrl(id: string, w = 800) {
-  return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`
-}
 
 const cardLift = {
   rest: { y: 0 },
@@ -48,26 +34,37 @@ const imageZoom = {
 
 function DestinationCardImage({
   src,
+  fallbackSrc,
   alt,
-  category,
   reduceMotion,
 }: {
-  src: string | null
+  src: string
+  fallbackSrc: string
   alt: string
-  category?: string
   reduceMotion: boolean | null
 }) {
-  const imageUrl =
-    src ||
-    unsplashUrl(
-      category ? (CATEGORY_IMAGE_ID[category] ?? DEFAULT_IMAGE_ID) : DEFAULT_IMAGE_ID
-    )
+  const [activeSrc, setActiveSrc] = React.useState(src)
+
+  React.useEffect(() => {
+    setActiveSrc(src)
+  }, [src])
+
+  const img = (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
+      src={activeSrc}
+      alt={alt}
+      loading="lazy"
+      onError={() => {
+        if (activeSrc !== fallbackSrc) setActiveSrc(fallbackSrc)
+      }}
+    />
+  )
 
   if (reduceMotion) {
     return (
       <div className="atlas-dest-image-wrap overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={imageUrl} alt={alt} loading="lazy" />
+        {img}
         <div className="atlas-dest-image-scrim" aria-hidden />
       </div>
     )
@@ -76,8 +73,7 @@ function DestinationCardImage({
   return (
     <div className="overflow-hidden">
       <motion.div className="atlas-dest-image-wrap" variants={imageZoom}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={imageUrl} alt={alt} loading="lazy" />
+        {img}
         <div className="atlas-dest-image-scrim" aria-hidden />
       </motion.div>
     </div>
@@ -111,15 +107,20 @@ function CardShell({
 
 export function DestinationCard({ destination }: { destination: Destination }) {
   const reduceMotion = useReducedMotion()
+  const imageUrl = resolveDestinationImage(
+    destination.slug,
+    destination.category,
+    destination.hero_image_url
+  )
 
   return (
     <Link href={`/destinations/${destination.slug}`} className="group block">
       <CardShell className={cn(atlasCardDestination)} reduceMotion={reduceMotion}>
         <div className="relative">
           <DestinationCardImage
-            src={destination.hero_image_url}
+            src={imageUrl}
+            fallbackSrc={categoryFallbackImage(destination.category)}
             alt={destination.name}
-            category={destination.category}
             reduceMotion={reduceMotion}
           />
           <Badge className="atlas-dest-badge">
@@ -148,24 +149,17 @@ export function DestinationCard({ destination }: { destination: Destination }) {
   )
 }
 
-const PKG_FALLBACK_IDS: string[] = [
-  'photo-1506905925346-21bda4d32df4',
-  'photo-1544735716-392fe2489ffa',
-  'photo-1540202404-a2f29016b523',
-]
-
 export function PackageCard({ pkg }: { pkg: Package }) {
   const reduceMotion = useReducedMotion()
-  const fallbackIdx =
-    pkg.slug.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) % PKG_FALLBACK_IDS.length
-  const fallbackId = PKG_FALLBACK_IDS[fallbackIdx]
+  const imageUrl = resolvePackageImage(pkg.slug, pkg.hero_image_url)
 
   return (
     <Link href={`/packages/${pkg.slug}`} className="group block">
       <CardShell className={cn(atlasCardDestination)} reduceMotion={reduceMotion}>
         <div className="relative">
           <DestinationCardImage
-            src={pkg.hero_image_url ?? unsplashUrl(fallbackId)}
+            src={imageUrl}
+            fallbackSrc="/images/pokhara.jpg"
             alt={pkg.title}
             reduceMotion={reduceMotion}
           />
@@ -245,6 +239,7 @@ export function ArticleCard({
 export function BorderCrossingCard({ crossing }: { crossing: BorderCrossing }) {
   const reduceMotion = useReducedMotion()
   const slug = slugify(crossing.crossing_name)
+  const imageUrl = resolveBorderCrossingImage(slug)
 
   return (
     <Link href={`/border-crossings/${slug}`} className="group block">
@@ -252,11 +247,21 @@ export function BorderCrossingCard({ crossing }: { crossing: BorderCrossing }) {
         className={cn(atlasCardDestination, 'border-l-4 border-l-[hsl(var(--atlas-blue))]')}
         reduceMotion={reduceMotion}
       >
+        {imageUrl && (
+          <DestinationCardImage
+            src={imageUrl}
+            fallbackSrc="/images/birgunj.jpeg"
+            alt={`${crossing.crossing_name} border crossing`}
+            reduceMotion={reduceMotion}
+          />
+        )}
         <div className="p-5 sm:p-6">
           <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--atlas-saffron))]/15 text-[hsl(var(--atlas-saffron))]">
-              <Milestone className="h-5 w-5" />
-            </div>
+            {!imageUrl && (
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--atlas-saffron))]/15 text-[hsl(var(--atlas-saffron))]">
+                <Milestone className="h-5 w-5" />
+              </div>
+            )}
             <div className="min-w-0 flex-1">
               <h3 className="font-display text-lg font-bold leading-tight transition-colors group-hover:text-[hsl(var(--atlas-blue))]">
                 {crossing.crossing_name}

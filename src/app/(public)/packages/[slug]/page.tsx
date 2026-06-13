@@ -9,6 +9,7 @@ import { JsonLd } from '@/components/public/json-ld'
 import { getPackageBySlug, getPackageSlugs } from '@/lib/supabase/queries'
 import { formatInr } from '@/lib/utils'
 import { PACKAGE_DIFFICULTY_LABELS, SITE } from '@/lib/site-config'
+import { absoluteImageUrl, resolvePackageImage } from '@/lib/local-images'
 
 export const revalidate = 3600
 
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = pkg.seo_title ?? pkg.title
   const description = pkg.seo_description ?? pkg.description ?? `${pkg.duration_days}-day Nepal itinerary.`
   const url = `${SITE.url}/packages/${pkg.slug}`
+  const imageUrl = resolvePackageImage(pkg.slug, pkg.hero_image_url)
 
   return {
     title,
@@ -39,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url,
       type: 'article',
-      images: pkg.hero_image_url ? [{ url: pkg.hero_image_url }] : undefined,
+      images: [{ url: absoluteImageUrl(imageUrl, SITE.url) }],
     },
     twitter: { card: 'summary_large_image', title, description },
   }
@@ -50,12 +52,14 @@ export default async function PackageDetailPage({ params }: PageProps) {
   const pkg = await getPackageBySlug(slug)
   if (!pkg) notFound()
 
+  const heroImage = resolvePackageImage(pkg.slug, pkg.hero_image_url)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'TouristTrip',
     name: pkg.title,
     description: pkg.description ?? undefined,
-    ...(pkg.hero_image_url ? { image: pkg.hero_image_url } : {}),
+    image: absoluteImageUrl(heroImage, SITE.url),
   }
 
   return (
@@ -91,16 +95,14 @@ export default async function PackageDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {pkg.hero_image_url && (
-        <div className="container py-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={pkg.hero_image_url}
-            alt={pkg.title}
-            className="aspect-[21/9] w-full rounded-xl object-cover"
-          />
-        </div>
-      )}
+      <div className="container py-6">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={heroImage}
+          alt={pkg.title}
+          className="aspect-[21/9] w-full rounded-xl object-cover"
+        />
+      </div>
 
       <div className="container grid gap-10 py-8 lg:grid-cols-3">
         <div className="space-y-8 lg:col-span-2">

@@ -30,14 +30,6 @@ export default async function MapPage() {
     getActiveTravelAlerts(),
   ])
 
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('[MapPage] data loaded', {
-      destinations: destinations.length,
-      borders: borders.length,
-      alerts: alerts.length,
-    })
-  }
-
   const data: MapData = {
     destinations,
     borders,

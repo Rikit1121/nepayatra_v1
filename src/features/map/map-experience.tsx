@@ -7,25 +7,14 @@ import type { MapData } from '@/lib/map'
 
 const FullMap = dynamic(
   () =>
-    import('./full-map')
-      .then((m) => {
-        if (process.env.NODE_ENV !== 'production') {
-          console.log('[MapExperience] FullMap chunk loaded')
-        }
-        return m.FullMap
-      })
+    import('./full-map').then((m) => m.FullMap)
       .catch((err) => {
         console.error('[MapExperience] FullMap dynamic import failed', err)
         throw err
       }),
   {
     ssr: false,
-    loading: () => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('[MapExperience] FullMap chunk loading…')
-      }
-      return <MapSkeleton className="min-h-[420px]" />
-    },
+    loading: () => <MapSkeleton className="min-h-[420px]" />,
   }
 )
 

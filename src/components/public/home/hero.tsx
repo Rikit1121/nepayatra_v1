@@ -3,23 +3,27 @@ import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { HomeMap } from '@/features/map'
 import { atlasMapFrame } from '@/lib/design-system'
+import { resolveHeroImage } from '@/lib/local-images'
 import type { DestinationMapMarker, BorderCrossingMapMarker } from '@/lib/map'
 
 interface HeroProps {
   headline: string
   subheadline: string
+  heroImageUrl?: string
   destinations: DestinationMapMarker[]
   borders: BorderCrossingMapMarker[]
 }
 
-export function Hero({ headline, subheadline, destinations, borders }: HeroProps) {
+export function Hero({ headline, subheadline, heroImageUrl, destinations, borders }: HeroProps) {
+  const heroImage = resolveHeroImage(heroImageUrl)
+
   return (
     <section className="relative flex min-h-[600px] flex-col overflow-hidden border-b">
       {/* Nepal mountain background */}
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=80"
+          src={heroImage}
           alt="Himalayan mountains Nepal"
           className="h-full w-full object-cover object-center"
           fetchPriority="high"

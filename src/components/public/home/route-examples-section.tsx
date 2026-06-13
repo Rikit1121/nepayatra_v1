@@ -5,12 +5,13 @@ import {
   atlasDisplayMd,
   atlasSectionDivider,
   atlasSectionEyebrow,
-  atlasSectionMuted,
   atlasSectionPadding,
 } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { JourneysCarousel, type Journey } from './journeys-carousel'
 import { SectionCta } from './section-cta'
+import { SectionBackground } from '@/components/public/section-background'
+import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 
 interface RouteExamplesSectionProps {
   journeys: Journey[]
@@ -18,8 +19,13 @@ interface RouteExamplesSectionProps {
 
 export function RouteExamplesSection({ journeys }: RouteExamplesSectionProps) {
   return (
-    <section className={cn(atlasSectionMuted, atlasSectionDivider, 'overflow-hidden border-b border-border/30')}>
-      <div className={cn('container', atlasSectionPadding, 'pb-8')}>
+    <section className={cn(atlasSectionDivider, 'overflow-hidden border-b border-border/30')}>
+      <SectionBackground
+        imageSrc={SITE_BACKGROUNDS.routeExamples}
+        overlayClassName="bg-[#f8fafc]/93"
+        imageClassName="opacity-35 saturate-[0.8]"
+      >
+        <div className={cn('container', atlasSectionPadding, 'pb-8')}>
         <FadeInView>
           <p className={atlasSectionEyebrow}>Route examples</p>
           <h2 className={cn('mt-2', atlasDisplayMd)}>Routes other travelers actually take</h2>
@@ -27,17 +33,18 @@ export function RouteExamplesSection({ journeys }: RouteExamplesSectionProps) {
             Open one to tweak it in the planner — change the border, add stops, adjust days.
           </p>
         </FadeInView>
-      </div>
+        </div>
 
-      <JourneysCarousel journeys={journeys} />
+        <JourneysCarousel journeys={journeys} />
 
-      <div className={cn('container', 'pb-14 md:pb-16')}>
-        <SectionCta
-          message="Need help choosing the best route?"
-          buttonLabel="Talk to a route advisor"
-          href="/contact"
-        />
-      </div>
+        <div className={cn('container', 'pb-14 md:pb-16')}>
+          <SectionCta
+            message="Need help choosing the best route?"
+            buttonLabel="Talk to a route advisor"
+            href="/contact"
+          />
+        </div>
+      </SectionBackground>
     </section>
   )
 }

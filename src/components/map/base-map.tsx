@@ -83,12 +83,6 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
         resizeObserverRef.current.observe(container)
       }
 
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('[BaseMap] onLoad', {
-          width: evt.target.getContainer()?.clientWidth,
-          height: evt.target.getContainer()?.clientHeight,
-        })
-      }
       onLoad?.(evt)
     },
     [onLoad]

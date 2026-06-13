@@ -6,6 +6,7 @@ import { whatsappLink, cn } from '@/lib/utils'
 import { getActiveAdvisors } from '@/lib/supabase/queries'
 import { atlasCardPlanner, atlasDisplayMd } from '@/lib/design-system'
 import { SectionBackground } from '@/components/public/section-background'
+import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 
 interface AdvisorCtaProps {
   heading?: string
@@ -34,7 +35,7 @@ export async function AdvisorCta({
   return (
     <section className="border-t border-border/40">
       <SectionBackground
-        imageSrc="/images/background4.jpg"
+        imageSrc={SITE_BACKGROUNDS.advisorCta}
         overlayClassName="bg-[#f8fafc]/92"
         imageClassName="opacity-45 saturate-[0.8] brightness-110"
         className="px-4 py-12 text-center md:py-14"

@@ -18,6 +18,7 @@ import {
   getNearbyDestinations,
 } from '@/lib/supabase/queries'
 import { DESTINATION_CATEGORY_LABELS, PROVINCE_LABELS, SITE } from '@/lib/site-config'
+import { absoluteImageUrl, resolveDestinationImage } from '@/lib/local-images'
 
 export const revalidate = 3600
 
@@ -38,6 +39,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = destination.seo_title ?? destination.name
   const description = destination.seo_description ?? destination.short_description
   const url = `${SITE.url}/destinations/${destination.slug}`
+  const imageUrl = resolveDestinationImage(
+    destination.slug,
+    destination.category,
+    destination.hero_image_url
+  )
 
   return {
     title,
@@ -48,13 +54,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url,
       type: 'article',
-      images: destination.hero_image_url ? [{ url: destination.hero_image_url }] : undefined,
+      images: [{ url: absoluteImageUrl(imageUrl, SITE.url) }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: destination.hero_image_url ? [destination.hero_image_url] : undefined,
+      images: [absoluteImageUrl(imageUrl, SITE.url)],
     },
   }
 }
@@ -88,6 +94,12 @@ export default async function DestinationDetailPage({ params }: PageProps) {
   const hasCoords =
     Number.isFinite(destination.longitude) && Number.isFinite(destination.latitude)
 
+  const heroImage = resolveDestinationImage(
+    destination.slug,
+    destination.category,
+    destination.hero_image_url
+  )
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'TouristDestination',
@@ -98,7 +110,7 @@ export default async function DestinationDetailPage({ params }: PageProps) {
       latitude: destination.latitude,
       longitude: destination.longitude,
     },
-    ...(destination.hero_image_url ? { image: destination.hero_image_url } : {}),
+    image: absoluteImageUrl(heroImage, SITE.url),
     address: {
       '@type': 'PostalAddress',
       addressRegion: PROVINCE_LABELS[destination.province] ?? destination.province,
@@ -136,16 +148,14 @@ export default async function DestinationDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {destination.hero_image_url && (
-        <div className="container py-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={destination.hero_image_url}
-            alt={destination.name}
-            className="aspect-[21/9] w-full rounded-xl object-cover"
-          />
-        </div>
-      )}
+      <div className="container py-6">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={heroImage}
+          alt={destination.name}
+          className="aspect-[21/9] w-full rounded-xl object-cover"
+        />
+      </div>
 
       <div className="container grid gap-10 py-8 lg:grid-cols-3">
         {/* Main column */}
