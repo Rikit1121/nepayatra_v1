@@ -33,14 +33,14 @@ export function createPublicClient() {
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!url || !anonKey) {
-    // Surfaces a clear, actionable message instead of an opaque fetch error.
-    console.error(
-      '[supabase] Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. ' +
-        'Public data queries will fail until these are set in .env.local.'
+    throw new Error(
+      'Missing Supabase env vars: set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY ' +
+        'in .env.local (local) or your host dashboard (Vercel → Settings → Environment Variables). ' +
+        'Both are required at build time for static page generation.'
     )
   }
 
-  return createClient<Database>(url!, anonKey!, {
+  return createClient<Database>(url, anonKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,

@@ -3,12 +3,25 @@
  * Dynamic values (contact, social) come from site_settings at runtime.
  */
 
+const DEFAULT_SITE_URL = 'https://nepayatra.com'
+
+function resolveSiteUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  if (!raw || raw === 'NEXT_PUBLIC_SITE_URL') return DEFAULT_SITE_URL
+
+  try {
+    return new URL(raw).origin
+  } catch {
+    return DEFAULT_SITE_URL
+  }
+}
+
 export const SITE = {
   name: 'NepaYatra',
   identity: "Explorer's Companion",
   description:
     'Plan your Nepal trip from India — borders, destinations, routes, and real answers to the questions Indian travelers actually ask.',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nepayatra.com',
+  url: resolveSiteUrl(),
   locale: 'en_IN',
 } as const
 
