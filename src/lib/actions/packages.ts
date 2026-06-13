@@ -40,7 +40,7 @@ export async function createPackage(
     return { success: false, error: `Database error: ${error.message}` }
   }
 
-  revalidateTag('packages')
+  revalidateTag('packages', 'max')
   revalidatePath('/admin/packages')
   revalidatePath(`/packages/${data.slug}`)
   revalidatePath('/')
@@ -80,7 +80,7 @@ export async function updatePackage(
     return { success: false, error: `Database error: ${error.message}` }
   }
 
-  revalidateTag('packages')
+  revalidateTag('packages', 'max')
   revalidatePath('/admin/packages')
   revalidatePath(`/packages/${data.slug}`)
   revalidatePath('/')
@@ -102,7 +102,7 @@ export async function deletePackage(id: string): Promise<ActionResult> {
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('packages')
+  revalidateTag('packages', 'max')
   revalidatePath('/admin/packages')
   if (existing?.slug) revalidatePath(`/packages/${existing.slug}`)
   revalidatePath('/')
@@ -119,7 +119,7 @@ export async function togglePackageFeatured(
 
   if (error) return { success: false, error: error.message }
 
-  revalidateTag('packages')
+  revalidateTag('packages', 'max')
   revalidatePath('/admin/packages')
   revalidatePath('/')
 

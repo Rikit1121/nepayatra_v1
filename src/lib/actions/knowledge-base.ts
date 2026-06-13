@@ -40,7 +40,7 @@ export async function createKnowledgeBaseArticle(
     return { success: false, error: `Database error: ${error.message}` }
   }
 
-  revalidateTag('knowledge-base')
+  revalidateTag('knowledge-base', 'max')
   revalidatePath('/admin/knowledge-base')
   revalidatePath(`/knowledge-base/${data.slug}`)
   revalidatePath('/guides')
@@ -80,7 +80,7 @@ export async function updateKnowledgeBaseArticle(
     return { success: false, error: `Database error: ${error.message}` }
   }
 
-  revalidateTag('knowledge-base')
+  revalidateTag('knowledge-base', 'max')
   revalidatePath('/admin/knowledge-base')
   revalidatePath(`/knowledge-base/${data.slug}`)
   revalidatePath('/guides')
@@ -102,7 +102,7 @@ export async function deleteKnowledgeBaseArticle(id: string): Promise<ActionResu
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('knowledge-base')
+  revalidateTag('knowledge-base', 'max')
   revalidatePath('/admin/knowledge-base')
   if (existing?.slug) revalidatePath(`/knowledge-base/${existing.slug}`)
   revalidatePath('/guides')
@@ -119,7 +119,7 @@ export async function toggleKnowledgeBaseFeatured(
 
   if (error) return { success: false, error: error.message }
 
-  revalidateTag('knowledge-base')
+  revalidateTag('knowledge-base', 'max')
   revalidatePath('/admin/knowledge-base')
 
   return { success: true, data: undefined }

@@ -31,7 +31,7 @@ export async function createFaq(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('faqs')
+  revalidateTag('faqs', 'max')
   revalidatePath('/admin/faqs')
   revalidatePath('/faq')
 
@@ -61,7 +61,7 @@ export async function updateFaq(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('faqs')
+  revalidateTag('faqs', 'max')
   revalidatePath('/admin/faqs')
   revalidatePath('/faq')
 
@@ -76,7 +76,7 @@ export async function deleteFaq(id: string): Promise<ActionResult> {
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('faqs')
+  revalidateTag('faqs', 'max')
   revalidatePath('/admin/faqs')
   revalidatePath('/faq')
 

@@ -31,7 +31,7 @@ export async function createAdvisor(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('advisors')
+  revalidateTag('advisors', 'max')
   revalidatePath('/admin/advisors')
   revalidatePath('/advisors')
   revalidatePath('/')
@@ -62,7 +62,7 @@ export async function updateAdvisor(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('advisors')
+  revalidateTag('advisors', 'max')
   revalidatePath('/admin/advisors')
   revalidatePath('/advisors')
   revalidatePath('/')
@@ -78,7 +78,7 @@ export async function deleteAdvisor(id: string): Promise<ActionResult> {
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('advisors')
+  revalidateTag('advisors', 'max')
   revalidatePath('/admin/advisors')
   revalidatePath('/advisors')
   revalidatePath('/')
@@ -95,7 +95,7 @@ export async function toggleAdvisorActive(
 
   if (error) return { success: false, error: error.message }
 
-  revalidateTag('advisors')
+  revalidateTag('advisors', 'max')
   revalidatePath('/admin/advisors')
   revalidatePath('/advisors')
 

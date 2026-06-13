@@ -57,7 +57,7 @@ export async function createDestination(
     return { success: false, error: `Database error: ${error.message}` }
   }
 
-  revalidateTag('destinations')
+  revalidateTag('destinations', 'max')
   revalidatePath('/admin/destinations')
   revalidatePath(`/destinations/${data.slug}`)
   revalidatePath('/')
@@ -102,7 +102,7 @@ export async function updateDestination(
     return { success: false, error: `Database error: ${error.message}` }
   }
 
-  revalidateTag('destinations')
+  revalidateTag('destinations', 'max')
   revalidatePath('/admin/destinations')
   revalidatePath(`/admin/destinations/${id}/edit`)
   revalidatePath(`/destinations/${data.slug}`)
@@ -131,7 +131,7 @@ export async function deleteDestination(id: string): Promise<ActionResult> {
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('destinations')
+  revalidateTag('destinations', 'max')
   revalidatePath('/admin/destinations')
   if (existing?.slug) revalidatePath(`/destinations/${existing.slug}`)
   revalidatePath('/')
@@ -156,7 +156,7 @@ export async function toggleDestinationFeatured(
 
   if (error) return { success: false, error: error.message }
 
-  revalidateTag('destinations')
+  revalidateTag('destinations', 'max')
   revalidatePath('/admin/destinations')
   revalidatePath('/')
 

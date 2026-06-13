@@ -31,7 +31,7 @@ export async function createBorderCrossing(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('border-crossings')
+  revalidateTag('border-crossings', 'max')
   revalidatePath('/admin/border-crossings')
   revalidatePath('/border-crossings')
 
@@ -61,7 +61,7 @@ export async function updateBorderCrossing(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('border-crossings')
+  revalidateTag('border-crossings', 'max')
   revalidatePath('/admin/border-crossings')
   revalidatePath('/border-crossings')
 
@@ -76,7 +76,7 @@ export async function deleteBorderCrossing(id: string): Promise<ActionResult> {
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('border-crossings')
+  revalidateTag('border-crossings', 'max')
   revalidatePath('/admin/border-crossings')
   revalidatePath('/border-crossings')
 
@@ -95,7 +95,7 @@ export async function toggleBorderCrossingFeatured(
 
   if (error) return { success: false, error: error.message }
 
-  revalidateTag('border-crossings')
+  revalidateTag('border-crossings', 'max')
   revalidatePath('/admin/border-crossings')
 
   return { success: true, data: undefined }

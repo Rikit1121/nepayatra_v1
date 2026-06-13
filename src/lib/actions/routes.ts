@@ -48,7 +48,7 @@ export async function createRoute(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('routes')
+  revalidateTag('routes', 'max')
   revalidatePath('/admin/routes')
 
   return { success: true, data, message: 'Route connection created.' }
@@ -77,7 +77,7 @@ export async function updateRoute(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('routes')
+  revalidateTag('routes', 'max')
   revalidatePath('/admin/routes')
 
   return { success: true, data, message: 'Route connection updated.' }
@@ -91,7 +91,7 @@ export async function deleteRoute(id: string): Promise<ActionResult> {
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('routes')
+  revalidateTag('routes', 'max')
   revalidatePath('/admin/routes')
 
   return { success: true, data: undefined, message: 'Route connection deleted.' }

@@ -41,7 +41,7 @@ export async function updateSiteSettings(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('settings')
+  revalidateTag('settings', 'max')
   revalidatePath('/admin/settings')
   revalidatePath('/')
 

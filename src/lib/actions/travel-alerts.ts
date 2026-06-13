@@ -31,7 +31,7 @@ export async function createTravelAlert(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('travel-alerts')
+  revalidateTag('travel-alerts', 'max')
   revalidatePath('/admin/travel-alerts')
   revalidatePath('/')
 
@@ -61,7 +61,7 @@ export async function updateTravelAlert(
 
   if (error) return { success: false, error: `Database error: ${error.message}` }
 
-  revalidateTag('travel-alerts')
+  revalidateTag('travel-alerts', 'max')
   revalidatePath('/admin/travel-alerts')
   revalidatePath('/')
 
@@ -76,7 +76,7 @@ export async function deleteTravelAlert(id: string): Promise<ActionResult> {
 
   if (error) return { success: false, error: `Failed to delete: ${error.message}` }
 
-  revalidateTag('travel-alerts')
+  revalidateTag('travel-alerts', 'max')
   revalidatePath('/admin/travel-alerts')
   revalidatePath('/')
 
@@ -92,7 +92,7 @@ export async function toggleTravelAlertActive(
 
   if (error) return { success: false, error: error.message }
 
-  revalidateTag('travel-alerts')
+  revalidateTag('travel-alerts', 'max')
   revalidatePath('/admin/travel-alerts')
   revalidatePath('/')
 
