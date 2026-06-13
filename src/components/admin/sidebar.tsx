@@ -19,10 +19,10 @@ import {
   LogOut,
   Menu,
   X,
-  Mountain,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { SiteLogo } from '@/components/public/site-logo'
 import * as React from 'react'
 
 const NAV_ITEMS = [
@@ -103,8 +103,8 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
     <div className="flex h-full flex-col">
       {/* Logo */}
       <div className="flex h-14 items-center border-b px-4">
-        <Link href="/admin/dashboard" className="flex items-center gap-2 font-semibold text-foreground">
-          <Mountain className="h-5 w-5 text-primary" />
+        <Link href="/admin/dashboard" className="flex items-center gap-2.5 font-semibold text-foreground">
+          <SiteLogo size={24} alt="" />
           <span>NepaYatra</span>
           <span className="ml-1 rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
             Admin

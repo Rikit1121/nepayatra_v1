@@ -1,6 +1,5 @@
 'use client'
 
-import 'maplibre-gl/dist/maplibre-gl.css'
 import * as React from 'react'
 import Map, {
   NavigationControl,
@@ -33,6 +32,18 @@ interface BaseMapProps {
   cursor?: string
 }
 
+/** Camera props only — never pass width/height back into Map (breaks rendering). */
+function toCameraProps(viewState: ViewState) {
+  return {
+    longitude: viewState.longitude,
+    latitude: viewState.latitude,
+    zoom: viewState.zoom,
+    bearing: viewState.bearing ?? 0,
+    pitch: viewState.pitch ?? 0,
+    padding: viewState.padding,
+  }
+}
+
 /**
  * Thin, reusable wrapper around react-map-gl's MapLibre map.
  * Applies the shared OSM base style, zoom limits and (optional) controls.
@@ -55,11 +66,46 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
   },
   ref
 ) {
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const resizeObserverRef = React.useRef<ResizeObserver | null>(null)
+  const camera = toCameraProps(viewState)
+
+  const handleLoad = React.useCallback(
+    (evt: MapEvent) => {
+      evt.target.resize()
+
+      const container = containerRef.current
+      if (container) {
+        resizeObserverRef.current?.disconnect()
+        resizeObserverRef.current = new ResizeObserver(() => {
+          evt.target.resize()
+        })
+        resizeObserverRef.current.observe(container)
+      }
+
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[BaseMap] onLoad', {
+          width: evt.target.getContainer()?.clientWidth,
+          height: evt.target.getContainer()?.clientHeight,
+        })
+      }
+      onLoad?.(evt)
+    },
+    [onLoad]
+  )
+
+  React.useEffect(() => {
+    return () => resizeObserverRef.current?.disconnect()
+  }, [])
+
   return (
-    <div className={cn('relative h-full w-full overflow-hidden', className)}>
+    <div
+      ref={containerRef}
+      className={cn('relative h-full w-full overflow-hidden', className)}
+    >
       <Map
         ref={ref}
-        {...viewState}
+        {...camera}
         onMove={onMove}
         mapStyle={getMapStyle()}
         minZoom={MIN_ZOOM}
@@ -70,7 +116,7 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
         onClick={onClick}
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
-        onLoad={onLoad}
+        onLoad={handleLoad}
         cursor={cursor}
         attributionControl={{ compact: true }}
         reuseMaps={false}

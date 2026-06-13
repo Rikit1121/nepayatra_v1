@@ -20,6 +20,69 @@ const transparentGradient: ExpressionSpecification = [
   'transparent',
 ]
 
+type GradientStop = { position: number; color: string }
+
+/** Build a line-progress gradient with stops sorted in strictly ascending order. */
+function buildLineProgressGradient(stops: GradientStop[]): ExpressionSpecification {
+  const merged = stops
+    .map(({ position, color }) => ({
+      position: Math.min(1, Math.max(0, position)),
+      color,
+    }))
+    .sort((a, b) => a.position - b.position)
+    .reduce<GradientStop[]>((acc, stop) => {
+      const prev = acc[acc.length - 1]
+      if (prev && prev.position === stop.position) {
+        prev.color = stop.color
+      } else {
+        acc.push({ ...stop })
+      }
+      return acc
+    }, [])
+
+  if (merged.length === 0) {
+    return transparentGradient
+  }
+
+  if (merged.length === 1) {
+    const { color } = merged[0]
+    return ['interpolate', ['linear'], ['line-progress'], 0, color, 1, color]
+  }
+
+  const expression: (string | number | string[])[] = ['interpolate', ['linear'], ['line-progress']]
+  for (const { position, color } of merged) {
+    expression.push(position, color)
+  }
+
+  return expression as ExpressionSpecification
+}
+
+/** Trace reveal: colored from 0 → progress, transparent from progress → 1. */
+function buildTraceGradient(progress: number, color: string): ExpressionSpecification {
+  const t = Math.min(1, Math.max(0, progress))
+
+  if (t <= 0) {
+    return transparentGradient
+  }
+
+  if (t >= 1) {
+    return buildLineProgressGradient([
+      { position: 0, color },
+      { position: 1, color },
+    ])
+  }
+
+  const epsilon = 1e-4
+  const fadeStart = Math.max(0, t - epsilon)
+
+  return buildLineProgressGradient([
+    { position: 0, color },
+    { position: fadeStart, color },
+    { position: t, color: 'transparent' },
+    { position: 1, color: 'transparent' },
+  ])
+}
+
 function prefersReducedMotion() {
   if (typeof window === 'undefined') return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -54,25 +117,17 @@ export function RoutePreviewLayer({
     const instance = map?.getMap()
     if (!instance) return
 
-    const setGradient = (cut: number, head: number) => {
+    const applyTraceGradient = (progress: number) => {
       if (!instance.getLayer(ROUTE_TRACE_LAYER_ID)) return
-      instance.setPaintProperty(ROUTE_TRACE_LAYER_ID, 'line-gradient', [
-        'interpolate',
-        ['linear'],
-        ['line-progress'],
-        0,
-        style.color,
-        cut,
-        style.color,
-        head,
-        'transparent',
-        1,
-        'transparent',
-      ])
+      instance.setPaintProperty(
+        ROUTE_TRACE_LAYER_ID,
+        'line-gradient',
+        buildTraceGradient(progress, style.color)
+      )
     }
 
     if (prefersReducedMotion()) {
-      setGradient(1, 1)
+      // Base layer already shows the full route; keep trace transparent.
       return
     }
 
@@ -81,7 +136,7 @@ export function RoutePreviewLayer({
     const start = performance.now()
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1)
-      setGradient(Math.max(t - 0.0001, 0), Math.min(t, 1))
+      applyTraceGradient(t)
       if (t < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)

@@ -31,6 +31,14 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
+  // /admin root — send to login or dashboard based on session
+  if (pathname === '/admin') {
+    const target = request.nextUrl.clone()
+    target.pathname = user ? '/admin/dashboard' : '/admin/login'
+    target.search = ''
+    return NextResponse.redirect(target)
+  }
+
   // Protect all /admin routes except /admin/login
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     if (!user) {
@@ -52,5 +60,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin', '/admin/:path*'],
 }

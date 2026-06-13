@@ -1,117 +1,201 @@
+'use client'
+
+import * as React from 'react'
 import Link from 'next/link'
-import { ArrowRight, Compass, Map as MapIcon } from 'lucide-react'
+import { ArrowRight, CheckCircle2, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { FadeInView, MotionCard } from '@/components/motion'
 import { ORIGIN_REGIONS, TRAVEL_STYLES } from '@/lib/site-config'
 import {
-  atlasCardPlanner,
   atlasDisplayMd,
+  atlasSectionDivider,
   atlasSectionEyebrow,
-  atlasStepDefault,
+  atlasSectionMuted,
+  atlasSectionPadding,
+  atlasSectionWhite,
 } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
-export function ComingFromIndia() {
+// ─────────────────────────────────────────────────────────────
+// Coming from India? — interactive region selector
+// ─────────────────────────────────────────────────────────────
+
+const REGION_BORDER_INFO: Record<string, {
+  crossing: string
+  distance: string
+  tip: string
+  nepaliSide: string
+}> = {
+  delhi:           { crossing: 'Raxaul–Birgunj', distance: '~1,150 km from Delhi', tip: 'Overnight train to Raxaul is the classic route', nepaliSide: 'Birgunj → Kathmandu (5 h)' },
+  bihar:           { crossing: 'Raxaul–Birgunj', distance: '~100 km from Patna', tip: 'Most popular crossing for Bihar travelers', nepaliSide: 'Birgunj → Kathmandu (5 h)' },
+  'uttar-pradesh': { crossing: 'Sunauli–Bhairahawa', distance: '~135 km from Gorakhpur', tip: 'Great access to Lumbini and Pokhara', nepaliSide: 'Bhairahawa → Pokhara (2.5 h)' },
+  'west-bengal':   { crossing: 'Panitanki–Kakarbhitta', distance: '~75 km from Siliguri', tip: 'Eastern Nepal gateway near the tea hills', nepaliSide: 'Kakarbhitta → Biratnagar (1.5 h)' },
+  uttarakhand:     { crossing: 'Banbasa–Mahendranagar', distance: '~95 km from Pithoragarh', tip: 'Far-west Nepal — quiet and uncrowded', nepaliSide: 'Mahendranagar → Dhangadhi (2 h)' },
+}
+
+// Accent colors for each region card (no emojis)
+const REGION_ACCENT: Record<string, { bar: string; activeBg: string; activeRing: string }> = {
+  delhi:           { bar: 'bg-[hsl(var(--atlas-blue))]',     activeBg: 'bg-[hsl(var(--atlas-blue))]/8',     activeRing: 'ring-[hsl(var(--atlas-blue))]/30' },
+  bihar:           { bar: 'bg-emerald-500',                  activeBg: 'bg-emerald-50',                      activeRing: 'ring-emerald-300' },
+  'uttar-pradesh': { bar: 'bg-[hsl(var(--atlas-saffron))]',  activeBg: 'bg-[hsl(var(--atlas-saffron))]/8',  activeRing: 'ring-[hsl(var(--atlas-saffron))]/30' },
+  'west-bengal':   { bar: 'bg-purple-500',                   activeBg: 'bg-purple-50',                       activeRing: 'ring-purple-300' },
+  uttarakhand:     { bar: 'bg-rose-500',                     activeBg: 'bg-rose-50',                         activeRing: 'ring-rose-300' },
+}
+
+export function ComingFromIndia({ tone = 'white' }: { tone?: 'white' | 'muted' }) {
+  const [selected, setSelected] = React.useState<string | null>(null)
+  const info = selected ? REGION_BORDER_INFO[selected] : null
+  const region = ORIGIN_REGIONS.find((r) => r.value === selected)
+  const bg = tone === 'muted' ? atlasSectionMuted : atlasSectionWhite
+
   return (
-    <section className="bg-[hsl(var(--atlas-mist))]/60">
-      <div className="container py-12 md:py-16">
-        <p className={atlasSectionEyebrow}>Entry from India</p>
-        <h2 className={`mt-2 ${atlasDisplayMd}`}>Coming from India?</h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Where you start usually decides which border makes sense. Pick your region to see the
-          closest way in.
-        </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {ORIGIN_REGIONS.map((region) => (
-            <Link
-              key={region.value}
-              href={`/route-planner?from=${region.value}`}
-              className="group block"
-            >
-              <div className={cn(atlasStepDefault, 'h-full p-4 group-hover:border-[hsl(var(--atlas-blue-light))]')}>
-                <p className="font-display font-bold group-hover:text-[hsl(var(--atlas-blue))]">
-                  {region.label}
+    <section className={cn(bg, atlasSectionDivider, 'border-b border-border/30')}>
+      <div className={cn('container', atlasSectionPadding)}>
+        <FadeInView>
+          <p className={atlasSectionEyebrow}>Entry from India</p>
+          <h2 className={`mt-2 ${atlasDisplayMd}`}>Coming from India?</h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Where you start decides which border makes sense.{' '}
+            <strong className="text-foreground">Click your region</strong> to see the nearest crossing.
+          </p>
+        </FadeInView>
+
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {ORIGIN_REGIONS.map((r) => {
+            const isActive = selected === r.value
+            const accent = REGION_ACCENT[r.value]
+            return (
+              <MotionCard key={r.value}>
+                <button
+                  onClick={() => setSelected(isActive ? null : r.value)}
+                  className={cn(
+                    'group relative w-full overflow-hidden rounded-xl border bg-card p-4 text-left shadow-sm transition-colors duration-200',
+                    isActive
+                      ? `border-transparent ${accent.activeBg} ring-2 ${accent.activeRing} shadow-md`
+                      : 'border-border hover:border-[hsl(var(--atlas-blue-light))]/50 hover:shadow-md'
+                  )}
+                >
+                {/* Colored top accent bar */}
+                <div className={cn('mb-3 h-1 w-8 rounded-full', accent.bar)} />
+                {/* Active check */}
+                {isActive && (
+                  <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-[hsl(var(--atlas-blue))]" />
+                )}
+                <p className={cn('font-display font-bold transition-colors', isActive ? 'text-[hsl(var(--atlas-blue))]' : 'group-hover:text-[hsl(var(--atlas-blue))]')}>
+                  {r.label}
                 </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{region.note}</p>
-              </div>
-            </Link>
-          ))}
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{r.note}</p>
+                </button>
+              </MotionCard>
+            )
+          })}
         </div>
+
+        {/* Animated info panel */}
+        {info && region && (
+          <div
+            key={selected}
+            className="fade-up-1 mt-6 overflow-hidden rounded-xl border border-[hsl(var(--atlas-blue))]/20 bg-white p-5 shadow-sm sm:p-6"
+          >
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="space-y-3">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[hsl(var(--atlas-saffron))]">
+                    Nearest Border Crossing
+                  </p>
+                  <p className="mt-1 font-display text-xl font-bold text-[hsl(var(--atlas-blue))]">
+                    {info.crossing}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="rounded-full border border-border bg-[hsl(var(--atlas-mist))]/60 px-3 py-1 text-xs font-medium">
+                    {info.distance}
+                  </span>
+                  <span className="rounded-full border border-border bg-[hsl(var(--atlas-mist))]/60 px-3 py-1 text-xs font-medium">
+                    {info.nepaliSide}
+                  </span>
+                </div>
+                <p className="text-sm leading-relaxed text-muted-foreground">{info.tip}</p>
+              </div>
+              <div className="shrink-0">
+                <Button asChild size="sm" className="whitespace-nowrap shadow-sm">
+                  <Link href={`/route-planner?from=${selected}`}>
+                    Plan from {region.label} <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <p className="mt-10 text-center text-sm text-muted-foreground">
+          Once you know your entry point, explore real route examples below.
+        </p>
       </div>
     </section>
   )
 }
 
-export function TravelStyles() {
-  return (
-    <section>
-      <div className="container py-12 md:py-16">
-        <p className={atlasSectionEyebrow}>Find your journey</p>
-        <h2 className={`mt-2 ${atlasDisplayMd}`}>What kind of trip is this?</h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Nepal works for very different travelers. Start from what you care about most.
-        </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {TRAVEL_STYLES.map((style) => (
-            <Link
-              key={style.value}
-              href={`/destinations?style=${style.value}`}
-              className="group block"
-            >
-              <div className={cn(atlasStepDefault, 'h-full p-4 group-hover:border-[hsl(var(--atlas-blue-light))]')}>
-                <p className="font-display font-bold group-hover:text-[hsl(var(--atlas-blue))]">
-                  {style.label}
-                </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                  {style.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+// ─────────────────────────────────────────────────────────────
+// Travel Styles — right-scrolling carousel
+// ─────────────────────────────────────────────────────────────
+
+const STYLE_COLORS: Record<string, { bg: string; bar: string; text: string }> = {
+  religious: { bg: 'bg-amber-50  border-amber-200/50',  bar: 'bg-amber-400',  text: 'text-amber-700' },
+  family:    { bg: 'bg-sky-50    border-sky-200/50',    bar: 'bg-sky-400',    text: 'text-sky-700' },
+  adventure: { bg: 'bg-emerald-50 border-emerald-200/50', bar: 'bg-emerald-500', text: 'text-emerald-700' },
+  wildlife:  { bg: 'bg-lime-50   border-lime-200/50',   bar: 'bg-lime-500',   text: 'text-lime-700' },
+  scenic:    { bg: 'bg-violet-50 border-violet-200/50', bar: 'bg-violet-500', text: 'text-violet-700' },
 }
 
-export function FeaturePreviews() {
-  return (
-    <section className="bg-[hsl(var(--atlas-mist))]/60">
-      <div className="container grid gap-6 py-12 md:grid-cols-2 md:py-16">
-        <div className={cn(atlasCardPlanner, 'flex h-full flex-col p-6 sm:p-8')}>
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[hsl(var(--atlas-blue))]/10 text-[hsl(var(--atlas-blue))]">
-            <MapIcon className="h-6 w-6" />
-          </div>
-          <h3 className="mt-5 font-display text-xl font-bold">Border Explorer</h3>
-          <p className="mt-2 flex-1 leading-relaxed text-muted-foreground">
-            Five road crossings connect India and Nepal. Compare them side by side — which is
-            open, what is on each side, and where each one takes you.
-          </p>
-          <Button asChild variant="outline" className="mt-6 self-start border-[hsl(var(--atlas-blue))]/30">
-            <Link href="/border-crossings">
-              Compare crossings <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
+export function TravelStyles({ tone = 'muted' }: { tone?: 'white' | 'muted' }) {
+  const items = [...TRAVEL_STYLES, ...TRAVEL_STYLES, ...TRAVEL_STYLES, ...TRAVEL_STYLES]
+  const bg = tone === 'muted' ? atlasSectionMuted : atlasSectionWhite
 
-        <div
-          className={cn(
-            atlasCardPlanner,
-            'flex h-full flex-col border-[hsl(var(--atlas-blue))]/25 bg-[hsl(var(--atlas-blue))]/[0.03] p-6 sm:p-8'
-          )}
-        >
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[hsl(var(--atlas-saffron))]/15 text-[hsl(var(--atlas-saffron))]">
-            <Compass className="h-6 w-6" />
-          </div>
-          <h3 className="mt-5 font-display text-xl font-bold">Route Planner</h3>
-          <p className="mt-2 flex-1 leading-relaxed text-muted-foreground">
-            Tell us where you are entering, what you want to see and how many days you have. We
-            map a sensible route with travel times and transport.
+  return (
+    <section className={cn(bg, atlasSectionDivider, 'overflow-hidden border-b border-border/30')}>
+      <div className={cn('container mb-8', atlasSectionPadding, 'pb-0')}>
+        <FadeInView>
+          <p className={atlasSectionEyebrow}>Travel styles</p>
+          <h2 className={`mt-2 ${atlasDisplayMd}`}>What kind of trip is this?</h2>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Nepal works for very different travelers. Pick what you care about most — then explore
+            destinations that match your style.
           </p>
-          <Button asChild className="mt-6 self-start shadow-sm">
-            <Link href="/route-planner">
-              Plan my route <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+        </FadeInView>
+      </div>
+
+      <div className="overflow-hidden pb-14 md:pb-16">
+        <div className="marquee-right flex gap-4 pb-1" style={{ width: 'max-content' }}>
+          {items.map((style, i) => {
+            const colors = STYLE_COLORS[style.value] ?? { bg: 'bg-gray-50 border-gray-200/50', bar: 'bg-gray-400', text: 'text-gray-700' }
+            return (
+              <Link
+                key={`${style.value}-${i}`}
+                href={`/destinations?style=${style.value}`}
+                className="group block w-[220px] shrink-0 sm:w-[250px]"
+              >
+                <MotionCard>
+                  <div
+                    className={cn(
+                      'h-full rounded-xl border p-5 shadow-sm transition-shadow duration-200 hover:shadow-md',
+                      colors.bg
+                    )}
+                  >
+                  {/* Colored accent bar instead of emoji */}
+                  <div className={cn('mb-4 h-1 w-10 rounded-full', colors.bar)} />
+                  <p className={cn('font-display font-bold', colors.text)}>{style.label}</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                    {style.description}
+                  </p>
+                  <span className={cn('mt-3 inline-flex items-center gap-1 text-xs font-semibold', colors.text)}>
+                    Explore <ChevronRight className="h-3 w-3" />
+                  </span>
+                  </div>
+                </MotionCard>
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>

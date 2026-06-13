@@ -43,6 +43,11 @@ import {
 } from './planner-map'
 import { RouteResults } from './route-results'
 import { AdvisorHandoff } from './advisor-handoff'
+import { PlannerInspirationStack } from './planner-inspiration-stack'
+import {
+  getPlannerInspirationCards,
+  getInspirationEyebrow,
+} from './planner-inspiration-data'
 import type { DestinationMapMarker } from '@/lib/map'
 import type { RouteStop } from '@/components/map'
 
@@ -215,6 +220,23 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
   )
 
   const proceed = canProceed(state, validDestinationCount)
+
+  const showInspiration = !state.generated && wizardStep <= 3
+
+  const inspirationCards = React.useMemo(
+    () => getPlannerInspirationCards(wizardStep, data.destinations),
+    [wizardStep, data.destinations]
+  )
+
+  const inspirationPanel = (
+    <div className="flex h-full min-h-[420px] items-center justify-center bg-[hsl(var(--atlas-mist))]/25 px-4 py-8 lg:px-8">
+      <PlannerInspirationStack
+        cards={inspirationCards}
+        eyebrow={getInspirationEyebrow(wizardStep)}
+        className="w-full max-w-md lg:max-w-none"
+      />
+    </div>
+  )
 
   const panelContent = (
     <div className="flex h-full min-h-0 flex-col">
@@ -407,16 +429,24 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
         {panelContent}
       </div>
 
-      {/* Map — 60% desktop; mobile step 4+ or map tab */}
+      {/* Mobile inspiration — below planner on steps 1–3 */}
+      {showInspiration && (
+        <div className="shrink-0 border-t bg-[hsl(var(--atlas-mist))]/20 lg:hidden">
+          {inspirationPanel}
+        </div>
+      )}
+
+      {/* Inspiration (desktop steps 1–3) or map */}
       <div
         className={cn(
           'w-full min-h-0 flex-1 lg:h-full lg:w-[60%]',
-          state.step < 4 && !state.generated && 'hidden lg:block',
+          showInspiration && 'hidden lg:flex',
+          !showInspiration && state.step < 4 && !state.generated && 'hidden lg:block',
           state.generated && mobileTab === 'plan' && 'hidden lg:block',
           state.step >= 4 && !state.generated && 'min-h-[32dvh] shrink-0 lg:min-h-0 lg:shrink'
         )}
       >
-        {mapPanel}
+        {showInspiration ? inspirationPanel : mapPanel}
       </div>
     </div>
   )

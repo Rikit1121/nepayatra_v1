@@ -104,6 +104,44 @@
   }
 }
 
+/* ── Animation keyframes ─────────────────────────────────────── */
+@keyframes marquee-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(0.82); }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-7px); }
+}
+@keyframes shimmer-bg {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.marquee-left  { animation: marquee-left  38s linear infinite; }
+.marquee-right { animation: marquee-right 38s linear infinite; }
+.marquee-left:hover,
+.marquee-right:hover { animation-play-state: paused; }
+
+.fade-up-1 { animation: fade-up 0.65s 0.05s ease-out both; }
+.fade-up-2 { animation: fade-up 0.65s 0.20s ease-out both; }
+.fade-up-3 { animation: fade-up 0.65s 0.38s ease-out both; }
+
+.live-dot  { animation: live-pulse 1.5s ease-in-out infinite; }
+.float-y   { animation: float-y   4s   ease-in-out infinite; }
+
 /* MapLibre canvases must stay inside their containers. */
 .maplibregl-map {
   max-width: 100%;

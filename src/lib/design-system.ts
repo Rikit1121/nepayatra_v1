@@ -51,3 +51,10 @@ export const atlasFooterBand = 'border-t border-[hsl(var(--atlas-blue))]/30 bg-[
 export const atlasDisplayLg = 'font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl'
 export const atlasDisplayMd = 'font-display text-2xl font-bold tracking-tight md:text-3xl'
 export const atlasBodyLg = 'text-base leading-relaxed text-muted-foreground sm:text-lg'
+
+/** Homepage section rhythm — alternating backgrounds and spacing. */
+export const atlasSectionWhite = 'bg-background'
+export const atlasSectionMuted = 'bg-[#f8fafc]'
+export const atlasSectionPadding = 'py-14 md:py-16'
+export const atlasSectionDivider =
+  'border-t border-border/40 bg-gradient-to-b from-border/20 to-transparent'

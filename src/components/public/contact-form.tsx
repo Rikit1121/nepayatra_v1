@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle2, Loader2 } from 'lucide-react'
@@ -135,6 +136,13 @@ export function ContactForm() {
           {form.formState.isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
           Send message
         </Button>
+        <p className="text-xs text-muted-foreground">
+          By submitting, you agree we may use your details to respond. See our{' '}
+          <Link href="/privacy" className="underline-offset-4 hover:underline">
+            Privacy Policy
+          </Link>
+          .
+        </p>
       </form>
     </Form>
   )

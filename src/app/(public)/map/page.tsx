@@ -30,6 +30,14 @@ export default async function MapPage() {
     getActiveTravelAlerts(),
   ])
 
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('[MapPage] data loaded', {
+      destinations: destinations.length,
+      borders: borders.length,
+      alerts: alerts.length,
+    })
+  }
+
   const data: MapData = {
     destinations,
     borders,
@@ -49,7 +57,7 @@ export default async function MapPage() {
           </p>
         </div>
       </div>
-      <div className="min-h-0 flex-1">
+      <div className="relative min-h-[420px] flex-1 h-[calc(100svh-13rem)] md:h-[calc(100svh-12rem)]">
         <MapExperience data={data} />
       </div>
     </div>

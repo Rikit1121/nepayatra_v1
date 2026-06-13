@@ -1,14 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter, Libre_Baskerville } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
+import 'maplibre-gl/dist/maplibre-gl.css'
 import { SITE } from '@/lib/site-config'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
-const libreBaskerville = Libre_Baskerville({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-display',
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -35,6 +31,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: '/images/logo.png',
+    apple: '/images/logo.png',
+  },
 }
 
 export default function RootLayout({
@@ -44,7 +44,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${libreBaskerville.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

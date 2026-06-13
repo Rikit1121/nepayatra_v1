@@ -1,178 +1,355 @@
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { atlasCardPlanner } from '@/lib/design-system'
-import { cn } from '@/lib/utils'
 import { Hero } from '@/components/public/home/hero'
-import {
-  ComingFromIndia,
-  TravelStyles,
-  FeaturePreviews,
-} from '@/components/public/home/static-sections'
+
+import { ComingFromIndia, TravelStyles } from '@/components/public/home/static-sections'
+
+import { WhyNepalStats } from '@/components/public/home/why-nepal-stats'
+
+import { RouteExamplesSection } from '@/components/public/home/route-examples-section'
+
+import { SectionCta } from '@/components/public/home/section-cta'
+
 import { Section } from '@/components/public/section'
+
 import { DestinationCard, PackageCard, ArticleCard } from '@/components/public/cards'
+
+import { StaggerItem } from '@/components/motion'
+
 import { FaqAccordion } from '@/components/public/faq-accordion'
+
 import { AdvisorCta } from '@/components/public/advisor-cta'
+
 import { getSiteSettings } from '@/lib/site-settings'
+
 import {
+
   getFeaturedDestinations,
+
   getFeaturedPackages,
+
   getFeaturedArticles,
+
   getFaqsPreview,
+
   getDestinationMapMarkers,
+
   getBorderMapMarkers,
+
 } from '@/lib/supabase/queries'
+
+
 
 export const revalidate = 3600
 
+
+
 const POPULAR_JOURNEYS = [
+
   {
+
     title: 'Classic First Trip',
+
     route: 'Raxaul–Birgunj → Kathmandu → Pokhara',
+
     days: '7 days',
+
     href: '/route-planner?border=raxaul-birgunj&dest=kathmandu,pokhara&days=7&step=4',
+
   },
+
   {
+
     title: 'Temples & Heritage',
+
     route: 'Sunauli → Lumbini → Kathmandu → Janakpur',
+
     days: '8 days',
+
     href: '/route-planner?border=sunauli-bhairahawa&dest=lumbini,kathmandu,janakpur&days=8&step=4',
+
   },
+
   {
+
     title: 'Mountains & Wildlife',
+
     route: 'Kathmandu → Pokhara → Chitwan',
+
     days: '10 days',
+
     href: '/route-planner?border=raxaul-birgunj&dest=kathmandu,pokhara,chitwan&days=10&step=4',
+
   },
+
 ]
 
+
+
 export default async function HomePage() {
+
   const settings = await getSiteSettings()
 
+
+
   const [
+
     featuredDestinations,
+
     featuredPackages,
+
     featuredArticles,
+
     faqs,
+
     mapDestinations,
+
     mapBorders,
+
   ] = await Promise.all([
+
     getFeaturedDestinations(settings.homepage_featured_destinations_count),
+
     getFeaturedPackages(settings.homepage_featured_packages_count),
+
     getFeaturedArticles(3),
+
     getFaqsPreview(5),
+
     getDestinationMapMarkers(),
+
     getBorderMapMarkers(),
+
   ])
 
+
+
   return (
+
     <>
-      {/* 1. Hero */}
+
+      {/* 1 — Hero */}
+
       <Hero
+
         headline={settings.homepage_hero_headline}
+
         subheadline={settings.homepage_hero_subheadline}
+
         destinations={mapDestinations}
+
         borders={mapBorders}
+
       />
 
-      {/* 2. Coming From India? */}
-      <ComingFromIndia />
 
-      {/* 3. Popular Journeys */}
-      <Section
-        title="Popular journeys"
-        description="Routes other Indian travelers actually take. Open one to tweak it in the planner."
-        viewAllHref="/route-planner"
-        viewAllLabel="Open route planner"
-      >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {POPULAR_JOURNEYS.map((journey) => (
-            <Link key={journey.title} href={journey.href} className="group block">
-              <article className={cn(atlasCardPlanner, 'h-full p-5 group-hover:border-[hsl(var(--atlas-blue-light))]')}>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--atlas-saffron))]">
-                  {journey.days}
-                </p>
-                <h3 className="mt-1 font-display text-lg font-bold group-hover:text-[hsl(var(--atlas-blue))]">
-                  {journey.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{journey.route}</p>
-                <span className="mt-4 inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-[hsl(var(--atlas-blue))]">
-                  Use this route <ArrowRight className="h-3.5 w-3.5" />
-                </span>
-              </article>
-            </Link>
-          ))}
-        </div>
-      </Section>
 
-      {/* 4. Travel Styles */}
-      <TravelStyles />
+      {/* 2 — Why Nepal? stats */}
 
-      {/* 5 + 6. Border Explorer + Route Planner Previews */}
-      <FeaturePreviews />
+      <WhyNepalStats />
 
-      {/* 7. Featured Destinations */}
+
+
+      {/* 3 — Coming from India? */}
+
+      <ComingFromIndia tone="white" />
+
+
+
+      {/* 4 — Route examples */}
+
+      <RouteExamplesSection journeys={POPULAR_JOURNEYS} />
+
+
+
+      {/* 5 — Travel styles */}
+
+      <TravelStyles tone="white" />
+
+
+
+      {/* 6 — Featured destinations */}
+
       {featuredDestinations.length > 0 && (
+
         <Section
+
           title="Featured destinations"
+
           description="The places most first-time visitors build their trip around."
+
+          eyebrow="Top picks"
+
           viewAllHref="/destinations"
+
+          tone="muted"
+
+          stagger
+
+          staggerClassName="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+
+          footer={
+
+            <SectionCta
+
+              message="Not sure where to start?"
+
+              buttonLabel="Browse all destinations"
+
+              href="/destinations"
+
+            />
+
+          }
+
         >
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredDestinations.map((destination) => (
-              <DestinationCard key={destination.id} destination={destination} />
-            ))}
-          </div>
+
+          {featuredDestinations.map((destination) => (
+
+            <StaggerItem key={destination.id}>
+
+              <DestinationCard destination={destination} />
+
+            </StaggerItem>
+
+          ))}
+
         </Section>
+
       )}
 
-      {/* 8. Travel Guides */}
+
+
+      {/* 7 — Travel guides */}
+
       {settings.homepage_show_knowledge_base && featuredArticles.length > 0 && (
+
         <Section
+
           title="Travel guides"
+
           description="Straight answers to the practical questions — visas, currency, SIM cards, transport."
+
+          eyebrow="Knowledge base"
+
           viewAllHref="/guides"
-          muted
+
+          tone="white"
+
+          backgroundImage="/images/background3.jpg"
+
+          stagger
+
+          staggerClassName="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+
         >
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredArticles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
+
+          {featuredArticles.map((article) => (
+
+            <StaggerItem key={article.id}>
+
+              <ArticleCard article={article} />
+
+            </StaggerItem>
+
+          ))}
+
         </Section>
+
       )}
 
-      {/* 9. Suggested Trips */}
+
+
+      {/* 8 — Suggested trips */}
+
       {featuredPackages.length > 0 && (
+
         <Section
+
           title="Suggested trips"
+
           description="Sample itineraries you can follow as-is or adjust with an advisor."
+
+          eyebrow="Curated itineraries"
+
           viewAllHref="/packages"
+
+          tone="muted"
+
+          stagger
+
+          staggerClassName="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+
+          footer={
+
+            <SectionCta
+
+              message="Want a custom itinerary?"
+
+              buttonLabel="Plan with an advisor"
+
+              href="/contact"
+
+            />
+
+          }
+
         >
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredPackages.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg} />
-            ))}
-          </div>
+
+          {featuredPackages.map((pkg) => (
+
+            <StaggerItem key={pkg.id}>
+
+              <PackageCard pkg={pkg} />
+
+            </StaggerItem>
+
+          ))}
+
         </Section>
+
       )}
 
-      {/* 10. FAQ Preview */}
+
+
+      {/* 9 — FAQ */}
+
       {faqs.length > 0 && (
+
         <Section
+
           title="Common questions"
+
           description="The things Indian travelers ask us most often."
+
+          eyebrow="Before you go"
+
           viewAllHref="/faq"
+
           viewAllLabel="See all FAQs"
-          muted
+
+          tone="white"
+
         >
+
           <div className="mx-auto max-w-3xl">
+
             <FaqAccordion faqs={faqs} />
+
           </div>
+
         </Section>
+
       )}
 
-      {/* 11. Advisor CTA */}
+
+
+      {/* 10 — Advisor CTA (dark band) */}
+
       <AdvisorCta />
+
     </>
+
   )
+
 }
+
+

@@ -1,17 +1,43 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { atlasDisplayMd, atlasSectionEyebrow } from '@/lib/design-system'
+import {
+  atlasDisplayMd,
+  atlasSectionDivider,
+  atlasSectionEyebrow,
+  atlasSectionMuted,
+  atlasSectionPadding,
+  atlasSectionWhite,
+} from '@/lib/design-system'
+import { FadeInView } from '@/components/motion/fade-in-view'
+import { StaggerGrid } from '@/components/motion/stagger-grid'
+import { SectionBackground } from '@/components/public/section-background'
+
+type SectionTone = 'white' | 'muted'
+
+const toneClasses: Record<SectionTone, string> = {
+  white: atlasSectionWhite,
+  muted: atlasSectionMuted,
+}
 
 interface SectionProps {
   title: string
   description?: string
-  eyebrow?: string
+  eyebrow: string
   viewAllHref?: string
   viewAllLabel?: string
   children: React.ReactNode
   className?: string
-  muted?: boolean
+  tone?: SectionTone
+  divider?: boolean
+  /** Stagger-animate direct children into view. */
+  stagger?: boolean
+  staggerClassName?: string
+  footer?: React.ReactNode
+  /** Optional background image path (e.g. /images/background3.jpg). */
+  backgroundImage?: string
 }
 
 export function Section({
@@ -22,19 +48,30 @@ export function Section({
   viewAllLabel = 'View all',
   children,
   className,
-  muted = false,
+  tone = 'white',
+  divider = true,
+  stagger = false,
+  staggerClassName,
+  footer,
+  backgroundImage,
 }: SectionProps) {
-  return (
-    <section className={cn(muted && 'bg-[hsl(var(--atlas-mist))]/60', className)}>
-      <div className="container py-12 md:py-16">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            {eyebrow && <p className={atlasSectionEyebrow}>{eyebrow}</p>}
-            <h2 className={cn('font-display font-bold tracking-tight', eyebrow ? 'mt-2' : '', atlasDisplayMd)}>
+  const content = stagger ? (
+    <StaggerGrid className={cn('mt-10', staggerClassName)}>{children}</StaggerGrid>
+  ) : (
+    <div className="mt-10">{children}</div>
+  )
+
+  const inner = (
+    <>
+      <FadeInView>
+        <div className="flex items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <p className={atlasSectionEyebrow}>{eyebrow}</p>
+            <h2 className={cn('mt-2 font-display font-bold tracking-tight text-foreground', atlasDisplayMd)}>
               {title}
             </h2>
             {description && (
-              <p className="mt-2 max-w-2xl leading-relaxed text-muted-foreground">{description}</p>
+              <p className="mt-3 leading-relaxed text-muted-foreground">{description}</p>
             )}
           </div>
           {viewAllHref && (
@@ -46,18 +83,38 @@ export function Section({
             </Link>
           )}
         </div>
-        <div className="mt-8">{children}</div>
-        {viewAllHref && (
-          <div className="mt-6 sm:hidden">
-            <Link
-              href={viewAllHref}
-              className="inline-flex items-center gap-1 text-sm font-semibold text-[hsl(var(--atlas-blue))] hover:underline"
-            >
-              {viewAllLabel} <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-        )}
-      </div>
+      </FadeInView>
+      {content}
+      {footer}
+      {viewAllHref && (
+        <div className="mt-6 sm:hidden">
+          <Link
+            href={viewAllHref}
+            className="inline-flex items-center gap-1 text-sm font-semibold text-[hsl(var(--atlas-blue))] hover:underline"
+          >
+            {viewAllLabel} <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      )}
+    </>
+  )
+
+  return (
+    <section
+      className={cn(
+        !backgroundImage && toneClasses[tone],
+        divider && atlasSectionDivider,
+        'border-b border-border/30',
+        className
+      )}
+    >
+      {backgroundImage ? (
+        <SectionBackground imageSrc={backgroundImage}>
+          <div className={cn('container', atlasSectionPadding)}>{inner}</div>
+        </SectionBackground>
+      ) : (
+        <div className={cn('container', atlasSectionPadding)}>{inner}</div>
+      )}
     </section>
   )
 }

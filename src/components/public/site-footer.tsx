@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { Mountain, Facebook, Instagram, Youtube, Twitter, Mail, Phone } from 'lucide-react'
+import { Facebook, Instagram, Youtube, Twitter, Mail, Phone } from 'lucide-react'
 import { getSiteSettings } from '@/lib/site-settings'
 import { SITE } from '@/lib/site-config'
-import { atlasFooterBand } from '@/lib/design-system'
+import { SiteLogo } from '@/components/public/site-logo'
 
 const FOOTER_SECTIONS = [
   {
@@ -24,7 +24,7 @@ const FOOTER_SECTIONS = [
     ],
   },
   {
-    title: 'Border Information',
+    title: 'Border Info',
     links: [
       { label: 'All Crossings', href: '/border-crossings' },
       { label: 'Currency & UPI', href: '/knowledge-base/currency' },
@@ -45,57 +45,64 @@ export async function SiteFooter() {
   ].filter((s) => s.href)
 
   return (
-    <footer className={atlasFooterBand}>
-      <div className="container py-12">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 font-display font-semibold text-[hsl(var(--atlas-snow))]">
-              <Mountain className="h-6 w-6 text-[hsl(var(--atlas-saffron))]" />
-              <span className="text-lg">{settings.site_name}</span>
-            </Link>
-            <p className="mt-3 max-w-sm text-sm text-[hsl(var(--atlas-snow))]/75">{SITE.description}</p>
+    <footer className="relative overflow-hidden border-t text-white">
+      {/* background2 image — /public/images/background2.jpg */}
+      <div className="absolute inset-0 z-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/background2.jpg"
+          alt=""
+          aria-hidden
+          className="h-full w-full object-cover object-center"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-[hsl(215,52%,6%)]/90" />
+      </div>
 
-            <div className="mt-4 space-y-1.5 text-sm">
+      {/* Compact content */}
+      <div className="relative z-10 container py-10">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <Link href="/" className="inline-flex items-center gap-2.5 font-display font-semibold text-white">
+              <SiteLogo size={28} alt="" />
+              <span>{settings.site_name}</span>
+            </Link>
+            <p className="mt-2 max-w-xs text-xs leading-relaxed text-white/55">
+              {SITE.description}
+            </p>
+            <div className="mt-3 space-y-1 text-xs">
               {settings.contact_email && (
-                <a
-                  href={`mailto:${settings.contact_email}`}
-                  className="flex items-center gap-2 text-[hsl(var(--atlas-snow))]/75 hover:text-[hsl(var(--atlas-saffron))]"
-                >
-                  <Mail className="h-4 w-4" />
+                <a href={`mailto:${settings.contact_email}`} className="flex items-center gap-2 text-white/55 transition-colors hover:text-[hsl(var(--atlas-saffron))]">
+                  <Mail className="h-3.5 w-3.5" />
                   {settings.contact_email}
                 </a>
               )}
               {settings.contact_phone && (
-                <a
-                  href={`tel:${settings.contact_phone}`}
-                  className="flex items-center gap-2 text-[hsl(var(--atlas-snow))]/75 hover:text-[hsl(var(--atlas-saffron))]"
-                >
-                  <Phone className="h-4 w-4" />
+                <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2 text-white/55 transition-colors hover:text-[hsl(var(--atlas-saffron))]">
+                  <Phone className="h-3.5 w-3.5" />
                   {settings.contact_phone}
                 </a>
               )}
             </div>
-
             <Link
               href="/contact"
-              className="mt-4 inline-flex text-sm font-semibold text-[hsl(var(--atlas-saffron))] hover:underline"
+              className="mt-3 inline-flex text-xs font-semibold text-[hsl(var(--atlas-saffron))] transition-opacity hover:opacity-80"
             >
               Contact an advisor →
             </Link>
           </div>
 
+          {/* Nav columns */}
           {FOOTER_SECTIONS.map((section) => (
             <nav key={section.title} aria-label={section.title}>
-              <h3 className="font-display text-sm font-semibold text-[hsl(var(--atlas-snow))]">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white/80">
                 {section.title}
               </h3>
-              <ul className="mt-3 space-y-2.5">
+              <ul className="mt-3 space-y-2">
                 {section.links.map((link) => (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-[hsl(var(--atlas-snow))]/70 hover:text-[hsl(var(--atlas-saffron))]"
-                    >
+                    <Link href={link.href} className="text-xs text-white/50 transition-colors hover:text-[hsl(var(--atlas-saffron))]">
                       {link.label}
                     </Link>
                   </li>
@@ -105,17 +112,16 @@ export async function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[hsl(var(--atlas-snow))]/15 pt-6 sm:flex-row">
-          <div className="flex flex-wrap items-center gap-4 text-xs text-[hsl(var(--atlas-snow))]/60">
-            <span suppressHydrationWarning>
-              © {new Date().getFullYear()} {settings.site_name}
-            </span>
-            <Link href="/about" className="hover:text-[hsl(var(--atlas-saffron))]">About</Link>
-            <Link href="/contact" className="hover:text-[hsl(var(--atlas-saffron))]">Contact</Link>
+        {/* Bottom bar */}
+        <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-5 sm:flex-row">
+          <div className="flex flex-wrap items-center gap-4 text-[11px] text-white/35">
+            <span suppressHydrationWarning>© {new Date().getFullYear()} {settings.site_name}</span>
+            <Link href="/about" className="hover:text-[hsl(var(--atlas-saffron))] transition-colors">About</Link>
+            <Link href="/privacy" className="hover:text-[hsl(var(--atlas-saffron))] transition-colors">Privacy</Link>
+            <Link href="/contact" className="hover:text-[hsl(var(--atlas-saffron))] transition-colors">Contact</Link>
           </div>
-
           {socials.length > 0 && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {socials.map((s) => (
                 <a
                   key={s.label}
@@ -123,9 +129,9 @@ export async function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="text-[hsl(var(--atlas-snow))]/70 hover:text-[hsl(var(--atlas-saffron))]"
+                  className="rounded border border-white/10 p-1.5 text-white/40 transition-all hover:border-[hsl(var(--atlas-saffron))]/40 hover:text-[hsl(var(--atlas-saffron))]"
                 >
-                  <s.icon className="h-5 w-5" />
+                  <s.icon className="h-3.5 w-3.5" />
                 </a>
               ))}
             </div>

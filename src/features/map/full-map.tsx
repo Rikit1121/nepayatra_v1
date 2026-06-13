@@ -79,7 +79,7 @@ export function FullMap({ data }: FullMapProps) {
   }, [])
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full min-h-[inherit] w-full">
       <MapSidebar
         layers={layers}
         onToggle={toggleLayer}
@@ -102,29 +102,37 @@ export function FullMap({ data }: FullMapProps) {
         Fit to Nepal
       </Button>
 
-      <BaseMap ref={mapRef} viewState={viewState} onMove={onMove} onClick={onClick}>
-        <DestinationLayer
-          destinations={data.destinations}
-          visible={layers.destinations}
-          selectedId={selected?.kind === 'destination' ? selected.data.id : null}
-          onSelect={handleSelectDestination}
-        />
-        <BorderLayer
-          borders={data.borders}
-          visible={layers.borders}
-          selectedId={selected?.kind === 'border' ? selected.data.id : null}
-          onSelect={handleSelectBorder}
-        />
-        <AlertLayer
-          alerts={data.alerts}
-          visible={layers.alerts}
-          selectedId={selected?.kind === 'alert' ? selected.data.id : null}
-          onSelect={handleSelectAlert}
-        />
-        {data.route && layers.route && <RoutePreviewLayer route={data.route} />}
+      {/* Map fills the panel behind absolute UI controls */}
+      <div className="absolute inset-0 z-0">
+        <BaseMap
+          ref={mapRef}
+          viewState={viewState}
+          onMove={onMove}
+          onClick={onClick}
+        >
+          <DestinationLayer
+            destinations={data.destinations}
+            visible={layers.destinations}
+            selectedId={selected?.kind === 'destination' ? selected.data.id : null}
+            onSelect={handleSelectDestination}
+          />
+          <BorderLayer
+            borders={data.borders}
+            visible={layers.borders}
+            selectedId={selected?.kind === 'border' ? selected.data.id : null}
+            onSelect={handleSelectBorder}
+          />
+          <AlertLayer
+            alerts={data.alerts}
+            visible={layers.alerts}
+            selectedId={selected?.kind === 'alert' ? selected.data.id : null}
+            onSelect={handleSelectAlert}
+          />
+          {data.route && layers.route && <RoutePreviewLayer route={data.route} />}
 
-        {selected && <MarkerDetailCard selected={selected} onClose={clearSelection} />}
-      </BaseMap>
+          {selected && <MarkerDetailCard selected={selected} onClose={clearSelection} />}
+        </BaseMap>
+      </div>
     </div>
   )
 }
