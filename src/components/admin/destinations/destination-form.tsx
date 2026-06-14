@@ -206,12 +206,13 @@ export function DestinationForm({ destination }: DestinationFormProps) {
           <TextField<FormValues>
             name="hero_image_url"
             label="Hero image URL"
-            placeholder="https://..."
+            placeholder="/images/nagarkot1.jpg"
+            description="Leave blank to use the built-in photo for this destination slug, or enter /images/your-file.jpg"
           />
           <TagInputField<FormValues>
             name="gallery_images"
             label="Gallery image URLs"
-            placeholder="Paste an image URL and press Enter"
+            placeholder="/images/photo.jpg — press Enter after each"
           />
         </div>
 

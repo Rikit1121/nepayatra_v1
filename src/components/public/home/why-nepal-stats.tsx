@@ -16,7 +16,7 @@ const STATS = [
   { value: 5, suffix: '', label: 'Border Crossings', icon: Milestone },
   { value: 50, suffix: '+', label: 'Destinations', icon: MapPin },
   { value: 8, suffix: '', label: 'Travel Styles', icon: Compass },
-  { value: 10, suffix: 'M+', label: 'Annual Visitors', icon: Users },
+  { value: 1, suffix: 'M+', label: 'Intl. tourists (2024)', icon: Users },
 ] as const
 
 function useAnimatedCounter(target: number, active: boolean, duration = 1400) {

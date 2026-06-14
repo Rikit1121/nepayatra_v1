@@ -65,7 +65,7 @@ export function KnowledgeBaseForm({ article }: { article?: KBArticle }) {
             <SelectField<FormValues> name="category" label="Category" required
               options={KNOWLEDGE_BASE_CATEGORIES.map((c) => ({ value: c, label: c.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) }))}
             />
-            <TextField<FormValues> name="reading_time_minutes" label="Reading time (minutes)" placeholder="e.g. 5" />
+            <TextField<FormValues> name="reading_time_minutes" label="Reading time (minutes)" type="number" placeholder="e.g. 5" />
           </div>
           <TextareaField<FormValues> name="summary" label="Summary" rows={3} placeholder="1–2 sentences shown in article cards (max 500 chars)" required />
         </div>

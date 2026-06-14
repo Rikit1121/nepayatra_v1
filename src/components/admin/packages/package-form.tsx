@@ -63,8 +63,8 @@ export function PackageForm({ pkg }: { pkg?: Package }) {
           </div>
           <TextareaField<FormValues> name="description" label="Description" rows={6} />
           <div className="grid gap-4 sm:grid-cols-3">
-            <TextField<FormValues> name="duration_days" label="Duration (days)" placeholder="e.g. 10" required />
-            <TextField<FormValues> name="price_inr_from" label="Price from (₹)" placeholder="e.g. 25000" />
+            <TextField<FormValues> name="duration_days" label="Duration (days)" type="number" placeholder="e.g. 10" required />
+            <TextField<FormValues> name="price_inr_from" label="Price from (₹)" type="number" placeholder="e.g. 25000" />
             <SelectField<FormValues> name="difficulty" label="Difficulty" required
               options={PACKAGE_DIFFICULTIES.map((d) => ({ value: d, label: d.charAt(0).toUpperCase() + d.slice(1) }))}
             />
@@ -73,14 +73,14 @@ export function PackageForm({ pkg }: { pkg?: Package }) {
         <Separator />
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Highlights & Inclusions</h3>
-          <ListInputField<FormValues> name="highlights" label="Highlights" placeholder="Add highlight and press Enter" />
+          <ListInputField<FormValues> name="highlights" label="Highlights" required placeholder="Add highlight and press Enter" />
           <ListInputField<FormValues> name="includes" label="What's included" placeholder="Add included item" />
           <ListInputField<FormValues> name="excludes" label="What's excluded" placeholder="Add excluded item" />
         </div>
         <Separator />
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Media & SEO</h3>
-          <TextField<FormValues> name="hero_image_url" label="Hero image URL" placeholder="https://..." />
+          <TextField<FormValues> name="hero_image_url" label="Hero image URL" placeholder="/images/pokhara.jpg" description="Leave blank to use the built-in photo for this slug, or enter /images/your-file.jpg" />
           <TextField<FormValues> name="seo_title" label="SEO title" description="Max 70 characters" />
           <TextareaField<FormValues> name="seo_description" label="SEO description" rows={2} description="Max 160 characters" />
         </div>

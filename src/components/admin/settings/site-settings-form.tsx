@@ -69,10 +69,10 @@ export function SiteSettingsForm({ settings }: SiteSettingsFormProps) {
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Homepage</h3>
           <TextField<SiteSettingsFormValues> name="homepage_hero_headline" label="Hero headline" required />
           <TextareaField<SiteSettingsFormValues> name="homepage_hero_subheadline" label="Hero subheadline" rows={2} />
-          <TextField<SiteSettingsFormValues> name="homepage_hero_image_url" label="Hero image URL" placeholder="https://..." />
+          <TextField<SiteSettingsFormValues> name="homepage_hero_image_url" label="Hero image URL" placeholder="/images/sarangkot.webp" description="Leave blank for the default hero, or use /images/your-file.jpg" />
           <div className="grid gap-4 sm:grid-cols-2">
-            <TextField<SiteSettingsFormValues> name="homepage_featured_destinations_count" label="Featured destinations count" placeholder="6" />
-            <TextField<SiteSettingsFormValues> name="homepage_featured_packages_count" label="Featured packages count" placeholder="3" />
+            <TextField<SiteSettingsFormValues> name="homepage_featured_destinations_count" label="Featured destinations count" type="number" placeholder="6" />
+            <TextField<SiteSettingsFormValues> name="homepage_featured_packages_count" label="Featured packages count" type="number" placeholder="3" />
           </div>
           <SwitchField<SiteSettingsFormValues> name="homepage_show_travel_alerts" label="Show travel alerts on homepage" />
           <SwitchField<SiteSettingsFormValues> name="homepage_show_knowledge_base" label="Show knowledge base section on homepage" />

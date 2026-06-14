@@ -53,8 +53,8 @@ export function RouteForm({ connection, destinations }: { connection?: Connectio
           <SelectField<FormValues> name="to_destination_id" label="To destination" required options={destOptions} />
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
-          <TextField<FormValues> name="distance_km" label="Distance (km)" placeholder="e.g. 200" />
-          <TextField<FormValues> name="travel_time_hours" label="Travel time (hours)" placeholder="e.g. 6.5" />
+          <TextField<FormValues> name="distance_km" label="Distance (km)" type="number" placeholder="e.g. 200" />
+          <TextField<FormValues> name="travel_time_hours" label="Travel time (hours)" type="number" placeholder="e.g. 6.5" />
           <TextField<FormValues> name="recommended_transport" label="Recommended transport" placeholder="e.g. Bus / Private car" />
         </div>
         <TextareaField<FormValues> name="route_notes" label="Route notes" rows={4} placeholder="Road conditions, passes, seasonal closures, alternatives..." />

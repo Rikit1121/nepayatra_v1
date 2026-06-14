@@ -37,7 +37,7 @@ const DESTINATION_IMAGES: Record<string, string> = {
   'bardia-national-park': '/images/bardiya.jpg',
   birgunj: '/images/birgunj.jpeg',
   'annapurna-base-camp': '/images/Annapurna-base-camp-trek-8-days.jpg',
-  nagarkot: '/images/nagarkot.jpg',
+  nagarkot: '/images/nagarkot1.jpg',
   ilam: '/images/ilam.jpg',
   ghandruk: '/images/ghandruk.jpg',
 }

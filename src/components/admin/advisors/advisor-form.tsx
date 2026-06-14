@@ -51,12 +51,18 @@ export function AdvisorForm({ advisor }: { advisor?: Advisor }) {
           <TextField<FormValues> name="title" label="Title / role" placeholder="e.g. Nepal Trekking Specialist" />
         </div>
         <TextareaField<FormValues> name="bio" label="Bio" rows={5} placeholder="Brief bio about the advisor's Nepal expertise..." />
-        <TagInputField<FormValues> name="languages" label="Languages spoken" placeholder="e.g. Hindi, English" />
+        <TagInputField<FormValues>
+          name="languages"
+          label="Languages spoken"
+          required
+          placeholder="e.g. Hindi"
+          suggestions={['Hindi', 'English', 'Nepali', 'Bengali', 'Tamil']}
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField<FormValues> name="whatsapp_number" label="WhatsApp number" placeholder="+977XXXXXXXXXX" description="International format with country code." />
           <TextField<FormValues> name="phone_number" label="Phone number" placeholder="+977XXXXXXXXXX" />
         </div>
-        <TextField<FormValues> name="photo_url" label="Photo URL" placeholder="https://..." />
+        <TextField<FormValues> name="photo_url" label="Photo URL" placeholder="Leave blank for initials avatar" description="Optional. Use /images/photo.jpg or leave empty — we show initials instead." />
         <Separator />
         <SwitchField<FormValues> name="active" label="Active — visible to visitors" description="Only active advisors appear on the public advisors page." />
         <div className="flex items-center gap-3 pt-2">

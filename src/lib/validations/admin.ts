@@ -19,6 +19,90 @@ import { z } from 'zod'
 // SHARED PRIMITIVES
 // ─────────────────────────────────────────────────────────────
 
+/** HTML number inputs and RHF often submit strings — normalize before Zod checks. */
+function emptyToNull(val: unknown): unknown {
+  if (val === '' || val === null || val === undefined) return null
+  if (typeof val === 'number' && Number.isNaN(val)) return null
+  return val
+}
+
+function emptyToUndefined(val: unknown): unknown {
+  if (val === '' || val === null || val === undefined) return undefined
+  if (typeof val === 'number' && Number.isNaN(val)) return undefined
+  return val
+}
+
+/** `<input type="datetime-local">` returns `2026-06-15T14:01` — normalize to ISO for Zod/DB. */
+function datetimeLocalToIso(val: unknown): unknown {
+  if (val === '' || val === null || val === undefined) return null
+  if (typeof val !== 'string') return val
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(val)) {
+    return new Date(val).toISOString()
+  }
+  return val
+}
+
+const requiredDatetime = z.preprocess(
+  datetimeLocalToIso,
+  z.string().datetime({ message: 'Invalid start date' })
+)
+
+const optionalDatetime = z.preprocess(
+  datetimeLocalToIso,
+  z.string().datetime({ message: 'Invalid expiry date' }).optional().nullable()
+)
+
+const optionalPositiveNumber = (label: string) =>
+  z.preprocess(
+    emptyToNull,
+    z.coerce
+      .number({ invalid_type_error: `${label} must be a number` })
+      .positive(`${label} must be positive`)
+      .optional()
+      .nullable()
+  )
+
+const optionalPositiveInt = (label: string) =>
+  z.preprocess(
+    emptyToNull,
+    z.coerce
+      .number({ invalid_type_error: `${label} must be a number` })
+      .int(`${label} must be a whole number`)
+      .positive(`${label} must be positive`)
+      .optional()
+      .nullable()
+  )
+
+const requiredInt = (label: string, min: number, max: number) =>
+  z.preprocess(
+    emptyToUndefined,
+    z.coerce
+      .number({ invalid_type_error: `${label} must be a number` })
+      .int(`${label} must be a whole number`)
+      .min(min)
+      .max(max)
+  )
+
+const requiredNumber = (label: string, min: number, max: number) =>
+  z.preprocess(
+    emptyToUndefined,
+    z.coerce
+      .number({ invalid_type_error: `${label} must be a number` })
+      .min(min)
+      .max(max)
+  )
+
+const optionalInt = (label: string, min: number) =>
+  z.preprocess(
+    emptyToNull,
+    z.coerce
+      .number({ invalid_type_error: `${label} must be a number` })
+      .int(`${label} must be a whole number`)
+      .min(min)
+      .optional()
+      .nullable()
+  )
+
 const slugSchema = z
   .string()
   .min(2, 'Slug must be at least 2 characters')
@@ -32,12 +116,17 @@ const urlSchema = z
   .optional()
   .nullable()
 
-const imageUrlSchema = z
-  .string()
-  .min(1, 'Image URL is required')
-  .or(z.literal(''))
-  .optional()
-  .nullable()
+const imageUrlSchema = z.preprocess(
+  (val) => (val === '' ? null : val),
+  z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (val) => val == null || val.startsWith('/') || /^https?:\/\/.+/.test(val),
+      'Use a site path like /images/photo.jpg or a full https:// URL'
+    )
+)
 
 const seoTitleSchema = z
   .string()
@@ -131,22 +220,11 @@ export const createDestinationSchema = z.object({
     errorMap: () => ({ message: 'Please select a province' }),
   }),
 
-  latitude: z
-    .number({ invalid_type_error: 'Latitude must be a number' })
-    .min(26.0, 'Latitude must be within Nepal (26.0 – 31.0)')
-    .max(31.0, 'Latitude must be within Nepal (26.0 – 31.0)'),
+  latitude: requiredNumber('Latitude', 26.0, 31.0),
 
-  longitude: z
-    .number({ invalid_type_error: 'Longitude must be a number' })
-    .min(79.0, 'Longitude must be within Nepal (79.0 – 89.0)')
-    .max(89.0, 'Longitude must be within Nepal (79.0 – 89.0)'),
+  longitude: requiredNumber('Longitude', 79.0, 89.0),
 
-  altitude_meters: z
-    .number({ invalid_type_error: 'Altitude must be a number' })
-    .int('Altitude must be a whole number')
-    .min(0, 'Altitude cannot be negative')
-    .optional()
-    .nullable(),
+  altitude_meters: optionalInt('Altitude', 0),
 
   best_season: z
     .array(z.string())
@@ -192,19 +270,25 @@ export const createBorderCrossingSchema = z.object({
 
   description: z.string().optional().nullable(),
 
-  latitude: z
-    .number({ invalid_type_error: 'Latitude must be a number' })
-    .min(26.0, 'Latitude must be within Nepal (26.0 – 31.0)')
-    .max(31.0, 'Latitude must be within Nepal (26.0 – 31.0)')
-    .optional()
-    .nullable(),
+  latitude: z.preprocess(
+    emptyToNull,
+    z.coerce
+      .number({ invalid_type_error: 'Latitude must be a number' })
+      .min(26.0, 'Latitude must be within Nepal (26.0 – 31.0)')
+      .max(31.0, 'Latitude must be within Nepal (26.0 – 31.0)')
+      .optional()
+      .nullable()
+  ),
 
-  longitude: z
-    .number({ invalid_type_error: 'Longitude must be a number' })
-    .min(79.0, 'Longitude must be within Nepal (79.0 – 89.0)')
-    .max(89.0, 'Longitude must be within Nepal (79.0 – 89.0)')
-    .optional()
-    .nullable(),
+  longitude: z.preprocess(
+    emptyToNull,
+    z.coerce
+      .number({ invalid_type_error: 'Longitude must be a number' })
+      .min(79.0, 'Longitude must be within Nepal (79.0 – 89.0)')
+      .max(89.0, 'Longitude must be within Nepal (79.0 – 89.0)')
+      .optional()
+      .nullable()
+  ),
 
   operating_notes: z.string().optional().nullable(),
 
@@ -231,17 +315,9 @@ const destinationConnectionBaseSchema = z.object({
     .string({ required_error: 'Please select the ending destination' })
     .uuid('Invalid destination ID'),
 
-  distance_km: z
-    .number({ invalid_type_error: 'Distance must be a number' })
-    .positive('Distance must be positive')
-    .optional()
-    .nullable(),
+  distance_km: optionalPositiveNumber('Distance'),
 
-  travel_time_hours: z
-    .number({ invalid_type_error: 'Travel time must be a number' })
-    .positive('Travel time must be positive')
-    .optional()
-    .nullable(),
+  travel_time_hours: optionalPositiveNumber('Travel time'),
 
   recommended_transport: z
     .string()
@@ -286,18 +362,9 @@ export const createPackageSchema = z.object({
 
   description: z.string().optional().nullable(),
 
-  duration_days: z
-    .number({ invalid_type_error: 'Duration must be a number' })
-    .int('Duration must be a whole number')
-    .min(1, 'Duration must be at least 1 day')
-    .max(365, 'Duration must be under 365 days'),
+  duration_days: requiredInt('Duration', 1, 365),
 
-  price_inr_from: z
-    .number({ invalid_type_error: 'Price must be a number' })
-    .int('Price must be a whole number')
-    .positive('Price must be positive')
-    .optional()
-    .nullable(),
+  price_inr_from: optionalPositiveInt('Price'),
 
   highlights: z
     .array(z.string().min(1, 'Highlight cannot be empty'))
@@ -349,11 +416,14 @@ export const createFaqSchema = z.object({
     .string()
     .min(20, 'Answer must be at least 20 characters'),
 
-  order_index: z
-    .number({ invalid_type_error: 'Order must be a number' })
-    .int('Order must be a whole number')
-    .min(0, 'Order must be 0 or greater')
-    .default(0),
+  order_index: z.preprocess(
+    emptyToUndefined,
+    z.coerce
+      .number({ invalid_type_error: 'Order must be a number' })
+      .int('Order must be a whole number')
+      .min(0, 'Order must be 0 or greater')
+      .default(0)
+  ),
 })
 
 export const updateFaqSchema = createFaqSchema.extend({
@@ -390,12 +460,7 @@ export const createKnowledgeBaseSchema = z.object({
 
   tags: z.array(z.string().min(1)).default([]),
 
-  reading_time_minutes: z
-    .number({ invalid_type_error: 'Reading time must be a number' })
-    .int('Reading time must be a whole number')
-    .positive('Reading time must be positive')
-    .optional()
-    .nullable(),
+  reading_time_minutes: optionalPositiveInt('Reading time'),
 
   featured: z.boolean().default(false),
 
@@ -473,9 +538,9 @@ const travelAlertBaseSchema = z.object({
     errorMap: () => ({ message: 'Please select a severity level' }),
   }),
 
-  starts_at: z.string().datetime({ message: 'Invalid start date' }),
+  starts_at: requiredDatetime,
 
-  expires_at: z.string().datetime({ message: 'Invalid expiry date' }).optional().nullable(),
+  expires_at: optionalDatetime,
 
   affected_regions: z.array(z.string()).default([]),
 
@@ -519,19 +584,15 @@ export const siteSettingsSchema = z.object({
 
   homepage_hero_image_url: imageUrlSchema,
 
-  homepage_featured_destinations_count: z
-    .number()
-    .int()
-    .min(1)
-    .max(12)
-    .default(6),
+  homepage_featured_destinations_count: z.preprocess(
+    emptyToUndefined,
+    z.coerce.number().int().min(1).max(12).default(6)
+  ),
 
-  homepage_featured_packages_count: z
-    .number()
-    .int()
-    .min(1)
-    .max(6)
-    .default(3),
+  homepage_featured_packages_count: z.preprocess(
+    emptyToUndefined,
+    z.coerce.number().int().min(1).max(6).default(3)
+  ),
 
   homepage_show_travel_alerts: z.boolean().default(true),
 

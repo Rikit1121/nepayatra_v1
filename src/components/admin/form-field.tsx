@@ -99,9 +99,13 @@ export function TextField<T extends FieldValues>({
               placeholder={placeholder}
               disabled={disabled}
               value={field.value ?? ''}
-              onChange={(e) =>
-                field.onChange(type === 'number' ? e.target.valueAsNumber : e.target.value)
-              }
+              onChange={(e) => {
+                if (type === 'number') {
+                  field.onChange(e.target.value === '' ? null : e.target.valueAsNumber)
+                } else {
+                  field.onChange(e.target.value)
+                }
+              }}
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
@@ -291,10 +295,19 @@ export function TagInputField<T extends FieldValues>({
         const tags: string[] = field.value ?? []
 
         const addTag = (tag: string) => {
-          const trimmed = tag.trim()
-          if (!trimmed || tags.includes(trimmed)) return
-          if (maxTags && tags.length >= maxTags) return
-          field.onChange([...tags, trimmed])
+          const parts = tag
+            .split(',')
+            .map((part) => part.trim())
+            .filter(Boolean)
+          if (parts.length === 0) return
+
+          const next = [...tags]
+          for (const trimmed of parts) {
+            if (next.includes(trimmed)) continue
+            if (maxTags && next.length >= maxTags) break
+            next.push(trimmed)
+          }
+          field.onChange(next)
           setInputValue('')
         }
 
@@ -338,6 +351,9 @@ export function TagInputField<T extends FieldValues>({
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    onBlur={() => {
+                      if (inputValue.trim()) addTag(inputValue)
+                    }}
                     placeholder={tags.length === 0 ? placeholder : ''}
                     className="flex-1 min-w-[120px] bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   />
@@ -362,7 +378,11 @@ export function TagInputField<T extends FieldValues>({
                 )}
               </div>
             </FormControl>
-            {description && <FormDescription>{description}</FormDescription>}
+            {description ? (
+              <FormDescription>{description}</FormDescription>
+            ) : (
+              <FormDescription>Type a value and press Enter, or separate multiple with commas.</FormDescription>
+            )}
             <FormMessage />
           </FormItem>
         )
@@ -457,6 +477,9 @@ export function ListInputField<T extends FieldValues>({
                         addItem()
                       }
                     }}
+                    onBlur={() => {
+                      if (inputValue.trim()) addItem()
+                    }}
                     className="flex-1"
                   />
                   <Button type="button" variant="outline" size="sm" onClick={addItem}>
@@ -465,7 +488,11 @@ export function ListInputField<T extends FieldValues>({
                 </div>
               </div>
             </FormControl>
-            {description && <FormDescription>{description}</FormDescription>}
+            {description ? (
+              <FormDescription>{description}</FormDescription>
+            ) : (
+              <FormDescription>Press Enter or click Add after each item.</FormDescription>
+            )}
             <FormMessage />
           </FormItem>
         )

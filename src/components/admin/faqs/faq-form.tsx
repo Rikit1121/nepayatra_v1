@@ -50,7 +50,7 @@ export function FaqForm({ faq }: { faq?: Faq }) {
           <SelectField<FormValues> name="category" label="Category" required
             options={FAQ_CATEGORIES.map((c) => ({ value: c, label: c.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) }))}
           />
-          <TextField<FormValues> name="order_index" label="Order" placeholder="0" description="Lower numbers appear first within a category." />
+          <TextField<FormValues> name="order_index" label="Order" type="number" placeholder="0" description="Lower numbers appear first within a category." />
         </div>
         <TextField<FormValues> name="question" label="Question" placeholder="e.g. Do I need a passport to enter Nepal from India?" required />
         <TextareaField<FormValues> name="answer" label="Answer" rows={8} placeholder="Clear, practical answer. You can use markdown." required />
