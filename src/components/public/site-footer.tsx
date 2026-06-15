@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Facebook, Instagram, Youtube, Twitter, Mail, Phone } from 'lucide-react'
 import { getSiteSettings } from '@/lib/site-settings'
-import { SITE } from '@/lib/site-config'
+import { SITE, FOOTER_CONTACT } from '@/lib/site-config'
 import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 import { SiteLogo } from '@/components/public/site-logo'
 
@@ -38,9 +38,10 @@ const FOOTER_SECTIONS = [
 export async function SiteFooter() {
   const settings = await getSiteSettings()
 
+  const email = FOOTER_CONTACT.email
   const socials = [
-    { href: settings.social_facebook, icon: Facebook, label: 'Facebook' },
-    { href: settings.social_instagram, icon: Instagram, label: 'Instagram' },
+    { href: settings.social_facebook?.trim() || FOOTER_CONTACT.facebook, icon: Facebook, label: 'NepaYatra on Facebook' },
+    { href: settings.social_instagram?.trim() || FOOTER_CONTACT.instagram, icon: Instagram, label: 'NepaYatra on Instagram' },
     { href: settings.social_youtube, icon: Youtube, label: 'YouTube' },
     { href: settings.social_twitter, icon: Twitter, label: 'X' },
   ].filter((s) => s.href)
@@ -72,25 +73,44 @@ export async function SiteFooter() {
             <p className="mt-2 max-w-xs text-xs leading-relaxed text-white/55">
               {SITE.description}
             </p>
-            <div className="mt-3 space-y-1 text-xs">
-              {settings.contact_email && (
-                <a href={`mailto:${settings.contact_email}`} className="flex items-center gap-2 text-white/55 transition-colors hover:text-[hsl(var(--atlas-saffron))]">
-                  <Mail className="h-3.5 w-3.5" />
-                  {settings.contact_email}
-                </a>
-              )}
+            <div className="mt-3 space-y-1.5 text-xs">
+              <a
+                href={`mailto:${email}`}
+                className="flex items-center gap-2 text-white/55 transition-colors hover:text-[hsl(var(--atlas-saffron))]"
+              >
+                <Mail className="h-3.5 w-3.5 shrink-0" />
+                {email}
+              </a>
               {settings.contact_phone && (
                 <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2 text-white/55 transition-colors hover:text-[hsl(var(--atlas-saffron))]">
-                  <Phone className="h-3.5 w-3.5" />
+                  <Phone className="h-3.5 w-3.5 shrink-0" />
                   {settings.contact_phone}
                 </a>
               )}
+              <a
+                href={FOOTER_CONTACT.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white/55 transition-colors hover:text-[hsl(var(--atlas-saffron))]"
+              >
+                <Instagram className="h-3.5 w-3.5 shrink-0" />
+                @nepayatra
+              </a>
+              <a
+                href={FOOTER_CONTACT.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white/55 transition-colors hover:text-[hsl(var(--atlas-saffron))]"
+              >
+                <Facebook className="h-3.5 w-3.5 shrink-0" />
+                NepaYatra
+              </a>
             </div>
             <Link
-              href="/contact"
+              href="/#advisors"
               className="mt-3 inline-flex text-xs font-semibold text-[hsl(var(--atlas-saffron))] transition-opacity hover:opacity-80"
             >
-              Contact an advisor →
+              Talk to an advisor →
             </Link>
           </div>
 
@@ -115,11 +135,23 @@ export async function SiteFooter() {
 
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-5 sm:flex-row">
-          <div className="flex flex-wrap items-center gap-4 text-[11px] text-white/35">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-white/35">
             <span suppressHydrationWarning>© {new Date().getFullYear()} {settings.site_name}</span>
             <Link href="/about" className="hover:text-[hsl(var(--atlas-saffron))] transition-colors">About</Link>
             <Link href="/privacy" className="hover:text-[hsl(var(--atlas-saffron))] transition-colors">Privacy</Link>
             <Link href="/contact" className="hover:text-[hsl(var(--atlas-saffron))] transition-colors">Contact</Link>
+            <span className="text-white/25">·</span>
+            <span>
+              Built by{' '}
+              <a
+                href={FOOTER_CONTACT.builtBy.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/50 transition-colors hover:text-[hsl(var(--atlas-saffron))]"
+              >
+                {FOOTER_CONTACT.builtBy.name}
+              </a>
+            </span>
           </div>
           {socials.length > 0 && (
             <div className="flex items-center gap-2">

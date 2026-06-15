@@ -33,7 +33,7 @@ export async function AdvisorCta({
     : `Hi, I'm planning a Nepal trip and would like some advice.`
 
   return (
-    <section className="border-t border-border/40">
+    <section id="advisors" className="scroll-mt-20 border-t border-border/40">
       <SectionBackground
         imageSrc={SITE_BACKGROUNDS.advisorCta}
         overlayClassName="bg-[#f8fafc]/92"

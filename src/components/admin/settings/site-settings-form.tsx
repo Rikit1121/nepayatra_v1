@@ -84,7 +84,7 @@ export function SiteSettingsForm({ settings }: SiteSettingsFormProps) {
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Contact</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <TextField<SiteSettingsFormValues> name="contact_email" label="Contact email" placeholder="hello@nepayatra.com" />
+            <TextField<SiteSettingsFormValues> name="contact_email" label="Contact email" placeholder="nepayatra@gmail.com" />
             <TextField<SiteSettingsFormValues> name="contact_phone" label="Phone number" />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">

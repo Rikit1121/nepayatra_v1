@@ -64,7 +64,7 @@ export function Hero({ headline, subheadline, heroImageUrl, destinations, border
                 variant="outline"
                 className="border-white/30 bg-white/5 text-white backdrop-blur-sm hover:border-white/60 hover:bg-white/15"
               >
-                <Link href="/map">Explore the Map</Link>
+                <Link href="/#advisors">Talk to an Advisor</Link>
               </Button>
             </div>
 

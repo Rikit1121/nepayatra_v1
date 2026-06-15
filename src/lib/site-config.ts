@@ -25,6 +25,14 @@ export const SITE = {
   locale: 'en_IN',
 } as const
 
+/** Public contact & social links shown in the footer. */
+export const FOOTER_CONTACT = {
+  email: 'nepayatra@gmail.com',
+  instagram: 'https://www.instagram.com/nepayatra/',
+  facebook: 'https://web.facebook.com/profile.php?id=61590894657438',
+  builtBy: { name: 'MeroWorks', url: 'https://www.merowworks.tech/' },
+} as const
+
 export const MAIN_NAV: { label: string; href: string }[] = [
   { label: 'Home', href: '/' },
   { label: 'Destinations', href: '/destinations' },
