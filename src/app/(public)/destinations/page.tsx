@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { PageHero } from '@/components/public/page-hero'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
@@ -9,23 +8,18 @@ import { EmptyState, CardGridSkeleton } from '@/components/public/states'
 import { AdvisorCta } from '@/components/public/advisor-cta'
 import { SectionBackground } from '@/components/public/section-background'
 import { getDestinations } from '@/lib/supabase/queries'
-import { DESTINATION_CATEGORY_LABELS, PROVINCE_LABELS, SITE } from '@/lib/site-config'
+import { DESTINATION_CATEGORY_LABELS, PROVINCE_LABELS } from '@/lib/site-config'
 import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
+import { buildPageMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Destinations in Nepal',
+export const metadata = buildPageMetadata({
+  title: 'Destinations in Nepal for Indian Travelers',
   description:
-    'Browse Nepal destinations by category and province — cultural cities, trekking regions, wildlife parks and Himalayan viewpoints. Built for Indian travelers.',
-  alternates: { canonical: `${SITE.url}/destinations` },
-  openGraph: {
-    title: 'Destinations in Nepal · NepaYatra',
-    description:
-      'Browse Nepal destinations by category and province — cultural cities, trekking regions, wildlife parks and Himalayan viewpoints.',
-    url: `${SITE.url}/destinations`,
-  },
-}
+    'Browse Nepal destinations by category and province — Kathmandu, Pokhara, Chitwan, Lumbini, trekking regions and Himalayan viewpoints. Practical guides for Indian tourists.',
+  path: '/destinations',
+})
 
 const CATEGORY_OPTIONS = Object.entries(DESTINATION_CATEGORY_LABELS).map(([value, label]) => ({
   value,

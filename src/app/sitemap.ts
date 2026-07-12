@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '',
     '/destinations',
     '/border-crossings',
+    '/map',
     '/guides',
     '/packages',
     '/knowledge-base',
@@ -29,8 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ].map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: path === '' ? 1 : 0.7,
+    changeFrequency: path === '' ? ('weekly' as const) : ('weekly' as const),
+    priority: path === '' ? 1 : path === '/border-crossings' || path === '/destinations' ? 0.9 : 0.7,
   }))
 
   const [destSlugs, pkgSlugs, articleSlugs, kbParams, crossings] = await Promise.all([
@@ -42,12 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ])
 
   const dynamicRoutes: MetadataRoute.Sitemap = [
-    ...destSlugs.map((slug) => ({ url: `${base}/destinations/${slug}`, changeFrequency: 'monthly' as const, priority: 0.6 })),
-    ...pkgSlugs.map((slug) => ({ url: `${base}/packages/${slug}`, changeFrequency: 'monthly' as const, priority: 0.6 })),
-    ...articleSlugs.map((slug) => ({ url: `${base}/guides/${slug}`, changeFrequency: 'monthly' as const, priority: 0.5 })),
-    ...kbParams.map((p) => ({ url: `${base}/knowledge-base/${p.category}/${p.slug}`, changeFrequency: 'monthly' as const, priority: 0.5 })),
-    ...Object.keys(KB_CATEGORY_LABELS).map((category) => ({ url: `${base}/knowledge-base/${category}`, changeFrequency: 'monthly' as const, priority: 0.5 })),
-    ...crossings.map((c) => ({ url: `${base}/border-crossings/${slugify(c.crossing_name)}`, changeFrequency: 'monthly' as const, priority: 0.6 })),
+    ...destSlugs.map((slug) => ({ url: `${base}/destinations/${slug}`, changeFrequency: 'monthly' as const, priority: 0.8 })),
+    ...pkgSlugs.map((slug) => ({ url: `${base}/packages/${slug}`, changeFrequency: 'monthly' as const, priority: 0.7 })),
+    ...articleSlugs.map((slug) => ({ url: `${base}/guides/${slug}`, changeFrequency: 'monthly' as const, priority: 0.75 })),
+    ...kbParams.map((p) => ({ url: `${base}/knowledge-base/${p.category}/${p.slug}`, changeFrequency: 'monthly' as const, priority: 0.75 })),
+    ...Object.keys(KB_CATEGORY_LABELS).map((category) => ({ url: `${base}/knowledge-base/${category}`, changeFrequency: 'monthly' as const, priority: 0.6 })),
+    ...crossings.map((c) => ({ url: `${base}/border-crossings/${slugify(c.crossing_name)}`, changeFrequency: 'monthly' as const, priority: 0.85 })),
   ].map((entry) => ({ ...entry, lastModified: new Date() }))
 
   return [...staticRoutes, ...dynamicRoutes]

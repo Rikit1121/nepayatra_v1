@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { PageHero } from '@/components/public/page-hero'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
@@ -8,22 +7,17 @@ import { EmptyState, CardGridSkeleton } from '@/components/public/states'
 import { AdvisorCta } from '@/components/public/advisor-cta'
 import { SectionBackground } from '@/components/public/section-background'
 import { getBorderCrossings } from '@/lib/supabase/queries'
-import { SITE } from '@/lib/site-config'
 import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
+import { buildPageMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'India–Nepal Border Crossings',
+export const metadata = buildPageMetadata({
+  title: 'India–Nepal Border Crossings — Raxaul, Sunauli, Jogbani & More',
   description:
-    'Compare the road borders between India and Nepal — Raxaul–Birgunj, Sunauli–Bhairahawa, Jogbani–Biratnagar and more. See what is on each side and where each one leads.',
-  alternates: { canonical: `${SITE.url}/border-crossings` },
-  openGraph: {
-    title: 'India–Nepal Border Crossings · NepaYatra',
-    description: 'Compare the road borders between India and Nepal and pick the right one for your trip.',
-    url: `${SITE.url}/border-crossings`,
-  },
-}
+    'Compare India–Nepal road borders for Indian travelers — Raxaul–Birgunj, Sunauli–Bhairahawa, Jogbani–Biratnagar, Panitanki–Kakarbhitta. Documents, routes and which crossing to choose.',
+  path: '/border-crossings',
+})
 
 interface PageProps {
   searchParams: Promise<{ q?: string }>

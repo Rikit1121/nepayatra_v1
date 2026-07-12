@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import {
   getDestinationMapMarkers,
   getBorderMapMarkers,
@@ -6,22 +5,16 @@ import {
 } from '@/lib/supabase/queries'
 import { buildAlertMarkers, type MapData } from '@/lib/map'
 import { MapExperience } from '@/features/map'
-import { SITE } from '@/lib/site-config'
+import { buildPageMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Interactive Nepal Map',
+export const metadata = buildPageMetadata({
+  title: 'Interactive Nepal Map — Destinations & Border Crossings',
   description:
-    'Explore Nepal on an interactive map — destinations, border crossings from India, and current travel alerts, all in one place.',
-  alternates: { canonical: `${SITE.url}/map` },
-  openGraph: {
-    title: 'Interactive Nepal Map | NepaYatra',
-    description:
-      'Explore destinations, India–Nepal border crossings and live travel alerts on one interactive map.',
-    url: `${SITE.url}/map`,
-  },
-}
+    'Explore Nepal on an interactive map — destinations, India–Nepal border crossings from Bihar, UP and West Bengal, plus current travel alerts.',
+  path: '/map',
+})
 
 export default async function MapPage() {
   const [destinations, borders, alerts] = await Promise.all([

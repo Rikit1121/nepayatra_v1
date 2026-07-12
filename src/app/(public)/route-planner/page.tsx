@@ -1,26 +1,20 @@
-import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { MapSkeleton } from '@/components/map'
 import { getRoutePlannerData } from '@/lib/supabase/queries'
 import { RoutePlannerExperience } from '@/features/route-planner'
-import { SITE } from '@/lib/site-config'
+import { buildPageMetadata } from '@/lib/seo'
 import { atlasBodyLg, atlasDisplayMd, atlasHeroGradient, atlasSectionEyebrow } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Route Planner',
+export const metadata = buildPageMetadata({
+  title: 'Nepal Route Planner from India — Plan Your Trip Step by Step',
   description:
-    'Plan your Nepal route from India — choose where you start, how you enter, what you want to see and how many days you have.',
-  alternates: { canonical: `${SITE.url}/route-planner` },
-  openGraph: {
-    title: 'Route Planner · NepaYatra',
-    description: 'Plan your Nepal route from India, step by step.',
-    url: `${SITE.url}/route-planner`,
-  },
-}
+    'Plan your Nepal itinerary from India — pick your border crossing, destinations, travel style and number of days. Free route planner for Indian travelers.',
+  path: '/route-planner',
+})
 
 export default async function RoutePlannerPage() {
   const data = await getRoutePlannerData()

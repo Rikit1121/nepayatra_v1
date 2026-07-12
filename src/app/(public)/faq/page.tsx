@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { PageHero } from '@/components/public/page-hero'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { FaqBrowser } from '@/components/public/faq-browser'
@@ -6,21 +5,16 @@ import { EmptyState } from '@/components/public/states'
 import { AdvisorCta } from '@/components/public/advisor-cta'
 import { JsonLd } from '@/components/public/json-ld'
 import { getFaqs } from '@/lib/supabase/queries'
-import { SITE } from '@/lib/site-config'
+import { buildPageMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Frequently Asked Questions',
+export const metadata = buildPageMetadata({
+  title: 'Nepal Travel FAQ for Indian Tourists — Visa, UPI, Safety & Transport',
   description:
-    'Answers to the questions Indian travelers ask most about Nepal — passports, visas, currency, UPI, SIM cards, safety and transport.',
-  alternates: { canonical: `${SITE.url}/faq` },
-  openGraph: {
-    title: 'FAQ · NepaYatra',
-    description: 'Answers to the questions Indian travelers ask most about visiting Nepal.',
-    url: `${SITE.url}/faq`,
-  },
-}
+    'Answers Indian travelers ask about Nepal — passport rules, visa-free entry, currency, UPI, SIM cards, safety, transport and border crossings.',
+  path: '/faq',
+})
 
 export default async function FaqPage() {
   const faqs = await getFaqs()

@@ -37,9 +37,18 @@ import {
 
 } from '@/lib/supabase/queries'
 
+import { buildPageMetadata } from '@/lib/seo'
+
 
 
 export const revalidate = 3600
+
+export const metadata = buildPageMetadata({
+  title: 'Plan Your Nepal Trip from India — Borders, Destinations & Guides',
+  description:
+    'NepaYatra helps Indian travelers plan Nepal trips overland — Raxaul, Sunauli and other India–Nepal border crossings, destinations, route planner, visa-free entry guides, and WhatsApp advisors.',
+  path: '/',
+})
 
 
 

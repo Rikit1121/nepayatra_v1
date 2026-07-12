@@ -34,18 +34,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const crossing = await getBorderCrossingBySlug(slug)
   if (!crossing) return { title: 'Border crossing not found' }
 
-  const title = `${crossing.crossing_name} Border Crossing`
+  const title = `${crossing.crossing_name} Border Crossing — India to Nepal Guide`
   const description =
     crossing.description ??
-    `Cross between ${crossing.india_side} (India) and ${crossing.nepal_side} (Nepal). What to expect and where it leads.`
+    `How to cross from ${crossing.india_side} (India) to ${crossing.nepal_side} (Nepal) at ${crossing.crossing_name}. Documents, transport and tips for Indian travelers.`
   const url = `${SITE.url}/border-crossings/${slug}`
+  const imagePath = resolveBorderCrossingImage(slug) ?? undefined
 
   return {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'article' },
-    twitter: { card: 'summary', title, description },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'article',
+      ...(imagePath
+        ? { images: [{ url: `${SITE.url}${imagePath}`, alt: title }] }
+        : {}),
+    },
+    twitter: {
+      card: imagePath ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      ...(imagePath ? { images: [`${SITE.url}${imagePath}`] } : {}),
+    },
   }
 }
 
