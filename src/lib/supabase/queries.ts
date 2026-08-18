@@ -24,6 +24,15 @@ import type {
   KnowledgeBaseCategory,
   DestinationMapMarker,
   BorderCrossingMapMarker,
+  Accommodation,
+  TransportOption,
+  DomesticFlight,
+  Activity,
+  DailyCostEstimate,
+  AccommodationTier,
+  TransportType,
+  DailyCostTier,
+  ActivityCategory,
 } from './types'
 import type {
   PlannerDestination,
@@ -501,3 +510,148 @@ export async function getRoutePlannerData(): Promise<RoutePlannerData> {
   ])
   return { destinations, borders, connections, advisors }
 }
+
+// ─────────────────────────────────────────────────────────────
+// Phase 2A: Travel Data Query Layer (Public visible only)
+// ─────────────────────────────────────────────────────────────
+
+export interface AccommodationFilters {
+  destinationId?: string
+  tier?: AccommodationTier
+}
+
+export async function getAccommodations(
+  filters: AccommodationFilters = {}
+): Promise<Accommodation[]> {
+  const supabase = createPublicClient()
+  let query = supabase
+    .from('accommodations')
+    .select('*')
+    .eq('public_visible', true)
+    .order('tier')
+    .order('estimated_price_min', { ascending: true })
+
+  if (filters.destinationId) query = query.eq('destination_id', filters.destinationId)
+  if (filters.tier) query = query.eq('tier', filters.tier)
+
+  const { data, error } = await query
+  logQueryError('getAccommodations', error)
+  return data ?? []
+}
+
+export interface TransportOptionFilters {
+  originDestinationId?: string
+  destinationDestinationId?: string
+  transportType?: TransportType
+}
+
+export async function getTransportOptions(
+  filters: TransportOptionFilters = {}
+): Promise<TransportOption[]> {
+  const supabase = createPublicClient()
+  let query = supabase
+    .from('transport_options')
+    .select('*')
+    .eq('public_visible', true)
+    .order('estimated_cost_min', { ascending: true })
+
+  if (filters.originDestinationId) {
+    query = query.eq('origin_destination_id', filters.originDestinationId)
+  }
+  if (filters.destinationDestinationId) {
+    query = query.eq('destination_destination_id', filters.destinationDestinationId)
+  }
+  if (filters.transportType) {
+    query = query.eq('transport_type', filters.transportType)
+  }
+
+  const { data, error } = await query
+  logQueryError('getTransportOptions', error)
+  return data ?? []
+}
+
+export interface DomesticFlightFilters {
+  originAirportCode?: string
+  destinationAirportCode?: string
+  originDestinationId?: string
+  destinationDestinationId?: string
+}
+
+export async function getDomesticFlights(
+  filters: DomesticFlightFilters = {}
+): Promise<DomesticFlight[]> {
+  const supabase = createPublicClient()
+  let query = supabase
+    .from('domestic_flights')
+    .select('*')
+    .eq('public_visible', true)
+    .order('estimated_cost_min', { ascending: true })
+
+  if (filters.originAirportCode) {
+    query = query.eq('origin_airport_code', filters.originAirportCode.toUpperCase())
+  }
+  if (filters.destinationAirportCode) {
+    query = query.eq('destination_airport_code', filters.destinationAirportCode.toUpperCase())
+  }
+  if (filters.originDestinationId) {
+    query = query.eq('origin_destination_id', filters.originDestinationId)
+  }
+  if (filters.destinationDestinationId) {
+    query = query.eq('destination_destination_id', filters.destinationDestinationId)
+  }
+
+  const { data, error } = await query
+  logQueryError('getDomesticFlights', error)
+  return data ?? []
+}
+
+export interface ActivityFilters {
+  destinationId?: string
+  category?: ActivityCategory
+}
+
+export async function getActivities(
+  filters: ActivityFilters = {}
+): Promise<Activity[]> {
+  const supabase = createPublicClient()
+  let query = supabase
+    .from('activities')
+    .select('*')
+    .eq('public_visible', true)
+    .order('category')
+    .order('name')
+
+  if (filters.destinationId) query = query.eq('destination_id', filters.destinationId)
+  if (filters.category) query = query.eq('category', filters.category)
+
+  const { data, error } = await query
+  logQueryError('getActivities', error)
+  return data ?? []
+}
+
+export interface DailyCostEstimateFilters {
+  destinationId?: string
+  regionName?: string
+  travelTier?: DailyCostTier
+}
+
+export async function getDailyCostEstimates(
+  filters: DailyCostEstimateFilters = {}
+): Promise<DailyCostEstimate[]> {
+  const supabase = createPublicClient()
+  let query = supabase
+    .from('daily_cost_estimates')
+    .select('*')
+    .eq('public_visible', true)
+    .order('travel_tier')
+    .order('estimated_daily_food_cost', { ascending: true })
+
+  if (filters.destinationId) query = query.eq('destination_id', filters.destinationId)
+  if (filters.regionName) query = query.ilike('region_name', `%${filters.regionName}%`)
+  if (filters.travelTier) query = query.eq('travel_tier', filters.travelTier)
+
+  const { data, error } = await query
+  logQueryError('getDailyCostEstimates', error)
+  return data ?? []
+}
+

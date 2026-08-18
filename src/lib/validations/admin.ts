@@ -193,6 +193,31 @@ export const KNOWLEDGE_BASE_CATEGORIES = [
 
 export const CONTACT_STATUSES = ['new', 'read', 'replied', 'closed'] as const
 
+export const ACCOMMODATION_TIERS = ['budget', 'mid_range', 'premium', 'luxury'] as const
+
+export const TRANSPORT_TYPES = [
+  'bus',
+  'tourist_bus',
+  'jeep',
+  'shared_jeep',
+  'private_vehicle',
+  'taxi',
+  'other',
+] as const
+
+export const DAILY_COST_TIERS = ['budget', 'comfort', 'premium'] as const
+
+export const ACTIVITY_CATEGORIES = [
+  'sightseeing',
+  'trekking',
+  'adventure',
+  'wildlife',
+  'cultural',
+  'spiritual',
+  'nature',
+  'other',
+] as const
+
 // ─────────────────────────────────────────────────────────────
 // 1. DESTINATION SCHEMA
 // ─────────────────────────────────────────────────────────────
@@ -651,6 +676,182 @@ export const updateContactInquirySchema = z.object({
 })
 
 export type UpdateContactInquiryFormValues = z.infer<typeof updateContactInquirySchema>
+
+// ─────────────────────────────────────────────────────────────
+// 11. ACCOMMODATIONS SCHEMA (Phase 2A)
+// ─────────────────────────────────────────────────────────────
+
+export const createAccommodationSchema = z
+  .object({
+    destination_id: z.string().uuid('Please select a valid destination'),
+    name: z
+      .string()
+      .min(2, 'Name must be at least 2 characters')
+      .max(200, 'Name must be under 200 characters'),
+    tier: z.enum(ACCOMMODATION_TIERS, {
+      errorMap: () => ({ message: 'Please select an accommodation tier' }),
+    }),
+    estimated_price_min: requiredInt('Min price', 1, 10_000_000),
+    estimated_price_max: requiredInt('Max price', 1, 10_000_000),
+    currency: z.string().default('NPR'),
+    source: z.string().max(200).optional().nullable(),
+    source_date: z.string().optional().nullable(),
+    notes: z.string().optional().nullable(),
+    image_url: imageUrlSchema,
+    website_url: urlSchema,
+    public_visible: z.boolean().default(true),
+  })
+  .refine((data) => data.estimated_price_max >= data.estimated_price_min, {
+    message: 'Max estimated price cannot be less than min price',
+    path: ['estimated_price_max'],
+  })
+
+export const updateAccommodationSchema = createAccommodationSchema.and(
+  z.object({ id: z.string().uuid() })
+)
+
+export type CreateAccommodationFormValues = z.infer<typeof createAccommodationSchema>
+export type UpdateAccommodationFormValues = z.infer<typeof updateAccommodationSchema>
+
+// ─────────────────────────────────────────────────────────────
+// 12. TRANSPORT OPTIONS SCHEMA (Phase 2A)
+// ─────────────────────────────────────────────────────────────
+
+export const createTransportOptionSchema = z
+  .object({
+    origin_destination_id: z.string().uuid('Please select an origin destination'),
+    destination_destination_id: z.string().uuid('Please select a target destination'),
+    transport_type: z.enum(TRANSPORT_TYPES, {
+      errorMap: () => ({ message: 'Please select a transport type' }),
+    }),
+    estimated_cost_min: requiredInt('Min cost', 1, 10_000_000),
+    estimated_cost_max: requiredInt('Max cost', 1, 10_000_000),
+    currency: z.string().default('NPR'),
+    duration_hours: optionalPositiveNumber('Duration hours'),
+    duration_text: z.string().max(100).optional().nullable(),
+    route_notes: z.string().optional().nullable(),
+    source: z.string().max(200).optional().nullable(),
+    source_date: z.string().optional().nullable(),
+    public_visible: z.boolean().default(true),
+  })
+  .refine((data) => data.origin_destination_id !== data.destination_destination_id, {
+    message: 'Origin and destination must be different',
+    path: ['destination_destination_id'],
+  })
+  .refine((data) => data.estimated_cost_max >= data.estimated_cost_min, {
+    message: 'Max estimated cost cannot be less than min cost',
+    path: ['estimated_cost_max'],
+  })
+
+export const updateTransportOptionSchema = createTransportOptionSchema.and(
+  z.object({ id: z.string().uuid() })
+)
+
+export type CreateTransportOptionFormValues = z.infer<typeof createTransportOptionSchema>
+export type UpdateTransportOptionFormValues = z.infer<typeof updateTransportOptionSchema>
+
+// ─────────────────────────────────────────────────────────────
+// 13. DOMESTIC FLIGHTS SCHEMA (Phase 2A)
+// ─────────────────────────────────────────────────────────────
+
+export const createDomesticFlightSchema = z
+  .object({
+    origin_destination_id: z.preprocess(emptyToNull, z.string().uuid().optional().nullable()),
+    origin_city: z.string().min(2, 'Origin city is required').max(100),
+    origin_airport_code: z
+      .string()
+      .min(2, 'Airport code required')
+      .max(10)
+      .transform((s) => s.toUpperCase()),
+    destination_destination_id: z.preprocess(emptyToNull, z.string().uuid().optional().nullable()),
+    destination_city: z.string().min(2, 'Destination city is required').max(100),
+    destination_airport_code: z
+      .string()
+      .min(2, 'Airport code required')
+      .max(10)
+      .transform((s) => s.toUpperCase()),
+    estimated_cost_min: requiredInt('Min cost', 1, 10_000_000),
+    estimated_cost_max: requiredInt('Max cost', 1, 10_000_000),
+    currency: z.string().default('NPR'),
+    duration_minutes: optionalPositiveInt('Duration minutes'),
+    airlines: z.array(z.string()).default([]),
+    flight_notes: z.string().optional().nullable(),
+    source: z.string().max(200).optional().nullable(),
+    source_date: z.string().optional().nullable(),
+    public_visible: z.boolean().default(true),
+  })
+  .refine((data) => data.estimated_cost_max >= data.estimated_cost_min, {
+    message: 'Max estimated flight cost cannot be less than min cost',
+    path: ['estimated_cost_max'],
+  })
+
+export const updateDomesticFlightSchema = createDomesticFlightSchema.and(
+  z.object({ id: z.string().uuid() })
+)
+
+export type CreateDomesticFlightFormValues = z.infer<typeof createDomesticFlightSchema>
+export type UpdateDomesticFlightFormValues = z.infer<typeof updateDomesticFlightSchema>
+
+// ─────────────────────────────────────────────────────────────
+// 14. ACTIVITIES SCHEMA (Phase 2A)
+// ─────────────────────────────────────────────────────────────
+
+export const createActivitySchema = z.object({
+  destination_id: z.string().uuid('Please select a valid destination'),
+  name: z
+    .string()
+    .min(2, 'Activity name must be at least 2 characters')
+    .max(200, 'Name must be under 200 characters'),
+  category: z.enum(ACTIVITY_CATEGORIES, {
+    errorMap: () => ({ message: 'Please select an activity category' }),
+  }),
+  estimated_cost: optionalInt('Estimated cost', 0),
+  currency: z.string().default('NPR'),
+  duration: z.string().max(100).optional().nullable(),
+  description: z.string().optional().nullable(),
+  source: z.string().max(200).optional().nullable(),
+  source_date: z.string().optional().nullable(),
+  public_visible: z.boolean().default(true),
+})
+
+export const updateActivitySchema = createActivitySchema.and(
+  z.object({ id: z.string().uuid() })
+)
+
+export type CreateActivityFormValues = z.infer<typeof createActivitySchema>
+export type UpdateActivityFormValues = z.infer<typeof updateActivitySchema>
+
+// ─────────────────────────────────────────────────────────────
+// 15. DAILY COST ESTIMATES SCHEMA (Phase 2A)
+// ─────────────────────────────────────────────────────────────
+
+export const createDailyCostEstimateSchema = z.object({
+  destination_id: z.preprocess(emptyToNull, z.string().uuid().optional().nullable()),
+  region_name: z
+    .string()
+    .min(2, 'Region / Area name is required')
+    .max(150),
+  travel_tier: z.enum(DAILY_COST_TIERS, {
+    errorMap: () => ({ message: 'Please select a travel tier' }),
+  }),
+  estimated_daily_food_cost: requiredInt('Daily food cost', 1, 1_000_000),
+  estimated_daily_misc_cost: z.preprocess(
+    emptyToNull,
+    z.coerce.number().int().min(0).default(0)
+  ),
+  currency: z.string().default('NPR'),
+  notes: z.string().optional().nullable(),
+  source: z.string().max(200).optional().nullable(),
+  source_date: z.string().optional().nullable(),
+  public_visible: z.boolean().default(true),
+})
+
+export const updateDailyCostEstimateSchema = createDailyCostEstimateSchema.and(
+  z.object({ id: z.string().uuid() })
+)
+
+export type CreateDailyCostEstimateFormValues = z.infer<typeof createDailyCostEstimateSchema>
+export type UpdateDailyCostEstimateFormValues = z.infer<typeof updateDailyCostEstimateSchema>
 
 // ─────────────────────────────────────────────────────────────
 // UTILITY: Server Action Response shape

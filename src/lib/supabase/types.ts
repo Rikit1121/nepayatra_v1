@@ -76,6 +76,29 @@ export type SettingGroup = 'general' | 'seo' | 'contact' | 'social' | 'homepage'
 
 export type ContactInquiryStatus = 'new' | 'read' | 'replied' | 'closed'
 
+export type AccommodationTier = 'budget' | 'mid_range' | 'premium' | 'luxury'
+
+export type TransportType =
+  | 'bus'
+  | 'tourist_bus'
+  | 'jeep'
+  | 'shared_jeep'
+  | 'private_vehicle'
+  | 'taxi'
+  | 'other'
+
+export type DailyCostTier = 'budget' | 'comfort' | 'premium'
+
+export type ActivityCategory =
+  | 'sightseeing'
+  | 'trekking'
+  | 'adventure'
+  | 'wildlife'
+  | 'cultural'
+  | 'spiritual'
+  | 'nature'
+  | 'other'
+
 // ─────────────────────────────────────────────────────────────
 // FULL DATABASE TYPE (Supabase Client Generic)
 // ─────────────────────────────────────────────────────────────
@@ -548,6 +571,342 @@ export interface Database {
         }
         Relationships: []
       }
+
+      // ── accommodations ───────────────────────────────────
+
+      accommodations: {
+        Row: {
+          id: string
+          destination_id: string
+          name: string
+          tier: AccommodationTier
+          estimated_price_min: number
+          estimated_price_max: number
+          currency: string
+          source: string | null
+          source_date: string | null
+          notes: string | null
+          image_url: string | null
+          website_url: string | null
+          public_visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          destination_id: string
+          name: string
+          tier: AccommodationTier
+          estimated_price_min: number
+          estimated_price_max: number
+          currency?: string
+          source?: string | null
+          source_date?: string | null
+          notes?: string | null
+          image_url?: string | null
+          website_url?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          destination_id?: string
+          name?: string
+          tier?: AccommodationTier
+          estimated_price_min?: number
+          estimated_price_max?: number
+          currency?: string
+          source?: string | null
+          source_date?: string | null
+          notes?: string | null
+          image_url?: string | null
+          website_url?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'accommodations_destination_id_fkey'
+            columns: ['destination_id']
+            isOneToOne: false
+            referencedRelation: 'destinations'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+
+      // ── transport_options ─────────────────────────────────
+
+      transport_options: {
+        Row: {
+          id: string
+          origin_destination_id: string
+          destination_destination_id: string
+          transport_type: TransportType
+          estimated_cost_min: number
+          estimated_cost_max: number
+          currency: string
+          duration_hours: number | null
+          duration_text: string | null
+          route_notes: string | null
+          source: string | null
+          source_date: string | null
+          public_visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          origin_destination_id: string
+          destination_destination_id: string
+          transport_type: TransportType
+          estimated_cost_min: number
+          estimated_cost_max: number
+          currency?: string
+          duration_hours?: number | null
+          duration_text?: string | null
+          route_notes?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          origin_destination_id?: string
+          destination_destination_id?: string
+          transport_type?: TransportType
+          estimated_cost_min?: number
+          estimated_cost_max?: number
+          currency?: string
+          duration_hours?: number | null
+          duration_text?: string | null
+          route_notes?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'transport_options_origin_destination_id_fkey'
+            columns: ['origin_destination_id']
+            isOneToOne: false
+            referencedRelation: 'destinations'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'transport_options_destination_destination_id_fkey'
+            columns: ['destination_destination_id']
+            isOneToOne: false
+            referencedRelation: 'destinations'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+
+      // ── domestic_flights ──────────────────────────────────
+
+      domestic_flights: {
+        Row: {
+          id: string
+          origin_destination_id: string | null
+          origin_city: string
+          origin_airport_code: string
+          destination_destination_id: string | null
+          destination_city: string
+          destination_airport_code: string
+          estimated_cost_min: number
+          estimated_cost_max: number
+          currency: string
+          duration_minutes: number | null
+          airlines: string[]
+          flight_notes: string | null
+          source: string | null
+          source_date: string | null
+          public_visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          origin_destination_id?: string | null
+          origin_city: string
+          origin_airport_code: string
+          destination_destination_id?: string | null
+          destination_city: string
+          destination_airport_code: string
+          estimated_cost_min: number
+          estimated_cost_max: number
+          currency?: string
+          duration_minutes?: number | null
+          airlines?: string[]
+          flight_notes?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          origin_destination_id?: string | null
+          origin_city?: string
+          origin_airport_code?: string
+          destination_destination_id?: string | null
+          destination_city?: string
+          destination_airport_code?: string
+          estimated_cost_min?: number
+          estimated_cost_max?: number
+          currency?: string
+          duration_minutes?: number | null
+          airlines?: string[]
+          flight_notes?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'domestic_flights_origin_destination_id_fkey'
+            columns: ['origin_destination_id']
+            isOneToOne: false
+            referencedRelation: 'destinations'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'domestic_flights_destination_destination_id_fkey'
+            columns: ['destination_destination_id']
+            isOneToOne: false
+            referencedRelation: 'destinations'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+
+      // ── activities ────────────────────────────────────────
+
+      activities: {
+        Row: {
+          id: string
+          destination_id: string
+          name: string
+          category: ActivityCategory
+          estimated_cost: number | null
+          currency: string
+          duration: string | null
+          description: string | null
+          source: string | null
+          source_date: string | null
+          public_visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          destination_id: string
+          name: string
+          category: ActivityCategory
+          estimated_cost?: number | null
+          currency?: string
+          duration?: string | null
+          description?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          destination_id?: string
+          name?: string
+          category?: ActivityCategory
+          estimated_cost?: number | null
+          currency?: string
+          duration?: string | null
+          description?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'activities_destination_id_fkey'
+            columns: ['destination_id']
+            isOneToOne: false
+            referencedRelation: 'destinations'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+
+      // ── daily_cost_estimates ──────────────────────────────
+
+      daily_cost_estimates: {
+        Row: {
+          id: string
+          destination_id: string | null
+          region_name: string
+          travel_tier: DailyCostTier
+          estimated_daily_food_cost: number
+          estimated_daily_misc_cost: number
+          currency: string
+          notes: string | null
+          source: string | null
+          source_date: string | null
+          public_visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          destination_id?: string | null
+          region_name: string
+          travel_tier: DailyCostTier
+          estimated_daily_food_cost: number
+          estimated_daily_misc_cost?: number
+          currency?: string
+          notes?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          destination_id?: string | null
+          region_name?: string
+          travel_tier?: DailyCostTier
+          estimated_daily_food_cost?: number
+          estimated_daily_misc_cost?: number
+          currency?: string
+          notes?: string | null
+          source?: string | null
+          source_date?: string | null
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'daily_cost_estimates_destination_id_fkey'
+            columns: ['destination_id']
+            isOneToOne: false
+            referencedRelation: 'destinations'
+            referencedColumns: ['id']
+          }
+        ]
+      }
     }
 
     Views: Record<string, never>
@@ -617,6 +976,26 @@ export type SiteSettingUpdate = Database['public']['Tables']['site_settings']['U
 export type ContactInquiry       = Database['public']['Tables']['contact_inquiries']['Row']
 export type ContactInquiryInsert = Database['public']['Tables']['contact_inquiries']['Insert']
 export type ContactInquiryUpdate = Database['public']['Tables']['contact_inquiries']['Update']
+
+export type Accommodation       = Database['public']['Tables']['accommodations']['Row']
+export type AccommodationInsert = Database['public']['Tables']['accommodations']['Insert']
+export type AccommodationUpdate = Database['public']['Tables']['accommodations']['Update']
+
+export type TransportOption       = Database['public']['Tables']['transport_options']['Row']
+export type TransportOptionInsert = Database['public']['Tables']['transport_options']['Insert']
+export type TransportOptionUpdate = Database['public']['Tables']['transport_options']['Update']
+
+export type DomesticFlight       = Database['public']['Tables']['domestic_flights']['Row']
+export type DomesticFlightInsert = Database['public']['Tables']['domestic_flights']['Insert']
+export type DomesticFlightUpdate = Database['public']['Tables']['domestic_flights']['Update']
+
+export type Activity       = Database['public']['Tables']['activities']['Row']
+export type ActivityInsert = Database['public']['Tables']['activities']['Insert']
+export type ActivityUpdate = Database['public']['Tables']['activities']['Update']
+
+export type DailyCostEstimate       = Database['public']['Tables']['daily_cost_estimates']['Row']
+export type DailyCostEstimateInsert = Database['public']['Tables']['daily_cost_estimates']['Insert']
+export type DailyCostEstimateUpdate = Database['public']['Tables']['daily_cost_estimates']['Update']
 
 // ─────────────────────────────────────────────────────────────
 // ENRICHED / JOIN TYPES

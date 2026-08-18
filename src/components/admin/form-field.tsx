@@ -67,7 +67,8 @@ interface BaseFieldProps<T extends FieldValues> {
 
 interface TextFieldProps<T extends FieldValues> extends BaseFieldProps<T> {
   placeholder?: string
-  type?: 'text' | 'email' | 'url' | 'tel' | 'number' | 'datetime-local'
+  type?: 'text' | 'email' | 'url' | 'tel' | 'number' | 'datetime-local' | 'date'
+  step?: string
 }
 
 export function TextField<T extends FieldValues>({
@@ -76,6 +77,7 @@ export function TextField<T extends FieldValues>({
   description,
   placeholder,
   type = 'text',
+  step,
   required = false,
   disabled = false,
   className,
@@ -96,6 +98,7 @@ export function TextField<T extends FieldValues>({
             <Input
               {...field}
               type={type}
+              step={step}
               placeholder={placeholder}
               disabled={disabled}
               value={field.value ?? ''}

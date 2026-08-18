@@ -19,6 +19,11 @@ import {
   LogOut,
   Menu,
   X,
+  Hotel,
+  Bus,
+  Plane,
+  Sparkles,
+  Utensils,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -30,6 +35,16 @@ const NAV_ITEMS = [
     label: 'Dashboard',
     href: '/admin/dashboard',
     icon: LayoutDashboard,
+  },
+  {
+    label: 'Travel Data',
+    items: [
+      { label: 'Accommodations', href: '/admin/accommodations', icon: Hotel },
+      { label: 'Transport', href: '/admin/transports', icon: Bus },
+      { label: 'Domestic Flights', href: '/admin/domestic-flights', icon: Plane },
+      { label: 'Activities', href: '/admin/activities', icon: Sparkles },
+      { label: 'Daily Costs', href: '/admin/daily-costs', icon: Utensils },
+    ],
   },
   {
     label: 'Content',

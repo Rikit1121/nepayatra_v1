@@ -13,6 +13,11 @@ import {
   AlertTriangle,
   HelpCircle,
   ArrowRight,
+  Hotel,
+  Bus,
+  Plane,
+  Sparkles,
+  Utensils,
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -28,6 +33,11 @@ async function getDashboardData() {
     { count: newMessages },
     { count: activeAlerts },
     { count: faqs },
+    { count: accommodations },
+    { count: transports },
+    { count: domesticFlights },
+    { count: activities },
+    { count: dailyCosts },
     { data: recentMessages },
     { data: recentAlerts },
   ] = await Promise.all([
@@ -39,6 +49,11 @@ async function getDashboardData() {
     supabase.from('contact_inquiries').select('*', { count: 'exact', head: true }).eq('status', 'new'),
     supabase.from('travel_alerts').select('*', { count: 'exact', head: true }).eq('active', true),
     supabase.from('faqs').select('*', { count: 'exact', head: true }),
+    supabase.from('accommodations').select('*', { count: 'exact', head: true }),
+    supabase.from('transport_options').select('*', { count: 'exact', head: true }),
+    supabase.from('domestic_flights').select('*', { count: 'exact', head: true }),
+    supabase.from('activities').select('*', { count: 'exact', head: true }),
+    supabase.from('daily_cost_estimates').select('*', { count: 'exact', head: true }),
     supabase
       .from('contact_inquiries')
       .select('id, visitor_name, visitor_email, message, status, created_at')
@@ -62,6 +77,11 @@ async function getDashboardData() {
       newMessages: newMessages ?? 0,
       activeAlerts: activeAlerts ?? 0,
       faqs: faqs ?? 0,
+      accommodations: accommodations ?? 0,
+      transports: transports ?? 0,
+      domesticFlights: domesticFlights ?? 0,
+      activities: activities ?? 0,
+      dailyCosts: dailyCosts ?? 0,
     },
     recentMessages: recentMessages ?? [],
     recentAlerts: recentAlerts ?? [],
@@ -83,6 +103,14 @@ const SEVERITY_BADGE: Record<string, string> = {
 
 export default async function DashboardPage() {
   const { counts, recentMessages, recentAlerts } = await getDashboardData()
+
+  const travelDataCards = [
+    { label: 'Accommodations', value: counts.accommodations, icon: Hotel, href: '/admin/accommodations' },
+    { label: 'Transport Options', value: counts.transports, icon: Bus, href: '/admin/transports' },
+    { label: 'Domestic Flights', value: counts.domesticFlights, icon: Plane, href: '/admin/domestic-flights' },
+    { label: 'Activities', value: counts.activities, icon: Sparkles, href: '/admin/activities' },
+    { label: 'Daily Costs', value: counts.dailyCosts, icon: Utensils, href: '/admin/daily-costs' },
+  ]
 
   const statCards = [
     { label: 'Destinations', value: counts.destinations, icon: MapPin, href: '/admin/destinations' },
@@ -111,28 +139,59 @@ export default async function DashboardPage() {
     <div className="space-y-8 py-6">
       <AdminHeader
         heading="Dashboard"
-        description="Overview of all NepaYatra content."
+        description="Overview of all NepaYatra content & travel data."
       />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {statCards.map((card) => (
-          <Link key={card.label} href={card.href}>
-            <Card className={`transition-colors hover:border-primary/50 ${card.highlight ? 'border-primary/40' : ''}`}>
-              <CardContent className="pt-5 pb-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">{card.label}</p>
-                    <p className={`mt-1 text-3xl font-semibold tabular-nums ${card.highlight ? 'text-primary' : ''}`}>
-                      {card.value}
-                    </p>
+      {/* Travel Data Foundation (Phase 2A) */}
+      <div className="space-y-3">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Travel Data Foundation
+        </h2>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {travelDataCards.map((card) => (
+            <Link key={card.label} href={card.href}>
+              <Card className="transition-colors hover:border-primary/50 bg-muted/10">
+                <CardContent className="pt-4 pb-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-muted-foreground">{card.label}</p>
+                      <p className="mt-1 text-2xl font-semibold tabular-nums">
+                        {card.value}
+                      </p>
+                    </div>
+                    <card.icon className="h-4 w-4 mt-0.5 text-primary" />
                   </div>
-                  <card.icon className={`h-5 w-5 mt-0.5 ${card.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Content & System Stats */}
+      <div className="space-y-3">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Platform Content & System
+        </h2>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {statCards.map((card) => (
+            <Link key={card.label} href={card.href}>
+              <Card className={`transition-colors hover:border-primary/50 ${card.highlight ? 'border-primary/40' : ''}`}>
+                <CardContent className="pt-5 pb-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">{card.label}</p>
+                      <p className={`mt-1 text-3xl font-semibold tabular-nums ${card.highlight ? 'text-primary' : ''}`}>
+                        {card.value}
+                      </p>
+                    </div>
+                    <card.icon className={`h-5 w-5 mt-0.5 ${card.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
