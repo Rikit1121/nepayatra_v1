@@ -232,6 +232,8 @@ export const createDestinationSchema = z.object({
 
   featured: z.boolean().default(false),
 
+  public_visible: z.boolean().default(true),
+
   hero_image_url: imageUrlSchema,
 
   gallery_images: z.array(z.string()).default([]),
@@ -293,6 +295,8 @@ export const createBorderCrossingSchema = z.object({
   operating_notes: z.string().optional().nullable(),
 
   featured: z.boolean().default(false),
+
+  public_visible: z.boolean().default(true),
 })
 
 export const updateBorderCrossingSchema = createBorderCrossingSchema.extend({

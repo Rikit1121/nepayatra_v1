@@ -60,6 +60,7 @@ export function DestinationForm({ destination }: DestinationFormProps) {
           best_season: destination.best_season ?? [],
           gallery_images: destination.gallery_images ?? [],
           featured: destination.featured ?? false,
+          public_visible: (destination as unknown as Record<string, unknown>).public_visible !== false,
         }
       : {
           name: '',
@@ -73,6 +74,7 @@ export function DestinationForm({ destination }: DestinationFormProps) {
           altitude_meters: null,
           best_season: [],
           featured: false,
+          public_visible: true,
           hero_image_url: '',
           gallery_images: [],
           seo_title: '',
@@ -250,6 +252,11 @@ export function DestinationForm({ destination }: DestinationFormProps) {
             name="featured"
             label="Featured on homepage"
             description="Show this destination in the Featured Destinations section on the homepage."
+          />
+          <SwitchField<FormValues>
+            name="public_visible"
+            label="Visible in trip planner"
+            description="When off, this destination is hidden from the public trip planner and cannot be selected by users. The record still exists in the admin database."
           />
         </div>
 

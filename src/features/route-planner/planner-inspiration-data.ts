@@ -1,4 +1,4 @@
-import type { PlannerDestination, PlannerTravelStyle } from '@/lib/route-planner/types'
+import type { PlannerDestination, PlannerTravelCategory } from '@/lib/route-planner/types'
 import { CATEGORY_DEFAULT_DAYS } from '@/lib/route-planner/config'
 import { DESTINATION_CATEGORY_LABELS } from '@/lib/site-config'
 import { resolveDestinationImage } from '@/lib/local-images'
@@ -12,7 +12,7 @@ export interface InspirationCard {
   description: string
 }
 
-const ROUTE_STYLE_IMAGES: Record<PlannerTravelStyle, string> = {
+const ROUTE_STYLE_IMAGES: Record<PlannerTravelCategory, string> = {
   adventure: '/images/Annapurna-base-camp-trek-8-days.jpg',
   religious: '/images/Pashupatinath.webp',
   wildlife: '/images/Chitwan.jpg',

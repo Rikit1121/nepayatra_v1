@@ -29,8 +29,11 @@ export function BorderCrossingForm({ crossing }: { crossing?: BorderCrossing }) 
   const form = useForm<FormValues>({
     resolver: zodResolver(isEditing ? updateBorderCrossingSchema : createBorderCrossingSchema),
     defaultValues: crossing
-      ? (crossing as unknown as UpdateBorderCrossingFormValues)
-      : { crossing_name: '', india_side: '', nepal_side: '', featured: false },
+      ? {
+          ...(crossing as unknown as UpdateBorderCrossingFormValues),
+          public_visible: (crossing as unknown as Record<string, unknown>).public_visible !== false,
+        }
+      : { crossing_name: '', india_side: '', nepal_side: '', featured: false, public_visible: true },
   })
 
   const { handleSubmit, formState: { isSubmitting } } = form
@@ -72,6 +75,11 @@ export function BorderCrossingForm({ crossing }: { crossing?: BorderCrossing }) 
         <TextareaField<FormValues> name="operating_notes" label="Operating notes" rows={5} placeholder="Opening hours, document requirements, vehicle rules..." />
         <Separator />
         <SwitchField<FormValues> name="featured" label="Featured on Border Explorer page" description="Show this crossing prominently in the Border Explorer section." />
+        <SwitchField<FormValues>
+          name="public_visible"
+          label="Visible in trip planner"
+          description="When off, this crossing is hidden from the public trip planner. The record still exists in the admin database."
+        />
         <div className="flex items-center gap-3 pt-2">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

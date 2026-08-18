@@ -442,14 +442,15 @@ export async function getActiveTravelAlerts(): Promise<TravelAlert[]> {
 // Route planner (bundled graph data)
 // ─────────────────────────────────────────────────────────────
 
-/** All destinations for the route planner (client-side selection + generation). */
+/** All destinations for the route planner — only public_visible = true rows. */
 export async function getRoutePlannerDestinations(): Promise<PlannerDestination[]> {
   const supabase = createPublicClient()
   const { data, error } = await supabase
     .from('destinations')
     .select(
-      'id, name, slug, category, province, latitude, longitude, featured, short_description, best_season'
+      'id, name, slug, category, province, latitude, longitude, featured, public_visible, short_description, best_season'
     )
+    .eq('public_visible', true)
     .order('featured', { ascending: false })
     .order('name')
   logQueryError('getRoutePlannerDestinations', error)
@@ -471,7 +472,8 @@ export async function getRoutePlannerBorders(): Promise<PlannerBorder[]> {
   const supabase = createPublicClient()
   const { data, error } = await supabase
     .from('border_crossings')
-    .select('id, crossing_name, india_side, nepal_side, latitude, longitude, featured, description')
+    .select('id, crossing_name, india_side, nepal_side, latitude, longitude, featured, public_visible, description')
+    .eq('public_visible', true)
     .order('featured', { ascending: false })
     .order('crossing_name')
   logQueryError('getRoutePlannerBorders', error)

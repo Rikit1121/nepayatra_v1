@@ -10,9 +10,9 @@ import { cn } from '@/lib/utils'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'Nepal Route Planner from India — Plan Your Trip Step by Step',
+  title: 'Nepal Trip Planner — Build Your Itinerary Step by Step',
   description:
-    'Plan your Nepal itinerary from India — pick your border crossing, destinations, travel style and number of days. Free route planner for Indian travelers.',
+    'Plan your Nepal trip from India or anywhere in the world. Pick your entry method, dates, destinations, travel style and budget. Free trip planner that saves in the URL.',
   path: '/route-planner',
 })
 
@@ -23,11 +23,12 @@ export default async function RoutePlannerPage() {
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <div className={cn('shrink-0 border-b px-4 py-4 sm:container sm:py-5', atlasHeroGradient)}>
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Route Planner' }]} />
-        <p className={cn(atlasSectionEyebrow, 'mt-2')}>Route planner</p>
-        <h1 className={cn('mt-1', atlasDisplayMd)}>Plan your Nepal route</h1>
+        <p className={cn(atlasSectionEyebrow, 'mt-2')}>Trip planner</p>
+        <h1 className={cn('mt-1', atlasDisplayMd)}>Build your Nepal trip</h1>
         <p className={cn('mt-2 max-w-2xl', atlasBodyLg)}>
-          Six quick steps — where you&apos;re coming from, how you enter, what you want to see, and
-          how long you have. Your plan stays in the URL so you can refresh or share it.
+          Eight quick steps — where you&apos;re coming from, how you enter, your dates, who&apos;s
+          travelling, destinations, style, and budget. Your plan stays in the URL so you can
+          refresh or share it.
         </p>
       </div>
 

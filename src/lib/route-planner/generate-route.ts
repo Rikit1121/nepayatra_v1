@@ -2,6 +2,7 @@ import { slugify } from '@/lib/utils'
 import {
   BORDER_ENTRY_DESTINATION_SLUG,
   CATEGORY_DEFAULT_DAYS,
+  FLIGHT_ARRIVAL_DESTINATION_SLUG,
   MAX_DAYS,
   MIN_DAYS,
 } from './config'
@@ -13,18 +14,27 @@ import type {
   PlannerDestination,
   RouteLeg,
   DayAllocation,
+  TravelMode,
 } from './types'
 
 interface GenerateInput {
   destinations: PlannerDestination[]
   connections: PlannerConnection[]
+  /** Null for flight or in-nepal travelers. */
   border: PlannerBorder | null
   selectedSlugs: string[]
   totalDays: number
+  /**
+   * How the traveler enters Nepal.
+   * - 'flight'  → Kathmandu is the implicit start, no land border entry node.
+   * - 'road'    → border → BORDER_ENTRY_DESTINATION_SLUG entry node logic.
+   * - null      → 'Already in Nepal', no forced start.
+   */
+  travelMode: TravelMode | null
 }
 
 export function generateRoute(input: GenerateInput): GeneratedRoute | null {
-  const { destinations, connections, border, selectedSlugs, totalDays } = input
+  const { destinations, connections, border, selectedSlugs, totalDays, travelMode } = input
   const days = Math.min(MAX_DAYS, Math.max(MIN_DAYS, totalDays))
 
   const destBySlug = new Map(destinations.map((d) => [d.slug, d]))
@@ -41,18 +51,27 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
     return d ? { lat: d.latitude, lng: d.longitude } : null
   }
 
+  // ── Determine graph start node ───────────────────────────
   let startId: string | null = null
-  if (border) {
+
+  if (travelMode === 'road' && border) {
+    // Road: use the border's associated Nepal-side entry destination
     const borderSlug = slugify(border.crossing_name)
     const entrySlug = BORDER_ENTRY_DESTINATION_SLUG[borderSlug]
     if (entrySlug) {
       const entry = destBySlug.get(entrySlug)
       if (entry) startId = entry.id
     }
+  } else if (travelMode === 'flight') {
+    // Flight: Kathmandu is the implicit arrival point
+    const arrival = destBySlug.get(FLIGHT_ARRIVAL_DESTINATION_SLUG)
+    if (arrival) startId = arrival.id
   }
+  // in-nepal / null: no forced start — graph orders freely
 
-  // If entry is also in selected list, don't duplicate in ordering input
+  // ── Order destinations ───────────────────────────────────
   const selectedIds = selected.map((d) => d.id)
+  // If entry is also in selected list, avoid duplication in ordering
   const orderInput = selectedIds.filter((id) => id !== startId)
 
   let orderedIds: string[]
@@ -61,7 +80,7 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
   } else if (startId) {
     orderedIds = [startId]
   } else {
-    // No entry node — order from first selected using permutations from arbitrary start
+    // No entry node — order from first selected destination
     const fakeStart = selectedIds[0]
     orderedIds = orderDestinations(graph, fakeStart, selectedIds.slice(1), getCoords)
     if (orderedIds.length === 0) orderedIds = selectedIds
@@ -71,12 +90,19 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
     .map((id) => destById.get(id))
     .filter((d): d is PlannerDestination => Boolean(d))
 
+  // ── Build legs ───────────────────────────────────────────
   const legs: RouteLeg[] = []
   let totalDistanceKm = 0
   let totalTravelHours = 0
 
-  // Border → first stop (if border coords available and first stop isn't entry at border)
-  if (border?.latitude != null && border?.longitude != null && orderedStops.length > 0) {
+  // Road only: border → first stop (if border coords available and first stop
+  // isn't already the border-side entry destination)
+  if (
+    travelMode === 'road' &&
+    border?.latitude != null &&
+    border?.longitude != null &&
+    orderedStops.length > 0
+  ) {
     const first = orderedStops[0]
     const borderSlug = slugify(border.crossing_name)
     const entrySlug = BORDER_ENTRY_DESTINATION_SLUG[borderSlug]
@@ -106,6 +132,7 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
     }
   }
 
+  // Destination-to-destination legs
   for (let i = 0; i < orderedStops.length - 1; i++) {
     const from = orderedStops[i]
     const to = orderedStops[i + 1]
@@ -151,10 +178,13 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
     }
   }
 
+  // ── Day allocation ───────────────────────────────────────
   const travelDays = Math.max(1, Math.ceil(totalTravelHours / 8))
   const remainingDays = Math.max(selected.length, days - travelDays)
-
-  const dayAllocations = allocateDays(orderedStops.filter((d) => selectedIds.includes(d.id)), remainingDays)
+  const dayAllocations = allocateDays(
+    orderedStops.filter((d) => selectedIds.includes(d.id)),
+    remainingDays
+  )
 
   const transportSuggestions = [
     ...new Set(

@@ -100,6 +100,7 @@ export interface Database {
           altitude_meters: number | null
           best_season: string[]
           featured: boolean
+          public_visible: boolean
           hero_image_url: string | null
           gallery_images: string[]
           seo_title: string | null
@@ -120,6 +121,7 @@ export interface Database {
           altitude_meters?: number | null
           best_season?: string[]
           featured?: boolean
+          public_visible?: boolean
           hero_image_url?: string | null
           gallery_images?: string[]
           seo_title?: string | null
@@ -140,6 +142,7 @@ export interface Database {
           altitude_meters?: number | null
           best_season?: string[]
           featured?: boolean
+          public_visible?: boolean
           hero_image_url?: string | null
           gallery_images?: string[]
           seo_title?: string | null
@@ -163,6 +166,7 @@ export interface Database {
           longitude: number | null
           operating_notes: string | null
           featured: boolean
+          public_visible: boolean
           created_at: string
           updated_at: string
         }
@@ -176,6 +180,7 @@ export interface Database {
           longitude?: number | null
           operating_notes?: string | null
           featured?: boolean
+          public_visible?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -189,6 +194,7 @@ export interface Database {
           longitude?: number | null
           operating_notes?: string | null
           featured?: boolean
+          public_visible?: boolean
           created_at?: string
           updated_at?: string
         }
