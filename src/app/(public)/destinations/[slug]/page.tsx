@@ -8,6 +8,7 @@ import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { DestinationCard } from '@/components/public/cards'
 import { AdvisorCta } from '@/components/public/advisor-cta'
 import { JsonLd } from '@/components/public/json-ld'
+import { DestinationHeroImage, GalleryImage } from '@/components/public/destination-images'
 import { LocationMap } from '@/features/map'
 import type { DestinationMapMarker } from '@/lib/map'
 import {
@@ -149,11 +150,10 @@ export default async function DestinationDetailPage({ params }: PageProps) {
       </section>
 
       <div className="container py-6">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <DestinationHeroImage
           src={heroImage}
           alt={destination.name}
-          className="aspect-[21/9] w-full rounded-xl object-cover"
+          fallbackSrc={`https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80`}
         />
       </div>
 
@@ -176,13 +176,11 @@ export default async function DestinationDetailPage({ params }: PageProps) {
               <h2 className="text-xl font-semibold">Gallery</h2>
               <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {destination.gallery_images.map((src, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <GalleryImage
                     key={i}
                     src={src}
                     alt={`${destination.name} photo ${i + 1}`}
-                    className="aspect-square w-full rounded-lg object-cover"
-                    loading="lazy"
+                    index={i}
                   />
                 ))}
               </div>

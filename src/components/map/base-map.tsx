@@ -10,6 +10,7 @@ import Map, {
   type MapLayerMouseEvent,
   type MapEvent,
 } from 'react-map-gl/maplibre'
+import type { MapLibreEvent } from 'maplibre-gl'
 import type { LngLatBoundsLike } from 'maplibre-gl'
 import { getMapStyle, MIN_ZOOM, MAX_ZOOM, NEPAL_MAX_BOUNDS } from '@/lib/map'
 import { cn } from '@/lib/utils'
@@ -88,6 +89,12 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
     [onLoad]
   )
 
+  // Second resize after map goes idle (all tiles loaded) — fixes blank-on-first-load
+  // on devices where the canvas size isn't settled during the load event.
+  const handleIdle = React.useCallback((evt: MapLibreEvent) => {
+    evt.target.resize()
+  }, [])
+
   React.useEffect(() => {
     return () => resizeObserverRef.current?.disconnect()
   }, [])
@@ -111,8 +118,9 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
         onLoad={handleLoad}
+        onIdle={handleIdle}
         cursor={cursor}
-        attributionControl={{ compact: true }}
+        attributionControl={{ compact: false }}
         reuseMaps={false}
         style={{ width: '100%', height: '100%' }}
       >

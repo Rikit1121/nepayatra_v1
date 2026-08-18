@@ -397,7 +397,7 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
           <button
             type="button"
             className={cn(
-              'flex-1 py-3 text-sm font-medium',
+              'flex-1 min-h-[44px] py-3 text-sm font-medium',
               mobileTab === 'plan' && 'border-b-2 border-[hsl(var(--atlas-blue))] font-semibold text-[hsl(var(--atlas-blue))]'
             )}
             onClick={() => setMobileTab('plan')}
@@ -407,7 +407,7 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
           <button
             type="button"
             className={cn(
-              'flex flex-1 items-center justify-center gap-1 py-3 text-sm font-medium',
+              'flex flex-1 min-h-[44px] items-center justify-center gap-1 py-3 text-sm font-medium',
               mobileTab === 'map' && 'border-b-2 border-[hsl(var(--atlas-blue))] font-semibold text-[hsl(var(--atlas-blue))]'
             )}
             onClick={() => setMobileTab('map')}

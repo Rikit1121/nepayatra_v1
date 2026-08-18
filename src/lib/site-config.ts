@@ -10,7 +10,10 @@ function resolveSiteUrl(): string {
   if (!raw || raw === 'NEXT_PUBLIC_SITE_URL') return DEFAULT_SITE_URL
 
   try {
-    return new URL(raw).origin
+    const origin = new URL(raw).origin
+    // Never let Vercel preview/staging domains leak into canonical URLs or og:url.
+    if (origin.endsWith('.vercel.app')) return DEFAULT_SITE_URL
+    return origin
   } catch {
     return DEFAULT_SITE_URL
   }

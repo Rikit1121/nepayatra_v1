@@ -9,6 +9,7 @@ import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { TextField, TextareaField, SelectField, SwitchField, ListInputField } from '@/components/admin/form-field'
+import { ImageUploadField } from '@/components/admin/image-upload-field'
 import {
   createPackageSchema,
   updatePackageSchema,
@@ -80,7 +81,13 @@ export function PackageForm({ pkg }: { pkg?: Package }) {
         <Separator />
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Media & SEO</h3>
-          <TextField<FormValues> name="hero_image_url" label="Hero image URL" placeholder="/images/pokhara.jpg" description="Leave blank to use the built-in photo for this slug, or enter /images/your-file.jpg" />
+          <ImageUploadField
+            fieldName="hero_image_url"
+            bucket="package-images"
+            label="Hero image"
+            pathPrefix="packages/"
+            description="Uploaded image will be stored in Supabase and the URL auto-filled."
+          />
           <TextField<FormValues> name="seo_title" label="SEO title" description="Max 70 characters" />
           <TextareaField<FormValues> name="seo_description" label="SEO description" rows={2} description="Max 160 characters" />
         </div>

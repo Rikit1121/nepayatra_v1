@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { TextField, TextareaField, SwitchField, TagInputField } from '@/components/admin/form-field'
+import { ImageUploadField } from '@/components/admin/image-upload-field'
 import {
   createAdvisorSchema,
   updateAdvisorSchema,
@@ -62,7 +63,13 @@ export function AdvisorForm({ advisor }: { advisor?: Advisor }) {
           <TextField<FormValues> name="whatsapp_number" label="WhatsApp number" placeholder="+977XXXXXXXXXX" description="International format with country code." />
           <TextField<FormValues> name="phone_number" label="Phone number" placeholder="+977XXXXXXXXXX" />
         </div>
-        <TextField<FormValues> name="photo_url" label="Photo URL" placeholder="Leave blank for initials avatar" description="Optional. Use /images/photo.jpg or leave empty — we show initials instead." />
+        <ImageUploadField
+          fieldName="photo_url"
+          bucket="advisor-photos"
+          label="Advisor photo"
+          pathPrefix="advisors/"
+          description="Optional. Upload a photo or leave blank — initials avatar shown instead."
+        />
         <Separator />
         <SwitchField<FormValues> name="active" label="Active — visible to visitors" description="Only active advisors appear on the public advisors page." />
         <div className="flex items-center gap-3 pt-2">

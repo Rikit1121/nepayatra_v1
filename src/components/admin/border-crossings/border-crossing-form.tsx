@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { TextField, TextareaField, SwitchField } from '@/components/admin/form-field'
+import { ImageUploadField } from '@/components/admin/image-upload-field'
 import {
   createBorderCrossingSchema,
   updateBorderCrossingSchema,
@@ -57,6 +58,13 @@ export function BorderCrossingForm({ crossing }: { crossing?: BorderCrossing }) 
         </div>
         <TextField<FormValues> name="nepal_side" label="Nepal side" placeholder="e.g. Birgunj, Madhesh Province" required />
         <TextareaField<FormValues> name="description" label="Description" rows={4} />
+        <ImageUploadField
+          fieldName="image_url"
+          bucket="destination-images"
+          label="Crossing photo"
+          pathPrefix="border-crossings/"
+          description="Optional photo shown on the crossing detail page."
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField<FormValues> name="latitude" label="Latitude" placeholder="e.g. 27.0135" />
           <TextField<FormValues> name="longitude" label="Longitude" placeholder="e.g. 84.8706" />

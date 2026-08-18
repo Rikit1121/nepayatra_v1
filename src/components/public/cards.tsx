@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
-import { MapPin, Clock, ArrowRight, Milestone, BookOpen } from 'lucide-react'
+import { MapPin, Clock, ArrowRight, Milestone, BookOpen, ImageIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { formatInr, slugify, cn } from '@/lib/utils'
 import { atlasCardDestination, atlasCardEditorial } from '@/lib/design-system'
@@ -44,28 +44,40 @@ function DestinationCardImage({
   reduceMotion: boolean | null
 }) {
   const [activeSrc, setActiveSrc] = React.useState(src)
+  const [allFailed, setAllFailed] = React.useState(false)
 
   React.useEffect(() => {
     setActiveSrc(src)
+    setAllFailed(false)
   }, [src])
 
-  const img = (
+  const handleError = React.useCallback(() => {
+    if (activeSrc !== fallbackSrc) {
+      setActiveSrc(fallbackSrc)
+    } else {
+      setAllFailed(true)
+    }
+  }, [activeSrc, fallbackSrc])
+
+  const imgOrPlaceholder = allFailed ? (
+    <div className="flex h-full w-full items-center justify-center bg-[hsl(var(--atlas-mist))]">
+      <ImageIcon className="h-8 w-8 text-[hsl(var(--atlas-stone))] opacity-30" />
+    </div>
+  ) : (
     /* eslint-disable-next-line @next/next/no-img-element */
     <img
       src={activeSrc}
       alt={alt}
       loading="lazy"
-      onError={() => {
-        if (activeSrc !== fallbackSrc) setActiveSrc(fallbackSrc)
-      }}
+      onError={handleError}
     />
   )
 
   if (reduceMotion) {
     return (
       <div className="atlas-dest-image-wrap overflow-hidden">
-        {img}
-        <div className="atlas-dest-image-scrim" aria-hidden />
+        {imgOrPlaceholder}
+        {!allFailed && <div className="atlas-dest-image-scrim" aria-hidden />}
       </div>
     )
   }
@@ -73,8 +85,8 @@ function DestinationCardImage({
   return (
     <div className="overflow-hidden">
       <motion.div className="atlas-dest-image-wrap" variants={imageZoom}>
-        {img}
-        <div className="atlas-dest-image-scrim" aria-hidden />
+        {imgOrPlaceholder}
+        {!allFailed && <div className="atlas-dest-image-scrim" aria-hidden />}
       </motion.div>
     </div>
   )

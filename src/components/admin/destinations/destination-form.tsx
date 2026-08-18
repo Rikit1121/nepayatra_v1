@@ -16,6 +16,7 @@ import {
   TagInputField,
   CoordinateField,
 } from '@/components/admin/form-field'
+import { ImageUploadField } from '@/components/admin/image-upload-field'
 import {
   createDestinationSchema,
   updateDestinationSchema,
@@ -203,11 +204,12 @@ export function DestinationForm({ destination }: DestinationFormProps) {
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
             Media
           </h3>
-          <TextField<FormValues>
-            name="hero_image_url"
-            label="Hero image URL"
-            placeholder="/images/nagarkot1.jpg"
-            description="Leave blank to use the built-in photo for this destination slug, or enter /images/your-file.jpg"
+          <ImageUploadField
+            fieldName="hero_image_url"
+            bucket="destination-images"
+            label="Hero image"
+            pathPrefix="destinations/"
+            description="Uploaded image will be stored in Supabase and the URL auto-filled."
           />
           <TagInputField<FormValues>
             name="gallery_images"

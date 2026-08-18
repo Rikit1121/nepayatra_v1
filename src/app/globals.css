@@ -150,3 +150,24 @@
 .nepayatra-popup .maplibregl-popup-content {
   @apply rounded-xl p-0 shadow-xl ring-1 ring-black/5;
 }
+
+/* ── MapLibre attribution overrides ─────────────────────────── */
+/* Hide the ⓘ info toggle button — attribution text is always visible */
+.maplibregl-ctrl-attrib-button {
+  display: none !important;
+}
+/* Minimal attribution text: 9px, half opacity */
+.maplibregl-ctrl-attrib-inner {
+  font-size: 9px !important;
+  opacity: 0.5;
+  line-height: 1.2;
+}
+.maplibregl-ctrl-attrib.maplibregl-compact {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 4px !important;
+}
+/* Ensure map canvas never causes horizontal scroll on mobile */
+.maplibregl-canvas {
+  max-width: 100% !important;
+}

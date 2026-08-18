@@ -7,6 +7,7 @@ import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { DestinationCard } from '@/components/public/cards'
 import { AdvisorCta } from '@/components/public/advisor-cta'
 import { JsonLd } from '@/components/public/json-ld'
+import { DestinationHeroImage } from '@/components/public/destination-images'
 import { LocationMap } from '@/features/map'
 import type { DestinationMapMarker } from '@/lib/map'
 import {
@@ -113,7 +114,7 @@ export default async function BorderCrossingDetailPage({ params }: PageProps) {
               { label: crossing.crossing_name },
             ]}
           />
-          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+          <h1 className="mt-3 break-words text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
             {crossing.crossing_name}
           </h1>
           {crossing.description && (
@@ -124,11 +125,10 @@ export default async function BorderCrossingDetailPage({ params }: PageProps) {
 
       {crossingImage ? (
         <div className="container py-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <DestinationHeroImage
             src={crossingImage}
             alt={`${crossing.crossing_name} border crossing`}
-            className="aspect-[21/9] w-full rounded-xl object-cover"
+            fallbackSrc="/images/birgunj.jpeg"
           />
         </div>
       ) : null}
