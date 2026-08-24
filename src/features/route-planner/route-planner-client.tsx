@@ -32,6 +32,7 @@ import { DESTINATION_CATEGORY_LABELS } from '@/lib/site-config'
 import { usePlannerUrlState } from '@/hooks/route-planner/use-planner-url-state'
 import {
   generateRoute,
+  calculateTripBudget,
   buildPlannerWhatsAppMessage,
   STYLE_CATEGORIES,
   ORIGIN_OPTIONS,
@@ -219,6 +220,15 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
     })
   }, [state.generated, state.travelMode, validDestinationSlugs, state.days, data, border])
 
+  const budgetResult = React.useMemo(() => {
+    if (!generatedRoute) return null
+    return calculateTripBudget({
+      state,
+      route: generatedRoute,
+      data,
+    })
+  }, [state, generatedRoute, data])
+
   const mapDestinations = React.useMemo(
     () => data.destinations.map(destinationToMarker),
     [data.destinations]
@@ -385,7 +395,11 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         {state.generated && generatedRoute ? (
           <div className="space-y-6">
-            <RouteResults route={generatedRoute} totalTripDays={state.days} />
+            <RouteResults
+              route={generatedRoute}
+              totalTripDays={state.days}
+              budgetResult={budgetResult}
+            />
             <AdvisorHandoff advisors={data.advisors} message={whatsappMessage} />
             <Button
               variant="outline"
@@ -1377,7 +1391,7 @@ function StepStyleBudget({
           />
         </div>
         <p className="text-xs text-muted-foreground">
-          Budget is saved with your plan. Detailed cost breakdowns come in a future update.
+          Total available budget for your party. NepaYatra calculates lodging, transit, meals, and activities to fit this amount.
         </p>
       </div>
     </div>

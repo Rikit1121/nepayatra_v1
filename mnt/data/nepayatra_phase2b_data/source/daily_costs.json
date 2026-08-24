@@ -1,0 +1,5 @@
+[
+  {"region_key":"national_general","tier":"budget","food_min_npr":1200,"food_max_npr":2000,"transport_min_npr":200,"transport_max_npr":500,"activities_misc_min_npr":500,"activities_misc_max_npr":1000,"source":"Nepal Travel Budget Guide 2025","source_date":"2025-08-01"},
+  {"region_key":"national_general","tier":"comfort","food_min_npr":2500,"food_max_npr":4500,"transport_min_npr":1000,"transport_max_npr":2500,"activities_misc_min_npr":1500,"activities_misc_max_npr":3000,"source":"Nepal Travel Budget Guide 2025","source_date":"2025-08-01"},
+  {"region_key":"national_general","tier":"premium","food_min_npr":6000,"food_max_npr":12000,"transport_min_npr":4000,"transport_max_npr":10000,"activities_misc_min_npr":5000,"activities_misc_max_npr":15000,"source":"Nepal Travel Budget Guide 2025","source_date":"2025-08-01"}
+]

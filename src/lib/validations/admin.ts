@@ -205,6 +205,13 @@ export const TRANSPORT_TYPES = [
   'other',
 ] as const
 
+export const PRICING_UNITS = [
+  'per_person',
+  'per_vehicle',
+  'per_day',
+  'per_trip',
+] as const
+
 export const DAILY_COST_TIERS = ['budget', 'comfort', 'premium'] as const
 
 export const ACTIVITY_CATEGORIES = [
@@ -724,6 +731,8 @@ export const createTransportOptionSchema = z
     transport_type: z.enum(TRANSPORT_TYPES, {
       errorMap: () => ({ message: 'Please select a transport type' }),
     }),
+    pricing_unit: z.enum(PRICING_UNITS).default('per_person'),
+    vehicle_capacity: optionalPositiveInt('Vehicle capacity'),
     estimated_cost_min: requiredInt('Min cost', 1, 10_000_000),
     estimated_cost_max: requiredInt('Max cost', 1, 10_000_000),
     currency: z.string().default('NPR'),
@@ -772,6 +781,9 @@ export const createDomesticFlightSchema = z
       .transform((s) => s.toUpperCase()),
     estimated_cost_min: requiredInt('Min cost', 1, 10_000_000),
     estimated_cost_max: requiredInt('Max cost', 1, 10_000_000),
+    estimated_cost_foreigner_min: optionalPositiveInt('Foreigner min cost'),
+    estimated_cost_foreigner_max: optionalPositiveInt('Foreigner max cost'),
+    foreigner_currency: z.string().default('USD').optional().nullable(),
     currency: z.string().default('NPR'),
     duration_minutes: optionalPositiveInt('Duration minutes'),
     airlines: z.array(z.string()).default([]),
@@ -784,6 +796,16 @@ export const createDomesticFlightSchema = z
     message: 'Max estimated flight cost cannot be less than min cost',
     path: ['estimated_cost_max'],
   })
+  .refine(
+    (data) =>
+      !data.estimated_cost_foreigner_max ||
+      !data.estimated_cost_foreigner_min ||
+      data.estimated_cost_foreigner_max >= data.estimated_cost_foreigner_min,
+    {
+      message: 'Max foreigner flight cost cannot be less than min foreigner cost',
+      path: ['estimated_cost_foreigner_max'],
+    }
+  )
 
 export const updateDomesticFlightSchema = createDomesticFlightSchema.and(
   z.object({ id: z.string().uuid() })
@@ -796,23 +818,35 @@ export type UpdateDomesticFlightFormValues = z.infer<typeof updateDomesticFlight
 // 14. ACTIVITIES SCHEMA (Phase 2A)
 // ─────────────────────────────────────────────────────────────
 
-export const createActivitySchema = z.object({
-  destination_id: z.string().uuid('Please select a valid destination'),
-  name: z
-    .string()
-    .min(2, 'Activity name must be at least 2 characters')
-    .max(200, 'Name must be under 200 characters'),
-  category: z.enum(ACTIVITY_CATEGORIES, {
-    errorMap: () => ({ message: 'Please select an activity category' }),
-  }),
-  estimated_cost: optionalInt('Estimated cost', 0),
-  currency: z.string().default('NPR'),
-  duration: z.string().max(100).optional().nullable(),
-  description: z.string().optional().nullable(),
-  source: z.string().max(200).optional().nullable(),
-  source_date: z.string().optional().nullable(),
-  public_visible: z.boolean().default(true),
-})
+export const createActivitySchema = z
+  .object({
+    destination_id: z.string().uuid('Please select a valid destination'),
+    name: z
+      .string()
+      .min(2, 'Activity name must be at least 2 characters')
+      .max(200, 'Name must be under 200 characters'),
+    category: z.enum(ACTIVITY_CATEGORIES, {
+      errorMap: () => ({ message: 'Please select an activity category' }),
+    }),
+    estimated_cost: optionalInt('Estimated cost', 0),
+    estimated_cost_max: optionalInt('Max cost', 0),
+    currency: z.string().default('NPR'),
+    duration: z.string().max(100).optional().nullable(),
+    description: z.string().optional().nullable(),
+    source: z.string().max(200).optional().nullable(),
+    source_date: z.string().optional().nullable(),
+    public_visible: z.boolean().default(true),
+  })
+  .refine(
+    (data) =>
+      data.estimated_cost == null ||
+      data.estimated_cost_max == null ||
+      data.estimated_cost_max >= data.estimated_cost,
+    {
+      message: 'Max activity cost cannot be less than min cost',
+      path: ['estimated_cost_max'],
+    }
+  )
 
 export const updateActivitySchema = createActivitySchema.and(
   z.object({ id: z.string().uuid() })

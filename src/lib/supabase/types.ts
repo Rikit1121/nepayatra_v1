@@ -87,6 +87,8 @@ export type TransportType =
   | 'taxi'
   | 'other'
 
+export type PricingUnit = 'per_person' | 'per_vehicle' | 'per_day' | 'per_trip'
+
 export type DailyCostTier = 'budget' | 'comfort' | 'premium'
 
 export type ActivityCategory =
@@ -645,6 +647,8 @@ export interface Database {
           origin_destination_id: string
           destination_destination_id: string
           transport_type: TransportType
+          pricing_unit: PricingUnit
+          vehicle_capacity: number | null
           estimated_cost_min: number
           estimated_cost_max: number
           currency: string
@@ -662,6 +666,8 @@ export interface Database {
           origin_destination_id: string
           destination_destination_id: string
           transport_type: TransportType
+          pricing_unit?: PricingUnit
+          vehicle_capacity?: number | null
           estimated_cost_min: number
           estimated_cost_max: number
           currency?: string
@@ -679,6 +685,8 @@ export interface Database {
           origin_destination_id?: string
           destination_destination_id?: string
           transport_type?: TransportType
+          pricing_unit?: PricingUnit
+          vehicle_capacity?: number | null
           estimated_cost_min?: number
           estimated_cost_max?: number
           currency?: string
@@ -722,6 +730,9 @@ export interface Database {
           destination_airport_code: string
           estimated_cost_min: number
           estimated_cost_max: number
+          estimated_cost_foreigner_min: number | null
+          estimated_cost_foreigner_max: number | null
+          foreigner_currency: string | null
           currency: string
           duration_minutes: number | null
           airlines: string[]
@@ -742,6 +753,9 @@ export interface Database {
           destination_airport_code: string
           estimated_cost_min: number
           estimated_cost_max: number
+          estimated_cost_foreigner_min?: number | null
+          estimated_cost_foreigner_max?: number | null
+          foreigner_currency?: string | null
           currency?: string
           duration_minutes?: number | null
           airlines?: string[]
@@ -762,6 +776,9 @@ export interface Database {
           destination_airport_code?: string
           estimated_cost_min?: number
           estimated_cost_max?: number
+          estimated_cost_foreigner_min?: number | null
+          estimated_cost_foreigner_max?: number | null
+          foreigner_currency?: string | null
           currency?: string
           duration_minutes?: number | null
           airlines?: string[]
@@ -799,6 +816,7 @@ export interface Database {
           name: string
           category: ActivityCategory
           estimated_cost: number | null
+          estimated_cost_max: number | null
           currency: string
           duration: string | null
           description: string | null
@@ -814,6 +832,7 @@ export interface Database {
           name: string
           category: ActivityCategory
           estimated_cost?: number | null
+          estimated_cost_max?: number | null
           currency?: string
           duration?: string | null
           description?: string | null
@@ -829,6 +848,7 @@ export interface Database {
           name?: string
           category?: ActivityCategory
           estimated_cost?: number | null
+          estimated_cost_max?: number | null
           currency?: string
           duration?: string | null
           description?: string | null

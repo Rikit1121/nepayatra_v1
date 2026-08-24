@@ -1,4 +1,11 @@
-import type { DestinationCategory } from '@/lib/supabase/types'
+import type {
+  DestinationCategory,
+  Accommodation,
+  TransportOption,
+  DomesticFlight,
+  Activity,
+  DailyCostEstimate,
+} from '@/lib/supabase/types'
 
 // ─────────────────────────────────────────────────────────────
 // Origin / Entry types
@@ -113,6 +120,11 @@ export interface RoutePlannerData {
   borders: PlannerBorder[]
   connections: PlannerConnection[]
   advisors: PlannerAdvisor[]
+  accommodations: Accommodation[]
+  transportOptions: TransportOption[]
+  domesticFlights: DomesticFlight[]
+  activities: Activity[]
+  dailyCostEstimates: DailyCostEstimate[]
 }
 
 // ─────────────────────────────────────────────────────────────

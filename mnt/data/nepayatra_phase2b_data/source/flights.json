@@ -1,0 +1,15 @@
+[
+{"origin":"KTM","destination":"SIMA","duration_minutes":15,"airlines":["Buddha Air"],"saarc_min_npr":2800,"saarc_max_npr":4500,"foreigner_min_usd":65,"foreigner_max_usd":95},
+{"origin":"KTM","destination":"BHR","duration_minutes":20,"airlines":["Buddha Air"],"saarc_min_npr":3500,"saarc_max_npr":5800,"foreigner_min_usd":85,"foreigner_max_usd":120},
+{"origin":"KTM","destination":"PKR","duration_minutes":25,"airlines":["Buddha Air","Yeti Airlines","Shree Airlines"],"saarc_min_npr":3800,"saarc_max_npr":6800,"foreigner_min_usd":90,"foreigner_max_usd":135},
+{"origin":"KTM","destination":"JKR","duration_minutes":25,"airlines":["Buddha Air","Shree Airlines"],"saarc_min_npr":3600,"saarc_max_npr":5800,"foreigner_min_usd":85,"foreigner_max_usd":125},
+{"origin":"KTM","destination":"BWA","duration_minutes":35,"airlines":["Buddha Air","Yeti Airlines","Shree Airlines"],"saarc_min_npr":4200,"saarc_max_npr":7200,"foreigner_min_usd":100,"foreigner_max_usd":150},
+{"origin":"KTM","destination":"TMI","duration_minutes":35,"airlines":["Buddha Air"],"saarc_min_npr":5500,"saarc_max_npr":8800,"foreigner_min_usd":120,"foreigner_max_usd":160},
+{"origin":"KTM","destination":"BIR","duration_minutes":45,"airlines":["Buddha Air","Yeti Airlines","Shree Airlines"],"saarc_min_npr":5000,"saarc_max_npr":8500,"foreigner_min_usd":120,"foreigner_max_usd":170},
+{"origin":"KTM","destination":"KEP","duration_minutes":50,"airlines":["Buddha Air","Yeti Airlines","Shree Airlines"],"saarc_min_npr":6500,"saarc_max_npr":10500,"foreigner_min_usd":140,"foreigner_max_usd":210},
+{"origin":"KTM","destination":"DHI","duration_minutes":70,"airlines":["Buddha Air","Shree Airlines"],"saarc_min_npr":8500,"saarc_max_npr":14000,"foreigner_min_usd":170,"foreigner_max_usd":250},
+{"origin":"KTM/RHP","destination":"LUA","duration_minutes":30,"airlines":["Tara Air","Summit Air","Sita Air"],"saarc_min_npr":10500,"saarc_max_npr":21800,"foreigner_min_usd":180,"foreigner_max_usd":265},
+{"origin":"KTM","destination":"JMO","duration_minutes":45,"airlines":["Tara Air","Summit Air"],"saarc_min_npr":12000,"saarc_max_npr":18000,"foreigner_min_usd":180,"foreigner_max_usd":250},
+{"origin":"PKR","destination":"JMO","duration_minutes":20,"airlines":["Tara Air","Summit Air"],"saarc_min_npr":6500,"saarc_max_npr":9500,"foreigner_min_usd":125,"foreigner_max_usd":160},
+{"origin":"KTM","destination":"EVEREST_SCENIC","duration_minutes":55,"airlines":["Buddha Air","Yeti Airlines","Shree Airlines"],"saarc_min_npr":11000,"saarc_max_npr":15000,"foreigner_min_usd":210,"foreigner_max_usd":260,"type":"scenic_flight"}
+]

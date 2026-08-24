@@ -1,0 +1,32 @@
+[
+  {
+    "route":"Kathmandu-Pokhara tourist bus",
+    "pricing_unit":"per_person",
+    "min_npr":1200,
+    "max_npr":1700,
+    "source":"Nepal Vehicle Rental",
+    "source_url":"https://nepalvehiclerental.com/kathmandu-pokhara-tourist-bus/",
+    "checked":"2026-08-19",
+    "purpose":"Current sanity-check against the 2025 guide range; do not overwrite the primary source automatically."
+  },
+  {
+    "route":"Kathmandu-Pokhara VIP tourist bus",
+    "pricing_unit":"per_person",
+    "min_npr":1600,
+    "max_npr":2200,
+    "source":"Hike On Treks",
+    "source_url":"https://hikeontreks.com/hike_package/kathmandu-pokhara-bus-service/",
+    "checked":"2026-08-19",
+    "purpose":"Current reference example; use as supplemental evidence only."
+  },
+  {
+    "route":"Kathmandu-Pokhara tourist bus",
+    "pricing_unit":"per_person",
+    "min_npr":1200,
+    "max_npr":1700,
+    "source":"Nepal Vehicle Rental",
+    "source_url":"https://nepalvehiclerental.com/kathmandu-pokhara-tourist-bus/",
+    "checked":"2026-08-19",
+    "purpose":"Current published range; primary dataset remains the supplied guide."
+  }
+]

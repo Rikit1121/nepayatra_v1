@@ -1,0 +1,1802 @@
+[
+  {
+    "name": "Flock Hostels Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "Hostel",
+    "price_min_npr": 800,
+    "price_max_npr": 1800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Zostel Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "Hostel",
+    "price_min_npr": 700,
+    "price_max_npr": 1600,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Encounter Nepal",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Friends Home",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Thamel Park",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Marshyangdi",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Nepalaya",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2800,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Kathmandu Guest House",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Kumari Boutique Hotel",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 3200,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Thamel House Boutique",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 8000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Shanker",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 10000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Dom Himalaya Hotel",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 6500,
+    "price_max_npr": 11000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Mulberry",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 8500,
+    "price_max_npr": 14500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Annapurna",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 15000,
+    "price_max_npr": 30000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Aloft Kathmandu Thamel",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 18000,
+    "price_max_npr": 32000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Soaltee Crowne Plaza",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 18000,
+    "price_max_npr": 40000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hyatt Regency Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 20000,
+    "price_max_npr": 45000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Marriott Hotel Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 22000,
+    "price_max_npr": 50000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Durbar Guesthouse & Backpackers",
+    "destination_key": "kathmandu",
+    "source_category": "Guesthouse",
+    "price_min_npr": 1200,
+    "price_max_npr": 1900,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Ambassador",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Woodland Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 3500,
+    "price_max_npr": 4900,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Royal Singi Hotel",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 8500,
+    "price_max_npr": 14000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Yak & Yeti",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star Heritage",
+    "price_min_npr": 16000,
+    "price_max_npr": 35000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Lazimpat House B&B",
+    "destination_key": "kathmandu",
+    "source_category": "Guesthouse",
+    "price_min_npr": 1500,
+    "price_max_npr": 2200,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Ambassador by ACE",
+    "destination_key": "kathmandu",
+    "source_category": "3/4-Star",
+    "price_min_npr": 4500,
+    "price_max_npr": 8000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "4-Star Heritage",
+    "destination_key": "kathmandu",
+    "source_category": "unspecified",
+    "price_min_npr": 6500,
+    "price_max_npr": 12000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Radisson Hotel Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 14000,
+    "price_max_npr": 25000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Dusit Princess Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 15000,
+    "price_max_npr": 28000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Lotus Guesthouse & Cafe",
+    "destination_key": "kathmandu",
+    "source_category": "Guesthouse",
+    "price_min_npr": 1000,
+    "price_max_npr": 1800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Tibet International",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Butsugen",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Shambaling Boutique Hotel",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 6500,
+    "price_max_npr": 12500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Tibet International (Premium)",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 8000,
+    "price_max_npr": 14000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hyatt Regency Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 18000,
+    "price_max_npr": 35000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Kwabahal Boutique Hostel",
+    "destination_key": "patan",
+    "source_category": "Hostel",
+    "price_min_npr": 800,
+    "price_max_npr": 1800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Newa Chen Traditional",
+    "destination_key": "patan",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Timila / Swotha",
+    "destination_key": "patan",
+    "source_category": "3-Star Boutique",
+    "price_min_npr": 3200,
+    "price_max_npr": 5000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Summit Hotel",
+    "destination_key": "patan",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 10000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Himalaya",
+    "destination_key": "patan",
+    "source_category": "4-Star",
+    "price_min_npr": 7000,
+    "price_max_npr": 13000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Vivanta Kathmandu",
+    "destination_key": "patan",
+    "source_category": "5-Star",
+    "price_min_npr": 15000,
+    "price_max_npr": 28000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Planet Bhaktapur Hostel",
+    "destination_key": "bhaktapur",
+    "source_category": "Hostel",
+    "price_min_npr": 800,
+    "price_max_npr": 1800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Peacock Guest House",
+    "destination_key": "bhaktapur",
+    "source_category": "Budget",
+    "price_min_npr": 1500,
+    "price_max_npr": 3000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Bhadgaon Guest House",
+    "destination_key": "bhaktapur",
+    "source_category": "3-Star",
+    "price_min_npr": 2000,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Tulaja Boutique Hotel",
+    "destination_key": "bhaktapur",
+    "source_category": "3-Star",
+    "price_min_npr": 2800,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Traditional Bhaktapur",
+    "destination_key": "bhaktapur",
+    "source_category": "3-Star Heritage",
+    "price_min_npr": 5500,
+    "price_max_npr": 9500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "The Nanee",
+    "destination_key": "bhaktapur",
+    "source_category": "4/5-Star Boutique",
+    "price_min_npr": 16000,
+    "price_max_npr": 30000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Peaceful Cottage & Cafe Du Mont",
+    "destination_key": "nagarkot",
+    "source_category": "Guesthouse",
+    "price_min_npr": 1200,
+    "price_max_npr": 2000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel at the End of the Universe",
+    "destination_key": "nagarkot",
+    "source_category": "3-Star",
+    "price_min_npr": 2000,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Green Valley",
+    "destination_key": "nagarkot",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Mystic Mountain",
+    "destination_key": "nagarkot",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 12000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "The Fort Resort",
+    "destination_key": "nagarkot",
+    "source_category": "4-Star",
+    "price_min_npr": 7500,
+    "price_max_npr": 14000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Club Himalaya by ACE Hotels",
+    "destination_key": "nagarkot",
+    "source_category": "4.5/5-Star",
+    "price_min_npr": 16000,
+    "price_max_npr": 28000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Kavya Resort & Spa",
+    "destination_key": "nagarkot",
+    "source_category": "5-Star Ultra",
+    "price_min_npr": 28000,
+    "price_max_npr": 55000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Buddha Shanti Lodge",
+    "destination_key": "dhulikhel",
+    "source_category": "Guesthouse",
+    "price_min_npr": 1000,
+    "price_max_npr": 1800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Gaia Holiday Home",
+    "destination_key": "dhulikhel",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Dhulikhel Mountain Resort",
+    "destination_key": "dhulikhel",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Dhulikhel Lodge Resort",
+    "destination_key": "dhulikhel",
+    "source_category": "4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 9000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Himalaya Drishya Resort",
+    "destination_key": "dhulikhel",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 12000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Dusit Thani Himalayan Resort",
+    "destination_key": "dhulikhel",
+    "source_category": "5-Star",
+    "price_min_npr": 22000,
+    "price_max_npr": 38000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Dwarika's Resort Dhulikhel",
+    "destination_key": "dhulikhel",
+    "source_category": "5-Star Ultra",
+    "price_min_npr": 45000,
+    "price_max_npr": 85000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Kusum Airport Hotel",
+    "destination_key": "kathmandu",
+    "source_category": "Guesthouse",
+    "price_min_npr": 1000,
+    "price_max_npr": 1900,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Aaradhya",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4200,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Best Western Plus Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 6800,
+    "price_max_npr": 11500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "The Everest Hotel",
+    "destination_key": "kathmandu",
+    "source_category": "4/5-Star",
+    "price_min_npr": 8500,
+    "price_max_npr": 16000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Homestay",
+    "destination_key": "kathmandu",
+    "source_category": "unspecified",
+    "price_min_npr": 750,
+    "price_max_npr": 1800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel In N Out Balaju",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2000,
+    "price_max_npr": 3800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "3.5-Star",
+    "destination_key": "kathmandu",
+    "source_category": "unspecified",
+    "price_min_npr": 5000,
+    "price_max_npr": 8500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Grand Retreat & Spa Balaju",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star",
+    "price_min_npr": 9500,
+    "price_max_npr": 15000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Maharajgunj Backpacker Lodge",
+    "destination_key": "kathmandu",
+    "source_category": "Hostel",
+    "price_min_npr": 1200,
+    "price_max_npr": 1900,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Le Village / Radhe Regent",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Shambala",
+    "destination_key": "kathmandu",
+    "source_category": "4-Star Boutique",
+    "price_min_npr": 6500,
+    "price_max_npr": 12000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Mandala Norling Lords Prime",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 14000,
+    "price_max_npr": 24000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Peace Eye Guest House",
+    "destination_key": "kathmandu",
+    "source_category": "Guesthouse",
+    "price_min_npr": 900,
+    "price_max_npr": 1800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Swayambhu Hotels & Apartments",
+    "destination_key": "kathmandu",
+    "source_category": "3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "3.5-Star",
+    "destination_key": "kathmandu",
+    "source_category": "unspecified",
+    "price_min_npr": 5500,
+    "price_max_npr": 9500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "The Soaltee Kathmandu",
+    "destination_key": "kathmandu",
+    "source_category": "5-Star",
+    "price_min_npr": 16000,
+    "price_max_npr": 35000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Waterfront Resort by KGH",
+    "destination_key": "pokhara",
+    "source_category": "Luxury / 5-Star (NPR 15,000 – 55,000+)",
+    "price_min_npr": 12000,
+    "price_max_npr": 20000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Temple Tree Resort & Spa",
+    "destination_key": "pokhara",
+    "source_category": "Luxury / 5-Star (NPR 15,000 – 55,000+)",
+    "price_min_npr": 14000,
+    "price_max_npr": 22000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Barahi Pokhara",
+    "destination_key": "pokhara",
+    "source_category": "Luxury / 5-Star (NPR 15,000 – 55,000+)",
+    "price_min_npr": 15000,
+    "price_max_npr": 26000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "The Pavilions Himalayas",
+    "destination_key": "pokhara",
+    "source_category": "Luxury / 5-Star (NPR 15,000 – 55,000+)",
+    "price_min_npr": 28000,
+    "price_max_npr": 55000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Middle Path & Spa",
+    "destination_key": "pokhara",
+    "source_category": "Mid-Range / 4-Star (NPR 5,000 – 15,000)",
+    "price_min_npr": 5500,
+    "price_max_npr": 10500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Landmark Pokhara",
+    "destination_key": "pokhara",
+    "source_category": "Mid-Range / 4-Star (NPR 5,000 – 15,000)",
+    "price_min_npr": 6000,
+    "price_max_npr": 11500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Mount Kailash Resort",
+    "destination_key": "pokhara",
+    "source_category": "Mid-Range / 4-Star (NPR 5,000 – 15,000)",
+    "price_min_npr": 6500,
+    "price_max_npr": 12000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Glacier 3960",
+    "destination_key": "pokhara",
+    "source_category": "Mid-Range / 4-Star (NPR 5,000 – 15,000)",
+    "price_min_npr": 7500,
+    "price_max_npr": 14000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Atithi Resort & Spa",
+    "destination_key": "pokhara",
+    "source_category": "Mid-Range / 4-Star (NPR 5,000 – 15,000)",
+    "price_min_npr": 8000,
+    "price_max_npr": 15000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Forest Lake Backpacker Lodge",
+    "destination_key": "pokhara",
+    "source_category": "Budget / 3-Star (NPR 2,000 – 5,000)",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Blossom",
+    "destination_key": "pokhara",
+    "source_category": "Budget / 3-Star (NPR 2,000 – 5,000)",
+    "price_min_npr": 2500,
+    "price_max_npr": 4200,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Mount View Pokhara",
+    "destination_key": "pokhara",
+    "source_category": "Budget / 3-Star (NPR 2,000 – 5,000)",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Peninsula",
+    "destination_key": "pokhara",
+    "source_category": "Budget / 3-Star (NPR 2,000 – 5,000)",
+    "price_min_npr": 2800,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel White Pearl",
+    "destination_key": "pokhara",
+    "source_category": "Budget / 3-Star (NPR 2,000 – 5,000)",
+    "price_min_npr": 3000,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Pokhara Peace",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Mala Pokhara",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Pokhara Choice",
+    "destination_key": "pokhara",
+    "source_category": "4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 8500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Crown Himalayas",
+    "destination_key": "pokhara",
+    "source_category": "4-Star",
+    "price_min_npr": 5500,
+    "price_max_npr": 9500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Pokhara Grande Hotel",
+    "destination_key": "pokhara",
+    "source_category": "5-Star",
+    "price_min_npr": 15000,
+    "price_max_npr": 30000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Fish Tail Lodge",
+    "destination_key": "pokhara",
+    "source_category": "5-Star Heritage",
+    "price_min_npr": 16000,
+    "price_max_npr": 32000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Mountain Lopchan Resort",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Sarangkot Sherpa Resort",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Bhanjyang Village Resort",
+    "destination_key": "pokhara",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 12000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Annapurna View",
+    "destination_key": "pokhara",
+    "source_category": "5-Star",
+    "price_min_npr": 20000,
+    "price_max_npr": 35000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Sarangkot Mountain Lodge",
+    "destination_key": "pokhara",
+    "source_category": "5-Star",
+    "price_min_npr": 22000,
+    "price_max_npr": 38000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Begnas Coffee House & Lodge",
+    "destination_key": "pokhara",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Begnas Garden Resort",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Grand Begnas Resort",
+    "destination_key": "pokhara",
+    "source_category": "4-Star",
+    "price_min_npr": 5500,
+    "price_max_npr": 9500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "The Begnas Lake Resort & Villas",
+    "destination_key": "pokhara",
+    "source_category": "5-Star Eco",
+    "price_min_npr": 15000,
+    "price_max_npr": 28000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Rupakot Resort",
+    "destination_key": "pokhara",
+    "source_category": "5-Star",
+    "price_min_npr": 18000,
+    "price_max_npr": 35000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel City Inn",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Tulsi",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 2800,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Crystal Palace",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 4900,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Pokhara Batika Hotel",
+    "destination_key": "pokhara",
+    "source_category": "4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 9000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Anand",
+    "destination_key": "pokhara",
+    "source_category": "3-Star",
+    "price_min_npr": 2000,
+    "price_max_npr": 3800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Kaski",
+    "destination_key": "pokhara",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3200,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Deep Jyoti",
+    "destination_key": "pokhara",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Crown Plaza Pokhara",
+    "destination_key": "pokhara",
+    "source_category": "4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 8500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Depche Bandipur",
+    "destination_key": "bandipur",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Bandipur Village Inn",
+    "destination_key": "bandipur",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Bandipur Kaushi Inn",
+    "destination_key": "bandipur",
+    "source_category": "3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Heritage Bandipur",
+    "destination_key": "bandipur",
+    "source_category": "3-Star",
+    "price_min_npr": 4000,
+    "price_max_npr": 7500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Bandipur Mountain Resort",
+    "destination_key": "bandipur",
+    "source_category": "3-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 9000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Gaun Ghar Hotel",
+    "destination_key": "bandipur",
+    "source_category": "Heritage 3-4 Star",
+    "price_min_npr": 6500,
+    "price_max_npr": 12000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "The Old Inn Bandipur",
+    "destination_key": "bandipur",
+    "source_category": "Heritage 3-4 Star",
+    "price_min_npr": 8000,
+    "price_max_npr": 15000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Jungle Sunset Camp",
+    "destination_key": "chitwan",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel National Park",
+    "destination_key": "chitwan",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Chitwan Village Resort",
+    "destination_key": "chitwan",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Chitwan Adventure Resort",
+    "destination_key": "chitwan",
+    "source_category": "3-Star",
+    "price_min_npr": 3500,
+    "price_max_npr": 6500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Seven Star",
+    "destination_key": "chitwan",
+    "source_category": "3-Star",
+    "price_min_npr": 4000,
+    "price_max_npr": 7500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Aikawa",
+    "destination_key": "chitwan",
+    "source_category": "3-Star",
+    "price_min_npr": 4500,
+    "price_max_npr": 8000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Jungle Crown",
+    "destination_key": "chitwan",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 5500,
+    "price_max_npr": 10000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Sapana Village Lodge",
+    "destination_key": "chitwan",
+    "source_category": "3.5/4-Star Eco",
+    "price_min_npr": 6000,
+    "price_max_npr": 11000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Landmark Forest Resort",
+    "destination_key": "chitwan",
+    "source_category": "4-Star",
+    "price_min_npr": 8000,
+    "price_max_npr": 14000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Green Park Chitwan",
+    "destination_key": "chitwan",
+    "source_category": "4-Star",
+    "price_min_npr": 9000,
+    "price_max_npr": 16000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Park Safari Resort",
+    "destination_key": "chitwan",
+    "source_category": "4-Star",
+    "price_min_npr": 10000,
+    "price_max_npr": 18000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Kasara Resort",
+    "destination_key": "chitwan",
+    "source_category": "5-Star",
+    "price_min_npr": 22000,
+    "price_max_npr": 40000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Barahi Jungle Lodge",
+    "destination_key": "chitwan",
+    "source_category": "5-Star",
+    "price_min_npr": 25000,
+    "price_max_npr": 48000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Meghauli Serai, Taj Safari",
+    "destination_key": "chitwan",
+    "source_category": "5-Star Ultra",
+    "price_min_npr": 35000,
+    "price_max_npr": 70000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Osho Janakpur",
+    "destination_key": "janakpur",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "City Star Hotel",
+    "destination_key": "janakpur",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Sita Palace",
+    "destination_key": "janakpur",
+    "source_category": "3-Star",
+    "price_min_npr": 2800,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Rama",
+    "destination_key": "janakpur",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Welcome",
+    "destination_key": "janakpur",
+    "source_category": "3-Star",
+    "price_min_npr": 3500,
+    "price_max_npr": 6000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Rajdurbar & Navrang",
+    "destination_key": "janakpur",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 9000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Manaki",
+    "destination_key": "janakpur",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 11000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Lumbini Village Lodge",
+    "destination_key": "lumbini",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Little Buddha Hotel",
+    "destination_key": "lumbini",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4200,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Peace Land Lumbini",
+    "destination_key": "lumbini",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Lumbini Garden",
+    "destination_key": "lumbini",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 5500,
+    "price_max_npr": 9500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Hokke Nepal",
+    "destination_key": "lumbini",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 10500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "4-Star Eco",
+    "destination_key": "lumbini",
+    "source_category": "unspecified",
+    "price_min_npr": 7000,
+    "price_max_npr": 13000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Kasai",
+    "destination_key": "lumbini",
+    "source_category": "4.5/5-Star",
+    "price_min_npr": 12000,
+    "price_max_npr": 22000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Galaxy Guest House",
+    "destination_key": "bhairahawa",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2000,
+    "price_max_npr": 3800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Yeti",
+    "destination_key": "bhairahawa",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Nirvana Luxury International",
+    "destination_key": "bhairahawa",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 11000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Siddhartha Vilasa",
+    "destination_key": "bhairahawa",
+    "source_category": "4-Star",
+    "price_min_npr": 8000,
+    "price_max_npr": 15000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Tiger Palace Resort",
+    "destination_key": "bhairahawa",
+    "source_category": "5-Star",
+    "price_min_npr": 16000,
+    "price_max_npr": 35000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Eastern Star",
+    "destination_key": "biratnagar",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Xenial",
+    "destination_key": "biratnagar",
+    "source_category": "3-Star",
+    "price_min_npr": 3500,
+    "price_max_npr": 6000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Ratna",
+    "destination_key": "biratnagar",
+    "source_category": "3-Star Heritage",
+    "price_min_npr": 4000,
+    "price_max_npr": 7000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Big Hotel Biratnagar",
+    "destination_key": "biratnagar",
+    "source_category": "4-Star",
+    "price_min_npr": 6500,
+    "price_max_npr": 11500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Harrison Palace",
+    "destination_key": "biratnagar",
+    "source_category": "4-Star",
+    "price_min_npr": 7000,
+    "price_max_npr": 13000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Batika",
+    "destination_key": "nepalgunj",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2500,
+    "price_max_npr": 4500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Starlight",
+    "destination_key": "nepalgunj",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 4500,
+    "price_max_npr": 8000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Cygnett Inn Krishna",
+    "destination_key": "nepalgunj",
+    "source_category": "4-Star",
+    "price_min_npr": 6000,
+    "price_max_npr": 10500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "4-Star Heritage",
+    "destination_key": "nepalgunj",
+    "source_category": "unspecified",
+    "price_min_npr": 7500,
+    "price_max_npr": 13000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Soaltee Westend Premier",
+    "destination_key": "nepalgunj",
+    "source_category": "5-Star",
+    "price_min_npr": 15000,
+    "price_max_npr": 28000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Summit Ilam",
+    "destination_key": "ilam",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Chintan / Green View",
+    "destination_key": "ilam",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4200,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Easton Blue Ilam",
+    "destination_key": "ilam",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Boutique 3-Star",
+    "destination_key": "ilam",
+    "source_category": "unspecified",
+    "price_min_npr": 4500,
+    "price_max_npr": 8500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Gajur Dharan",
+    "destination_key": "dharan",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 3800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Verandah Dharan",
+    "destination_key": "dharan",
+    "source_category": "3-Star",
+    "price_min_npr": 3000,
+    "price_max_npr": 5200,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel East Star",
+    "destination_key": "dharan",
+    "source_category": "3-Star",
+    "price_min_npr": 3500,
+    "price_max_npr": 6000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Namaste Resort Bhedetar",
+    "destination_key": "dharan",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 9500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Royal Palace Hetauda",
+    "destination_key": "hetauda",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 3800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Smarak",
+    "destination_key": "hetauda",
+    "source_category": "3-Star",
+    "price_min_npr": 2800,
+    "price_max_npr": 4800,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Regal Hetauda Resort",
+    "destination_key": "hetauda",
+    "source_category": "3-Star",
+    "price_min_npr": 4000,
+    "price_max_npr": 7000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Avocado & Orchid Garden",
+    "destination_key": "hetauda",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 5500,
+    "price_max_npr": 9500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel White Lake Tansen",
+    "destination_key": "tansen",
+    "source_category": "Budget",
+    "price_min_npr": 2000,
+    "price_max_npr": 3500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Taj Palpa",
+    "destination_key": "tansen",
+    "source_category": "Budget 3-Star",
+    "price_min_npr": 2200,
+    "price_max_npr": 4000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel The Ranimahal",
+    "destination_key": "tansen",
+    "source_category": "3-Star Heritage",
+    "price_min_npr": 3000,
+    "price_max_npr": 5500,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  },
+  {
+    "name": "Hotel Srinagar",
+    "destination_key": "tansen",
+    "source_category": "3.5/4-Star",
+    "price_min_npr": 5000,
+    "price_max_npr": 9000,
+    "pricing_unit": "per_room_night",
+    "source": "Nepal Travel Budget Guide 2025",
+    "source_date": "2025-08-01"
+  }
+]

@@ -502,13 +502,38 @@ export async function getRoutePlannerAdvisors(): Promise<PlannerAdvisor[]> {
 
 /** Single server fetch bundle for /route-planner. */
 export async function getRoutePlannerData(): Promise<RoutePlannerData> {
-  const [destinations, borders, connections, advisors] = await Promise.all([
+  const [
+    destinations,
+    borders,
+    connections,
+    advisors,
+    accommodations,
+    transportOptions,
+    domesticFlights,
+    activities,
+    dailyCostEstimates,
+  ] = await Promise.all([
     getRoutePlannerDestinations(),
     getRoutePlannerBorders(),
     getRoutePlannerConnections(),
     getRoutePlannerAdvisors(),
+    getAccommodations(),
+    getTransportOptions(),
+    getDomesticFlights(),
+    getActivities(),
+    getDailyCostEstimates(),
   ])
-  return { destinations, borders, connections, advisors }
+  return {
+    destinations,
+    borders,
+    connections,
+    advisors,
+    accommodations,
+    transportOptions,
+    domesticFlights,
+    activities,
+    dailyCostEstimates,
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
