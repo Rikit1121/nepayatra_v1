@@ -1,5 +1,5 @@
 import { Hero } from '@/components/public/home/hero'
-
+import { HowItWorks } from '@/components/public/home/how-it-works'
 import { ComingFromIndia, TravelStyles } from '@/components/public/home/static-sections'
 
 import { WhyNepalStats } from '@/components/public/home/why-nepal-stats'
@@ -44,9 +44,9 @@ import { buildPageMetadata } from '@/lib/seo'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'Plan Your Nepal Trip from India — Borders, Destinations & Guides',
+  title: 'Plan Your Nepal Trip — Borders, Destinations, Itineraries & Budget',
   description:
-    'NepaYatra helps Indian travelers plan Nepal trips overland — Raxaul, Sunauli and other India–Nepal border crossings, destinations, route planner, visa-free entry guides, and WhatsApp advisors.',
+    'NepaYatra helps travelers plan Nepal trips step by step — interactive route planner, India–Nepal border crossings, destinations, visa-free guides, and reference budget estimates.',
   path: '/',
 })
 
@@ -137,25 +137,18 @@ export default async function HomePage() {
     <>
 
       {/* 1 — Hero */}
-
       <Hero
-
         headline={settings.homepage_hero_headline}
-
         subheadline={settings.homepage_hero_subheadline}
-
         heroImageUrl={settings.homepage_hero_image_url}
-
         destinations={mapDestinations}
-
         borders={mapBorders}
-
       />
 
+      {/* 2 — How NepaYatra Works */}
+      <HowItWorks />
 
-
-      {/* 2 — Why Nepal? stats */}
-
+      {/* 3 — Why Nepal? stats */}
       <WhyNepalStats />
 
 
@@ -280,7 +273,7 @@ export default async function HomePage() {
 
           title="Suggested trips"
 
-          description="Sample itineraries you can follow as-is or adjust with an advisor."
+          description="Sample itineraries you can follow as-is or customize in the Trip Planner."
 
           eyebrow="Curated itineraries"
 
@@ -298,11 +291,11 @@ export default async function HomePage() {
 
             <SectionCta
 
-              message="Want a custom itinerary?"
+              message="Want a personalized itinerary?"
 
-              buttonLabel="Plan with an advisor"
+              buttonLabel="Build in Trip Planner"
 
-              href="/contact"
+              href="/route-planner"
 
             />
 

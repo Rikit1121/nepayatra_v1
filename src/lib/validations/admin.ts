@@ -888,6 +888,46 @@ export type CreateDailyCostEstimateFormValues = z.infer<typeof createDailyCostEs
 export type UpdateDailyCostEstimateFormValues = z.infer<typeof updateDailyCostEstimateSchema>
 
 // ─────────────────────────────────────────────────────────────
+// CALENDAR EVENT SCHEMAS
+// ─────────────────────────────────────────────────────────────
+
+export const CALENDAR_EVENT_TYPES = [
+  'festival',
+  'public_holiday',
+  'cultural_event',
+  'travel_season',
+  'national_day',
+] as const
+
+export const calendarEventBaseSchema = z.object({
+  title: z.string().min(2, 'Title must be at least 2 characters').max(150),
+  slug: slugSchema,
+  nepali_title: z.string().max(150).optional().nullable(),
+  event_type: z.enum(CALENDAR_EVENT_TYPES),
+  start_date_ad: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Valid start date (YYYY-MM-DD) is required'),
+  end_date_ad: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Valid end date (YYYY-MM-DD) is required'),
+  start_date_bs: z.string().min(4, 'BS start date is required'),
+  end_date_bs: z.string().min(4, 'BS end date is required'),
+  year_ad: z.coerce.number().int().min(2000).max(2100),
+  year_bs: z.coerce.number().int().min(2050).max(2150),
+  is_public_holiday: z.boolean().default(false),
+  summary: z.string().min(5, 'Summary must be at least 5 characters').max(500),
+  description: z.string().optional().nullable(),
+  travel_impact: z.string().optional().nullable(),
+  recommended_destinations: z.array(z.string()).default([]),
+  featured: z.boolean().default(false),
+  public_visible: z.boolean().default(true),
+})
+
+export const createCalendarEventSchema = calendarEventBaseSchema
+export const updateCalendarEventSchema = calendarEventBaseSchema.extend({
+  id: z.string().uuid(),
+})
+
+export type CreateCalendarEventFormValues = z.infer<typeof createCalendarEventSchema>
+export type UpdateCalendarEventFormValues = z.infer<typeof updateCalendarEventSchema>
+
+// ─────────────────────────────────────────────────────────────
 // UTILITY: Server Action Response shape
 // Used as the return type for all Server Actions
 // ─────────────────────────────────────────────────────────────
@@ -895,3 +935,4 @@ export type UpdateDailyCostEstimateFormValues = z.infer<typeof updateDailyCostEs
 export type ActionResult<T = void> =
   | { success: true; data: T; message?: string }
   | { success: false; error: string; fieldErrors?: Record<string, string[]> }
+

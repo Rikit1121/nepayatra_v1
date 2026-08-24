@@ -23,10 +23,10 @@ export function AdvisorHandoff({ advisors, message }: AdvisorHandoffProps) {
       )}
     >
       <div>
-        <h3 className="font-display text-lg font-bold">Have a local expert review your route</h3>
+        <h3 className="font-display text-lg font-bold">Want a local advisor to review your route?</h3>
         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-          Share your plan on WhatsApp — no booking, no pressure. An advisor can fine-tune transport,
-          timing and border formalities.
+          Share your itinerary on WhatsApp for friendly advice on transport, timing, and border details.
+          Free advice, no booking required.
         </p>
       </div>
 

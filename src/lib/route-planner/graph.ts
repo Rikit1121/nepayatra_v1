@@ -151,18 +151,71 @@ export function estimateLeg(
   }
 }
 
-/** Order destinations to minimise total travel time from a fixed start node. */
+// ─────────────────────────────────────────────────────────────
+// Bearing helpers for backtracking detection
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Compute the initial compass bearing (0–360°) from point A to point B.
+ * Returns NaN when the two points are identical.
+ */
+function bearingDeg(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const toDeg = (r: number) => (r * 180) / Math.PI
+  const dLon = toRad(lon2 - lon1)
+  const φ1 = toRad(lat1)
+  const φ2 = toRad(lat2)
+  const y = Math.sin(dLon) * Math.cos(φ2)
+  const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(dLon)
+  return (toDeg(Math.atan2(y, x)) + 360) % 360
+}
+
+/**
+ * Absolute angular difference between two bearings (0–180°).
+ */
+function bearingDelta(a: number, b: number): number {
+  const d = Math.abs(a - b) % 360
+  return d > 180 ? 360 - d : d
+}
+
+// ─────────────────────────────────────────────────────────────
+// Order destinations — improved
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Order destinations to produce a geographically sensible tourist route
+ * from a fixed start node.
+ *
+ * Scoring for each permutation combines:
+ *   1. Raw travel time (from graph or haversine fallback)
+ *   2. Backtracking penalty (×BACKTRACK_PENALTY) when a leg reverses
+ *      direction by more than BACKTRACK_THRESHOLD degrees
+ *   3. Clustering bias — rewards keeping geographically close destinations
+ *      consecutive, weighted more heavily on short trips
+ *
+ * @param totalDays - Optional trip duration; influences clustering bias weight.
+ */
 export function orderDestinations(
   graph: RouteGraph,
   startId: string,
   destinationIds: string[],
-  getCoords: (id: string) => { lat: number; lng: number } | null
+  getCoords: (id: string) => { lat: number; lng: number } | null,
+  totalDays?: number
 ): string[] {
+  const BACKTRACK_THRESHOLD = 100  // degrees — reversal beyond this counts
+  const BACKTRACK_PENALTY   = 1.4  // multiply leg cost when backtracking
+
   const unique = [...new Set(destinationIds.filter((id) => id !== startId))]
   if (unique.length === 0) return startId ? [startId] : []
   if (unique.length === 1) return [startId, unique[0]].filter(Boolean)
 
-  function legCost(from: string, to: string): number {
+  // ── leg travel time (graph path or haversine estimate) ─────
+  function rawLegHours(from: string, to: string): number {
     const path = findPath(graph, from, to)
     if (path) return path.travel_time_hours
     const a = getCoords(from)
@@ -171,18 +224,81 @@ export function orderDestinations(
     return estimateLeg(from, to, a.lat, a.lng, b.lat, b.lng).travel_time_hours
   }
 
+  // ── clustering bias weight scales with trip brevity ────────
+  // Short trips (≤5 days) get strong bias; longer trips approach 0.
+  const days = totalDays ?? 7
+  const clusterWeight = Math.max(0, 1 - (days - 1) / 9) * 0.5
+  // clusterWeight: ~0.5 at 1 day, ~0.28 at 5 days, 0 at 10+ days
+
+  // Pre-compute coordinate table for the candidate nodes
+  const allIds = [startId, ...unique]
+  const coordMap = new Map<string, { lat: number; lng: number } | null>()
+  for (const id of allIds) coordMap.set(id, getCoords(id))
+
+  // Max straight-line distance across the set — normalises cluster scores
+  let maxDist = 1
+  for (let i = 0; i < allIds.length; i++) {
+    for (let j = i + 1; j < allIds.length; j++) {
+      const a = coordMap.get(allIds[i])
+      const b = coordMap.get(allIds[j])
+      if (a && b) {
+        const d = haversineKm(a.lat, a.lng, b.lat, b.lng)
+        if (d > maxDist) maxDist = d
+      }
+    }
+  }
+
+  // ── score a full permutation ───────────────────────────────
+  function scorePerm(perm: string[]): number {
+    const seq = [startId, ...perm]
+    let score = 0
+    let prevBearing: number | null = null
+
+    for (let i = 0; i < seq.length - 1; i++) {
+      const from = seq[i]
+      const to   = seq[i + 1]
+      let legCost = rawLegHours(from, to)
+      if (!Number.isFinite(legCost)) return Infinity
+
+      // ── backtracking penalty ─────────────────────────────
+      const cFrom = coordMap.get(from)
+      const cTo   = coordMap.get(to)
+      if (cFrom && cTo) {
+        const bearing = bearingDeg(cFrom.lat, cFrom.lng, cTo.lat, cTo.lng)
+        if (prevBearing !== null) {
+          const delta = bearingDelta(prevBearing, bearing)
+          if (delta > BACKTRACK_THRESHOLD) {
+            legCost *= BACKTRACK_PENALTY
+          }
+        }
+        prevBearing = bearing
+      }
+
+      // ── clustering bias ──────────────────────────────────
+      if (clusterWeight > 0 && i < seq.length - 2) {
+        const next = seq[i + 2]
+        const cNext = coordMap.get(next)
+        if (cFrom && cTo && cNext) {
+          // How far is "to" from "next"? Short gap = nearby cluster = good.
+          const gap = haversineKm(cTo.lat, cTo.lng, cNext.lat, cNext.lng)
+          // Penalty for splitting a tight cluster (normalised, inverted)
+          score += clusterWeight * (gap / maxDist) * rawLegHours(to, next)
+        }
+      }
+
+      score += legCost
+    }
+
+    return score
+  }
+
   // Held-karp is overkill; brute-force permutations (max 5! = 120).
   const perms = permutations(unique)
   let bestOrder: string[] = unique
   let bestCost = Infinity
 
   for (const perm of perms) {
-    let cost = 0
-    let prev = startId
-    for (const id of perm) {
-      cost += legCost(prev, id)
-      prev = id
-    }
+    const cost = scorePerm(perm)
     if (cost < bestCost) {
       bestCost = cost
       bestOrder = perm

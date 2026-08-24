@@ -39,7 +39,7 @@ export function Hero({ headline, subheadline, heroImageUrl, destinations, border
           {/* Left: text */}
           <div className="min-w-0">
             <p className="fade-up-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[hsl(var(--atlas-saffron))]">
-              Explorer&apos;s Companion · India to Nepal
+              Plan Nepal Your Way
             </p>
             <h1 className="fade-up-2 mt-3 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-[2.75rem] md:leading-tight">
               {headline}
@@ -55,7 +55,7 @@ export function Hero({ headline, subheadline, heroImageUrl, destinations, border
                 className="bg-[hsl(var(--atlas-saffron))] font-semibold text-white shadow-lg shadow-[hsl(var(--atlas-saffron))]/25 hover:bg-[hsl(var(--atlas-saffron))]/90"
               >
                 <Link href="/route-planner">
-                  Plan My Route <ArrowRight className="ml-1 h-4 w-4" />
+                  Plan Your Trip <ArrowRight className="ml-1 h-4 w-4" />
                 </Link>
               </Button>
               <Button
@@ -64,7 +64,7 @@ export function Hero({ headline, subheadline, heroImageUrl, destinations, border
                 variant="outline"
                 className="border-white/30 bg-white/5 text-white backdrop-blur-sm hover:border-white/60 hover:bg-white/15"
               >
-                <Link href="/#advisors">Talk to an Advisor</Link>
+                <Link href="/packages">View Suggested Trips</Link>
               </Button>
             </div>
 
@@ -72,11 +72,15 @@ export function Hero({ headline, subheadline, heroImageUrl, destinations, border
             <div className="fade-up-3 mt-6 flex flex-wrap items-center gap-5 text-xs text-white/55">
               <span className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                Plan around destinations, days & budget
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 No visa required for Indian citizens
               </span>
               <span className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                UPI accepted at major destinations
+                Free interactive itinerary builder
               </span>
             </div>
           </div>

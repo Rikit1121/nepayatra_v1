@@ -20,8 +20,8 @@ interface AdvisorCtaProps {
  * Language is "talk to" / "ask" — never "book".
  */
 export async function AdvisorCta({
-  heading = 'Still have questions? Talk to someone who knows Nepal.',
-  subheading = 'Our Nepal-based advisors help Indian travelers finalise their plans. No booking fees. No pressure.',
+  heading = 'Need help from someone in Nepal?',
+  subheading = "Connect with a local travel advisor after you've built your trip. Free advice, no booking fees, and no pressure.",
   limit = 3,
   context,
 }: AdvisorCtaProps) {
@@ -42,7 +42,7 @@ export async function AdvisorCta({
       >
         <div className="container mx-auto max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[hsl(var(--atlas-saffron))]">
-            Talk to an expert
+            Local Advice
           </p>
           <h2 className={cn(atlasDisplayMd, 'mt-2 text-foreground')}>{heading}</h2>
           <p className="mt-3 text-muted-foreground">{subheading}</p>

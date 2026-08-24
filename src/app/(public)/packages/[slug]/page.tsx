@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { Clock, Check, X, Mountain, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
@@ -165,7 +167,23 @@ export default async function PackageDetailPage({ params }: PageProps) {
         </div>
 
         {/* Sidebar */}
-        <aside>
+        <aside className="space-y-4">
+          <Card className="border-[hsl(var(--atlas-blue))]/30 bg-[hsl(var(--atlas-blue))]/5">
+            <CardContent className="space-y-3 pt-6">
+              <h2 className="font-display text-base font-bold text-[hsl(var(--atlas-blue))]">
+                Customize this itinerary
+              </h2>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Load this route into the Trip Planner to adjust stops, change duration, choose your travel style, and calculate budget estimates.
+              </p>
+              <Button asChild className="w-full shadow-sm">
+                <Link href="/route-planner">
+                  Customize in Trip Planner <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardContent className="space-y-4 pt-6">
               <h2 className="text-base font-semibold">Trip summary</h2>
@@ -188,8 +206,7 @@ export default async function PackageDetailPage({ params }: PageProps) {
                 )}
               </dl>
               <p className="text-xs text-muted-foreground">
-                Prices are indicative and change with season and group size. Confirm current options
-                with an advisor — no booking fees.
+                Costs are reference estimates that vary by season and group size. You can also discuss adjustments with an advisor below.
               </p>
             </CardContent>
           </Card>

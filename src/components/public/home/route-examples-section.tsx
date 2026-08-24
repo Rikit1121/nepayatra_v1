@@ -39,9 +39,9 @@ export function RouteExamplesSection({ journeys }: RouteExamplesSectionProps) {
 
         <div className={cn('container', 'pb-14 md:pb-16')}>
           <SectionCta
-            message="Need help choosing the best route?"
-            buttonLabel="Talk to a route advisor"
-            href="/contact"
+            message="Want to build a custom route from scratch?"
+            buttonLabel="Open Trip Planner"
+            href="/route-planner"
           />
         </div>
       </SectionBackground>

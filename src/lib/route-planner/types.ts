@@ -219,4 +219,15 @@ export interface GeneratedRoute {
   travelDays: number
   dayAllocations: DayAllocation[]
   transportSuggestions: string[]
+  /**
+   * Advisory note shown to the user when the route contains detected
+   * backtracking or the itinerary is unusually compressed for the day count.
+   * Undefined when the route is clean.
+   */
+  routeQualityNote?: string
+  /**
+   * True when the selected destinations + estimated travel time exceed the
+   * available trip days in a way that makes the itinerary noticeably rushed.
+   */
+  isRushed?: boolean
 }

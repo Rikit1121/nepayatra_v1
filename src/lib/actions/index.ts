@@ -13,3 +13,6 @@ export * from './transport-options'
 export * from './domestic-flights'
 export * from './activities'
 export * from './daily-costs'
+export * from './trips'
+export * from './calendar-events'
+

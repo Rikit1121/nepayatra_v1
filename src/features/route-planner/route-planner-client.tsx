@@ -69,6 +69,7 @@ import {
 } from './planner-map'
 import { RouteResults } from './route-results'
 import { AdvisorHandoff } from './advisor-handoff'
+import { saveSharedTrip } from '@/lib/actions/trips'
 import { PlannerInspirationStack } from './planner-inspiration-stack'
 import {
   getPlannerInspirationCards,
@@ -228,6 +229,83 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
       data,
     })
   }, [state, generatedRoute, data])
+
+  // ── Shareable Trip Persistence ────────────────────────────
+  const [shareId, setShareId] = React.useState<string | null>(null)
+  const [isSavingTrip, setIsSavingTrip] = React.useState(false)
+  const [saveTripError, setSaveTripError] = React.useState<string | null>(null)
+  const savedTripFingerprintRef = React.useRef<string | null>(null)
+
+  const tripTitle = React.useMemo(() => {
+    if (!generatedRoute) return 'Nepal Trip Itinerary'
+    const names = generatedRoute.orderedStops.map((s) => s.name).join(', ')
+    return `${state.days}-Day Nepal Trip — ${names}`
+  }, [generatedRoute, state.days])
+
+  const currentPlanFingerprint = React.useMemo(() => {
+    if (!state.generated || !generatedRoute || !budgetResult) return null
+    return JSON.stringify({
+      destinations: [...validDestinationSlugs].sort(),
+      days: state.days,
+      travelers: state.travelerCount,
+      origin: state.originType,
+      mode: state.travelMode,
+      border: state.borderSlug,
+      style: state.travelStyle,
+      category: state.travelCategory,
+      startDate: state.startDate,
+      endDate: state.endDate,
+    })
+  }, [state, generatedRoute, budgetResult, validDestinationSlugs])
+
+  React.useEffect(() => {
+    if (!currentPlanFingerprint || !generatedRoute || !budgetResult || !state.generated) {
+      return
+    }
+
+    if (savedTripFingerprintRef.current === currentPlanFingerprint) {
+      return
+    }
+
+    savedTripFingerprintRef.current = currentPlanFingerprint
+    setIsSavingTrip(true)
+    setSaveTripError(null)
+
+    saveSharedTrip({
+      title: tripTitle,
+      origin_type: state.originType ?? 'in-nepal',
+      travel_mode: state.travelMode,
+      border_slug: state.borderSlug,
+      origin_country: state.originCountry,
+      origin_city: state.originCity,
+      from_region: state.from,
+      start_date: state.startDate,
+      end_date: state.endDate,
+      days: state.days,
+      traveler_count: state.travelerCount,
+      traveler_type: state.travelerType,
+      travel_category: state.travelCategory,
+      travel_style: state.travelStyle,
+      interests: state.interests,
+      user_budget_npr: state.budgetNpr,
+      destination_slugs: validDestinationSlugs,
+      route_snapshot: generatedRoute,
+      budget_snapshot: budgetResult,
+    })
+      .then((res) => {
+        if (res.success) {
+          setShareId(res.shareId)
+        } else {
+          setSaveTripError(res.error)
+        }
+      })
+      .catch(() => {
+        setSaveTripError('Unable to generate share link')
+      })
+      .finally(() => {
+        setIsSavingTrip(false)
+      })
+  }, [currentPlanFingerprint, generatedRoute, budgetResult, state, validDestinationSlugs, tripTitle])
 
   const mapDestinations = React.useMemo(
     () => data.destinations.map(destinationToMarker),
@@ -399,18 +477,32 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
               route={generatedRoute}
               totalTripDays={state.days}
               budgetResult={budgetResult}
+              shareId={shareId}
+              isSavingTrip={isSavingTrip}
+              saveTripError={saveTripError}
+              tripTitle={tripTitle}
             />
-            <AdvisorHandoff advisors={data.advisors} message={whatsappMessage} />
             <Button
-              variant="outline"
-              className="w-full border-[hsl(var(--atlas-blue))]/30"
+              className="w-full shadow-sm"
               onClick={() => update({ generated: false, step: effectiveStepCount - 1 })}
             >
-              Adjust plan
+              Adjust Destinations & Duration
             </Button>
+            <AdvisorHandoff advisors={data.advisors} message={whatsappMessage} />
           </div>
         ) : (
           <>
+            {/* Compact trip context — shown from dates step onward (not on origin/entry/review) */}
+            {currentStepId !== 'origin' &&
+              currentStepId !== 'entry' &&
+              currentStepId !== 'review' && (
+                <TripContextStrip
+                  state={state}
+                  selectedDestinations={selectedDestinations}
+                  borderName={border?.crossing_name ?? null}
+                />
+              )}
+
             {/* STEP 1: Origin */}
             {currentStepId === 'origin' && (
               <StepOriginType
@@ -671,6 +763,100 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
       >
         {showInspiration ? inspirationPanel : mapPanel}
       </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────
+// Date format helper
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Format an ISO date string as a short human-readable date, e.g. "Aug 28".
+ * Uses the local midnight interpretation to avoid timezone shift issues.
+ */
+function formatShortDate(iso: string): string {
+  try {
+    return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
+      new Date(iso + 'T00:00:00')
+    )
+  } catch {
+    return iso
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Trip context strip
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * A compact single-line summary of everything already decided.
+ * Rendered above step content from the dates step onward.
+ * Only shows fields that have actually been filled in.
+ */
+function TripContextStrip({
+  state,
+  selectedDestinations,
+  borderName,
+}: {
+  state: PlannerState
+  selectedDestinations: PlannerDestination[]
+  borderName: string | null
+}) {
+  const chunks: string[] = []
+
+  // Origin + entry context
+  if (state.originType === 'india') {
+    if (state.travelMode === 'flight') chunks.push('India · Flight')
+    else if (state.travelMode === 'road' && borderName) chunks.push(`India · ${borderName}`)
+    else if (state.travelMode === 'road') chunks.push('India · Road')
+    else chunks.push('India')
+  } else if (state.originType === 'international') {
+    chunks.push('International · Flight')
+  } else if (state.originType === 'in-nepal') {
+    chunks.push('Already in Nepal')
+  }
+
+  // Dates / duration
+  if (state.startDate && state.endDate) {
+    chunks.push(
+      `${formatShortDate(state.startDate)}–${formatShortDate(state.endDate)} · ${state.days}d`
+    )
+  } else {
+    chunks.push(`${state.days}d`)
+  }
+
+  // Travelers (only when traveler type is selected)
+  if (state.travelerType) {
+    const label =
+      state.travelerType.charAt(0).toUpperCase() + state.travelerType.slice(1)
+    chunks.push(`${label} · ${state.travelerCount}`)
+  }
+
+  // Selected destinations (abbreviated after 2)
+  if (selectedDestinations.length > 0) {
+    const names = selectedDestinations.map((d) => d.name)
+    const display =
+      names.length <= 2
+        ? names.join(', ')
+        : `${names.slice(0, 2).join(', ')} +${names.length - 2} more`
+    chunks.push(display)
+  }
+
+  if (chunks.length === 0) return null
+
+  return (
+    <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border/30 bg-muted/25 px-3 py-2 text-[11px] leading-relaxed text-muted-foreground">
+      {chunks.map((chunk, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && (
+            <span aria-hidden className="select-none text-border">
+              ·
+            </span>
+          )}
+          <span>{chunk}</span>
+        </React.Fragment>
+      ))}
     </div>
   )
 }
@@ -1018,7 +1204,7 @@ function StepEntry({
   )
 }
 
-// Step 4 — Dates
+// Step 3 (or 2 for in-nepal) — Dates
 function StepDates({
   startDate,
   endDate,
@@ -1036,7 +1222,28 @@ function StepDates({
 }) {
   const today = new Date().toISOString().split('T')[0]
 
-  // Auto-calculate days when both dates set
+  // Compute raw diff from selected dates (before clamping to MIN/MAX)
+  const computedDiff = React.useMemo(() => {
+    if (!startDate || !endDate) return null
+    return Math.round(
+      (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)
+    )
+  }, [startDate, endDate])
+
+  // Derive date validation state
+  type DateValidity = 'ok' | 'end-before-start' | 'too-short' | 'too-long'
+  const dateValidity: DateValidity | null =
+    computedDiff === null
+      ? null
+      : computedDiff <= 0
+      ? 'end-before-start'
+      : computedDiff < MIN_DAYS
+      ? 'too-short'
+      : computedDiff > MAX_DAYS
+      ? 'too-long'
+      : 'ok'
+
+  // Auto-calculate days when both dates set and within valid range
   const handleEndDate = (ed: string) => {
     onEndDateChange(ed)
     if (startDate && ed) {
@@ -1057,12 +1264,15 @@ function StepDates({
     }
   }
 
+  const hasDates = Boolean(startDate && endDate)
+
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        When are you planning to travel? ({MIN_DAYS}–{MAX_DAYS} days in Nepal)
+        When are you planning to travel?
       </p>
 
+      {/* Date pickers */}
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1">
           <label
@@ -1098,10 +1308,42 @@ function StepDates({
         </div>
       </div>
 
+      {/* Computed duration feedback — shown once both dates are set */}
+      {dateValidity === 'ok' && computedDiff !== null && (
+        <div className="flex items-center gap-2.5 rounded-lg border border-[hsl(var(--atlas-blue))]/25 bg-[hsl(var(--atlas-blue))]/8 px-3 py-2.5">
+          <Calendar className="h-4 w-4 shrink-0 text-[hsl(var(--atlas-blue))]" />
+          <span className="font-display text-sm font-bold text-[hsl(var(--atlas-blue))]">
+            {computedDiff} days
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {formatShortDate(startDate!)} → {formatShortDate(endDate!)}
+          </span>
+        </div>
+      )}
+      {dateValidity === 'end-before-start' && (
+        <p className="rounded-md bg-destructive/10 px-3 py-2 text-xs text-destructive">
+          End date must be after the start date.
+        </p>
+      )}
+      {dateValidity === 'too-short' && (
+        <p className="rounded-md bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+          Minimum trip duration is {MIN_DAYS} days. Adjust your dates or use the slider below.
+        </p>
+      )}
+      {dateValidity === 'too-long' && (
+        <p className="rounded-md bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+          Maximum trip duration is {MAX_DAYS} days. Adjust your dates or use the slider below.
+        </p>
+      )}
+
+      {/* Duration slider — primary when no dates set, secondary when dates are active */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Days in Nepal
+          <label
+            htmlFor="trip-days-slider"
+            className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
+          >
+            {hasDates && dateValidity === 'ok' ? 'Or adjust days manually' : 'Days in Nepal'}
           </label>
           <span className="font-display text-2xl font-bold tabular-nums text-[hsl(var(--atlas-blue))]">
             {days}
@@ -1113,6 +1355,7 @@ function StepDates({
           max={MAX_DAYS}
           value={days}
           id="trip-days-slider"
+          aria-label={`Trip duration: ${days} days`}
           onChange={(e) => onDaysChange(Number(e.target.value))}
           className="w-full accent-[hsl(var(--atlas-blue))]"
         />
@@ -1120,6 +1363,11 @@ function StepDates({
           <span>{MIN_DAYS} days</span>
           <span>{MAX_DAYS} days</span>
         </div>
+        {hasDates && dateValidity === 'ok' && computedDiff !== null && computedDiff !== days && (
+          <p className="text-[11px] text-muted-foreground/70">
+            Manually adjusted — differs from your date selection ({computedDiff} days).
+          </p>
+        )}
       </div>
     </div>
   )
@@ -1214,10 +1462,27 @@ function StepDestinations({
 }) {
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">
-        Pick {MIN_DESTINATIONS}–{MAX_DESTINATIONS} destinations ({selectedCount}/{MAX_DESTINATIONS}{' '}
-        selected). Also tap markers on the map.
-      </p>
+      {/* Header with prominent selection counter */}
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Pick {MIN_DESTINATIONS}–{MAX_DESTINATIONS} destinations. Tap markers on the map too.
+        </p>
+        <span
+          className={cn(
+            'shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold tabular-nums',
+            selectedCount >= MIN_DESTINATIONS
+              ? 'bg-[hsl(var(--atlas-saffron))]/15 text-[hsl(var(--atlas-saffron))]'
+              : 'bg-muted text-muted-foreground'
+          )}
+        >
+          {selectedCount}&thinsp;/&thinsp;{MAX_DESTINATIONS}
+        </span>
+      </div>
+      {selectedCount > 0 && (
+        <p className="text-[11px] text-muted-foreground/75">
+          NepaYatra will optimise the visit order for you — selection order doesn&apos;t matter.
+        </p>
+      )}
 
       {/* Category filter */}
       <div className="flex flex-wrap gap-1.5">
@@ -1440,7 +1705,7 @@ function StepReview({
       label: 'Dates',
       value:
         state.startDate && state.endDate
-          ? `${state.startDate} → ${state.endDate} (${state.days} days)`
+          ? `${formatShortDate(state.startDate)} → ${formatShortDate(state.endDate)} · ${state.days} days`
           : `${state.days} days`,
       editStepId: 'dates',
     },

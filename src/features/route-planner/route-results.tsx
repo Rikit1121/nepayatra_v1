@@ -26,16 +26,26 @@ import {
   ChevronUp,
 } from 'lucide-react'
 
+import { ShareTripControls } from '@/features/trips/share-trip-controls'
+
 interface RouteResultsProps {
   route: GeneratedRoute
   totalTripDays: number
   budgetResult?: BudgetResult | null
+  shareId?: string | null
+  isSavingTrip?: boolean
+  saveTripError?: string | null
+  tripTitle?: string
 }
 
 export function RouteResults({
   route,
   totalTripDays,
   budgetResult,
+  shareId,
+  isSavingTrip,
+  saveTripError,
+  tripTitle,
 }: RouteResultsProps) {
   const [showAllDays, setShowAllDays] = React.useState(false)
 
@@ -49,6 +59,14 @@ export function RouteResults({
 
   return (
     <div className="space-y-4">
+      {/* ── SHARE TRIP CONTROLS ── */}
+      <ShareTripControls
+        shareId={shareId}
+        tripTitle={tripTitle}
+        isSaving={isSavingTrip}
+        saveError={saveTripError}
+      />
+
       {/* ── BUDGET & COST ESTIMATE CARD ── */}
       {budgetResult && (
         <article
@@ -91,7 +109,7 @@ export function RouteResults({
             <div className="rounded-lg bg-background/80 p-3 border border-border/30">
               <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
                 {budgetResult.budgetStatus === 'over_budget'
-                  ? 'Min. Realistic Cost'
+                  ? 'Estimated Minimum Cost'
                   : 'Estimated Cost'}
               </p>
               <p className="mt-1 font-display text-lg font-bold text-foreground sm:text-xl">
@@ -252,12 +270,17 @@ export function RouteResults({
             </div>
           </div>
 
-          {/* Scope notice */}
-          <div className="mt-4 flex items-start gap-1.5 text-[11px] text-muted-foreground/80 leading-relaxed border-t border-border/20 pt-2.5">
-            <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-            <span>
-              {budgetResult.scopeNote} ({budgetResult.dataProvenance})
-            </span>
+          {/* Scope notice & reference disclaimer */}
+          <div className="mt-4 space-y-1 text-[11px] text-muted-foreground/80 leading-relaxed border-t border-border/20 pt-2.5">
+            <div className="flex items-start gap-1.5">
+              <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+              <span>
+                {budgetResult.scopeNote} ({budgetResult.dataProvenance})
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground/70 pl-5">
+              * Reference estimates based on typical local rates, transport, and season. Not a guaranteed or live booking price.
+            </p>
           </div>
         </article>
       )}
@@ -397,6 +420,28 @@ export function RouteResults({
             </button>
           )}
         </article>
+      )}
+
+      {/* ── ROUTE QUALITY ADVISORY ── */}
+      {route.routeQualityNote && (
+        <div
+          className={cn(
+            'flex items-start gap-3 rounded-xl border p-3.5 text-xs leading-relaxed',
+            route.isRushed
+              ? 'border-amber-500/40 bg-amber-500/8 text-amber-900 dark:text-amber-200'
+              : 'border-[hsl(var(--atlas-stone))]/40 bg-muted/40 text-muted-foreground'
+          )}
+          role="note"
+          aria-label="Route quality notice"
+        >
+          <AlertTriangle
+            className={cn(
+              'mt-0.5 h-4 w-4 shrink-0',
+              route.isRushed ? 'text-amber-500' : 'text-muted-foreground'
+            )}
+          />
+          <p>{route.routeQualityNote}</p>
+        </div>
       )}
 
       {/* ── ROUTE SUMMARY ── */}

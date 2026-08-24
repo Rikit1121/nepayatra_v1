@@ -24,6 +24,7 @@ import {
   Plane,
   Sparkles,
   Utensils,
+  Calendar,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -53,6 +54,7 @@ const NAV_ITEMS = [
       { label: 'Border Crossings', href: '/admin/border-crossings', icon: Milestone },
       { label: 'Routes', href: '/admin/routes', icon: Route },
       { label: 'Packages', href: '/admin/packages', icon: Package },
+      { label: 'Calendar Events', href: '/admin/calendar-events', icon: Calendar },
       { label: 'Knowledge Base', href: '/admin/knowledge-base', icon: BookOpen },
       { label: 'FAQs', href: '/admin/faqs', icon: HelpCircle },
     ],

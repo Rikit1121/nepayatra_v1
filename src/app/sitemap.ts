@@ -27,11 +27,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/about',
     '/privacy',
     '/route-planner',
+    '/calendar',
+    '/calendar/2026',
+    '/calendar/2083',
+    '/calendar/2025',
+    '/calendar/festivals/dashain',
+    '/calendar/festivals/tihar',
+    '/calendar/festivals/holi',
+    '/calendar/festivals/buddha-jayanti',
+    '/calendar/festivals/indra-jatra',
+    '/calendar/festivals/maha-shivaratri',
   ].map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
     changeFrequency: path === '' ? ('weekly' as const) : ('weekly' as const),
-    priority: path === '' ? 1 : path === '/border-crossings' || path === '/destinations' ? 0.9 : 0.7,
+    priority: path === '' ? 1 : path === '/border-crossings' || path === '/destinations' || path === '/calendar' ? 0.9 : 0.7,
   }))
 
   const [destSlugs, pkgSlugs, articleSlugs, kbParams, crossings] = await Promise.all([

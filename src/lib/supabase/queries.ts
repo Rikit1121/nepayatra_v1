@@ -29,6 +29,7 @@ import type {
   DomesticFlight,
   Activity,
   DailyCostEstimate,
+  CalendarEvent,
   AccommodationTier,
   TransportType,
   DailyCostTier,
@@ -679,4 +680,115 @@ export async function getDailyCostEstimates(
   logQueryError('getDailyCostEstimates', error)
   return data ?? []
 }
+
+export async function getSharedTripByShareId(
+  shareId: string
+): Promise<import('@/lib/trips/types').ParsedSharedTrip | null> {
+  const supabase = createPublicClient()
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(shareId)
+
+  let query = supabase.from('shared_trips').select('*')
+  if (isUuid) {
+    query = query.or(`share_id.eq.${shareId},id.eq.${shareId}`)
+  } else {
+    query = query.eq('share_id', shareId)
+  }
+
+  const { data, error } = await query.maybeSingle()
+  if (error) {
+    logQueryError('getSharedTripByShareId', error)
+    return null
+  }
+  if (!data) return null
+
+  return {
+    ...data,
+    route_snapshot: data.route_snapshot as unknown as import('@/lib/trips/types').ParsedSharedTrip['route_snapshot'],
+    budget_snapshot: data.budget_snapshot as unknown as import('@/lib/trips/types').ParsedSharedTrip['budget_snapshot'],
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Calendar & Festivals
+// ─────────────────────────────────────────────────────────────
+
+export interface CalendarEventFilters {
+  year?: number
+  month?: number
+  eventType?: string
+  isPublicHoliday?: boolean
+  limit?: number
+}
+
+export async function getCalendarEvents(
+  filters: CalendarEventFilters = {}
+): Promise<CalendarEvent[]> {
+  const supabase = createPublicClient()
+  let query = supabase
+    .from('calendar_events')
+    .select('*')
+    .eq('public_visible', true)
+    .order('start_date_ad', { ascending: true })
+
+  if (filters.year) {
+    query = query.eq('year_ad', filters.year)
+  }
+  if (filters.eventType) {
+    query = query.eq('event_type', filters.eventType as CalendarEvent['event_type'])
+  }
+  if (filters.isPublicHoliday !== undefined) {
+    query = query.eq('is_public_holiday', filters.isPublicHoliday)
+  }
+  if (filters.limit) {
+    query = query.limit(filters.limit)
+  }
+
+  const { data, error } = await query
+  if (error) {
+    logQueryError('getCalendarEvents', error)
+    // Fallback to verified static events
+    const { VERIFIED_CALENDAR_EVENTS_2026 } = await import('@/lib/calendar/events-data')
+    let fallback = VERIFIED_CALENDAR_EVENTS_2026
+    if (filters.year) fallback = fallback.filter((e) => e.year_ad === filters.year)
+    if (filters.eventType) fallback = fallback.filter((e) => e.event_type === filters.eventType)
+    if (filters.isPublicHoliday !== undefined) fallback = fallback.filter((e) => e.is_public_holiday === filters.isPublicHoliday)
+    if (filters.month) {
+      const monthStr = String(filters.month).padStart(2, '0')
+      fallback = fallback.filter((e) => e.start_date_ad.includes(`-${monthStr}-`) || e.end_date_ad.includes(`-${monthStr}-`))
+    }
+    return fallback
+  }
+
+  if (filters.month && data) {
+    const monthStr = String(filters.month).padStart(2, '0')
+    return data.filter((e) => e.start_date_ad.includes(`-${monthStr}-`) || e.end_date_ad.includes(`-${monthStr}-`))
+  }
+
+  return data ?? []
+}
+
+export async function getCalendarEventBySlug(slug: string): Promise<CalendarEvent | null> {
+  const supabase = createPublicClient()
+  const { data, error } = await supabase
+    .from('calendar_events')
+    .select('*')
+    .eq('slug', slug)
+    .eq('public_visible', true)
+    .maybeSingle()
+
+  if (error) {
+    logQueryError('getCalendarEventBySlug', error)
+    const { VERIFIED_CALENDAR_EVENTS_2026 } = await import('@/lib/calendar/events-data')
+    return VERIFIED_CALENDAR_EVENTS_2026.find((e) => e.slug === slug) ?? null
+  }
+
+  if (!data) {
+    const { VERIFIED_CALENDAR_EVENTS_2026 } = await import('@/lib/calendar/events-data')
+    return VERIFIED_CALENDAR_EVENTS_2026.find((e) => e.slug === slug) ?? null
+  }
+
+  return data
+}
+
+
 

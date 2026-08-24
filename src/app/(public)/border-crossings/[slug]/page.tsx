@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { MapPin, Info } from 'lucide-react'
+import Link from 'next/link'
+import { MapPin, Info, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
@@ -167,6 +169,22 @@ export default async function BorderCrossingDetailPage({ params }: PageProps) {
 
         {/* Sidebar */}
         <aside className="space-y-4">
+          <Card className="border-[hsl(var(--atlas-blue))]/30 bg-[hsl(var(--atlas-blue))]/5">
+            <CardContent className="space-y-3 pt-6">
+              <h2 className="font-display text-base font-bold text-[hsl(var(--atlas-blue))]">
+                Plan a route from this crossing
+              </h2>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Set {crossing.crossing_name} as your entry point and build an optimized onward journey in Nepal.
+              </p>
+              <Button asChild className="w-full shadow-sm">
+                <Link href={`/route-planner?border=${slug}&tm=road&ot=india&step=3`}>
+                  Plan from this Border <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
           {hasCoords && (
             <Card>
               <CardContent className="space-y-3 pt-6">

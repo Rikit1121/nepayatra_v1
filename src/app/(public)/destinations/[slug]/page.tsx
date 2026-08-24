@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { MapPin, Mountain, CalendarDays, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
@@ -229,6 +230,22 @@ export default async function DestinationDetailPage({ params }: PageProps) {
 
         {/* Sidebar */}
         <aside className="space-y-4">
+          <Card className="border-[hsl(var(--atlas-blue))]/30 bg-[hsl(var(--atlas-blue))]/5">
+            <CardContent className="space-y-3 pt-6">
+              <h2 className="font-display text-base font-bold text-[hsl(var(--atlas-blue))]">
+                Plan a trip with {destination.name}
+              </h2>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Include {destination.name} in your custom Nepal route. Automatically calculate sequence, travel times, and reference costs.
+              </p>
+              <Button asChild className="w-full shadow-sm">
+                <Link href={`/route-planner?dest=${destination.slug}&step=3`}>
+                  Add to Trip Planner <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
           {hasCoords && (
             <Card>
               <CardContent className="space-y-3 pt-6">

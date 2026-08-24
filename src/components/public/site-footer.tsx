@@ -9,8 +9,9 @@ const FOOTER_SECTIONS = [
   {
     title: 'Explore Nepal',
     links: [
+      { label: 'Trip Planner', href: '/route-planner' },
+      { label: 'Travel Calendar', href: '/calendar' },
       { label: 'Destinations', href: '/destinations' },
-      { label: 'Route Planner', href: '/route-planner' },
       { label: 'Suggested Trips', href: '/packages' },
       { label: 'Religious Sites', href: '/destinations?category=religious' },
     ],

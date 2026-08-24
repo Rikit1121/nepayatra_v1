@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { PageHero } from '@/components/public/page-hero'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { FilterSelect } from '@/components/public/filter-select'
@@ -14,13 +17,13 @@ import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Suggested Trips',
+  title: 'Suggested Trips & Curated Itineraries',
   description:
-    'Sample Nepal itineraries you can follow as-is or adapt — with durations, highlights and route summaries. Built for Indian travelers.',
+    'Sample Nepal itineraries you can follow as-is or open in the Trip Planner to customize destinations, duration, and budget.',
   alternates: { canonical: `${SITE.url}/packages` },
   openGraph: {
     title: 'Suggested Trips · NepaYatra',
-    description: 'Sample Nepal itineraries you can follow or adapt with an advisor.',
+    description: 'Sample Nepal itineraries you can follow as-is or customize in the Trip Planner.',
     url: `${SITE.url}/packages`,
   },
 }
@@ -40,7 +43,7 @@ async function PackagesGrid({ difficulty }: { difficulty?: string }) {
     return (
       <EmptyState
         title="No trips here yet"
-        description="Try a different difficulty, or talk to an advisor to build a custom plan."
+        description="Try a different difficulty, or build a custom plan in the Trip Planner."
         actionLabel="Clear filter"
         actionHref="/packages"
       />
@@ -63,7 +66,7 @@ export default async function PackagesPage({ searchParams }: PageProps) {
       <PageHero
         eyebrow="Itineraries"
         title="Suggested trips"
-        description="Tried-and-tested itineraries to start from. Take one as-is, or use it as a base and adjust the details with an advisor."
+        description="Tried-and-tested itineraries to start from. Follow one as-is, or open it in the Trip Planner to customize destinations, duration, and estimated budget."
       >
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Suggested Trips' }]} />
       </PageHero>
@@ -74,6 +77,21 @@ export default async function PackagesPage({ searchParams }: PageProps) {
         imageClassName="opacity-30 saturate-[0.75]"
       >
         <div className="container py-8">
+          {/* Planner banner */}
+          <div className="mb-8 flex flex-col gap-3 rounded-xl border border-[hsl(var(--atlas-blue))]/25 bg-[hsl(var(--atlas-blue))]/5 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+            <div>
+              <p className="font-display font-bold text-foreground">Want to build your own trip from scratch?</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Use our interactive Trip Planner to pick custom stops, set your dates, and calculate realistic budget estimates.
+              </p>
+            </div>
+            <Button asChild size="sm" className="shrink-0 shadow-sm">
+              <Link href="/route-planner">
+                Open Trip Planner <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
+
           <div className="max-w-xs">
             <FilterSelect
               paramKey="difficulty"
@@ -81,7 +99,7 @@ export default async function PackagesPage({ searchParams }: PageProps) {
               options={DIFFICULTY_OPTIONS}
             />
           </div>
-          <div className="mt-8">
+          <div className="mt-6">
             <Suspense key={difficulty} fallback={<CardGridSkeleton />}>
               <PackagesGrid difficulty={difficulty} />
             </Suspense>

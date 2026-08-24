@@ -76,13 +76,13 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
 
   let orderedIds: string[]
   if (startId && orderInput.length > 0) {
-    orderedIds = orderDestinations(graph, startId, orderInput, getCoords)
+    orderedIds = orderDestinations(graph, startId, orderInput, getCoords, days)
   } else if (startId) {
     orderedIds = [startId]
   } else {
     // No entry node — order from first selected destination
     const fakeStart = selectedIds[0]
-    orderedIds = orderDestinations(graph, fakeStart, selectedIds.slice(1), getCoords)
+    orderedIds = orderDestinations(graph, fakeStart, selectedIds.slice(1), getCoords, days)
     if (orderedIds.length === 0) orderedIds = selectedIds
   }
 
@@ -194,6 +194,15 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
     ),
   ]
 
+  // ── Route quality analysis ───────────────────────────────
+  const { routeQualityNote, isRushed } = analyseRouteQuality({
+    orderedStops: orderedStops.filter((d) => selectedIds.includes(d.id)),
+    legs,
+    totalDays: days,
+    travelDays,
+    getCoords,
+  })
+
   return {
     orderedStopIds: orderedIds,
     orderedStops,
@@ -203,8 +212,99 @@ export function generateRoute(input: GenerateInput): GeneratedRoute | null {
     travelDays,
     dayAllocations,
     transportSuggestions,
+    routeQualityNote,
+    isRushed,
   }
 }
+
+// ─────────────────────────────────────────────────────────────
+// Route quality analysis
+// ─────────────────────────────────────────────────────────────
+
+const BACKTRACK_DETECT_THRESHOLD = 100 // degrees — must match graph.ts constant
+
+function routeBearing(
+  from: PlannerDestination,
+  to: PlannerDestination
+): number {
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const toDeg = (r: number) => (r * 180) / Math.PI
+  const dLon = toRad(to.longitude - from.longitude)
+  const φ1 = toRad(from.latitude)
+  const φ2 = toRad(to.latitude)
+  const y = Math.sin(dLon) * Math.cos(φ2)
+  const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(dLon)
+  return (toDeg(Math.atan2(y, x)) + 360) % 360
+}
+
+function bearingDeltaDeg(a: number, b: number): number {
+  const d = Math.abs(a - b) % 360
+  return d > 180 ? 360 - d : d
+}
+
+interface QualityInput {
+  orderedStops: PlannerDestination[]
+  legs: RouteLeg[]
+  totalDays: number
+  travelDays: number
+  getCoords: (id: string) => { lat: number; lng: number } | null
+}
+
+function analyseRouteQuality({
+  orderedStops,
+  totalDays,
+  travelDays,
+}: QualityInput): { routeQualityNote?: string; isRushed?: boolean } {
+  const notes: string[] = []
+  let hasBacktracking = false
+
+  // ── Backtracking detection ────────────────────────────────
+  // Walk consecutive stop pairs and check for bearing reversals
+  if (orderedStops.length >= 3) {
+    let prevBearing: number | null = null
+    for (let i = 0; i < orderedStops.length - 1; i++) {
+      const from = orderedStops[i]
+      const to   = orderedStops[i + 1]
+      const bearing = routeBearing(from, to)
+      if (prevBearing !== null) {
+        const delta = bearingDeltaDeg(prevBearing, bearing)
+        if (delta > BACKTRACK_DETECT_THRESHOLD) {
+          hasBacktracking = true
+          break
+        }
+      }
+      prevBearing = bearing
+    }
+  }
+
+  if (hasBacktracking) {
+    notes.push(
+      'This route involves some backtracking. We\'ve arranged the order to minimise total travel time — but consider grouping nearby destinations together for a smoother journey.'
+    )
+  }
+
+  // ── Rushed trip detection ─────────────────────────────────
+  // Rushed = fewer days than stops + travel days (minimum viable comfort)
+  const minComfortDays = orderedStops.length + travelDays
+  const isRushed = totalDays < minComfortDays
+
+  if (isRushed) {
+    const shortfall = minComfortDays - totalDays
+    notes.push(
+      `With ${totalDays} day${totalDays !== 1 ? 's' : ''} and ${orderedStops.length} destination${orderedStops.length !== 1 ? 's' : ''}, this itinerary will be fast-paced. Consider adding ${
+        shortfall
+      } more day${shortfall !== 1 ? 's' : ''} or removing a stop for a more relaxed experience.`
+    )
+  }
+
+  const routeQualityNote = notes.length > 0 ? notes.join(' ') : undefined
+
+  return { routeQualityNote, isRushed: isRushed || undefined }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Day allocation
+// ─────────────────────────────────────────────────────────────
 
 function allocateDays(stops: PlannerDestination[], totalStayDays: number): DayAllocation[] {
   if (stops.length === 0) return []

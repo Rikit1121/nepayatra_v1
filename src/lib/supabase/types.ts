@@ -574,6 +574,159 @@ export interface Database {
         Relationships: []
       }
 
+      // ── shared_trips ──────────────────────────────────────
+
+      shared_trips: {
+        Row: {
+          id: string
+          share_id: string
+          title: string
+          origin_type: 'india' | 'international' | 'in-nepal'
+          travel_mode: 'flight' | 'road' | null
+          border_slug: string | null
+          origin_country: string | null
+          origin_city: string | null
+          from_region: string | null
+          start_date: string | null
+          end_date: string | null
+          days: number
+          traveler_count: number
+          traveler_type: 'solo' | 'couple' | 'family' | 'group' | null
+          travel_category: string | null
+          travel_style: 'budget' | 'comfort' | 'premium' | null
+          interests: string[]
+          user_budget_npr: number | null
+          destination_slugs: string[]
+          route_snapshot: Json
+          budget_snapshot: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          share_id: string
+          title: string
+          origin_type: 'india' | 'international' | 'in-nepal'
+          travel_mode?: 'flight' | 'road' | null
+          border_slug?: string | null
+          origin_country?: string | null
+          origin_city?: string | null
+          from_region?: string | null
+          start_date?: string | null
+          end_date?: string | null
+          days: number
+          traveler_count: number
+          traveler_type?: 'solo' | 'couple' | 'family' | 'group' | null
+          travel_category?: string | null
+          travel_style?: 'budget' | 'comfort' | 'premium' | null
+          interests?: string[]
+          user_budget_npr?: number | null
+          destination_slugs?: string[]
+          route_snapshot: Json
+          budget_snapshot: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          share_id?: string
+          title?: string
+          origin_type?: 'india' | 'international' | 'in-nepal'
+          travel_mode?: 'flight' | 'road' | null
+          border_slug?: string | null
+          origin_country?: string | null
+          origin_city?: string | null
+          from_region?: string | null
+          start_date?: string | null
+          end_date?: string | null
+          days?: number
+          traveler_count?: number
+          traveler_type?: 'solo' | 'couple' | 'family' | 'group' | null
+          travel_category?: string | null
+          travel_style?: 'budget' | 'comfort' | 'premium' | null
+          interests?: string[]
+          user_budget_npr?: number | null
+          destination_slugs?: string[]
+          route_snapshot?: Json
+          budget_snapshot?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+
+      // ── calendar_events ───────────────────────────────────
+
+      calendar_events: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          nepali_title: string | null
+          event_type: 'festival' | 'public_holiday' | 'cultural_event' | 'travel_season' | 'national_day'
+          start_date_ad: string
+          end_date_ad: string
+          start_date_bs: string
+          end_date_bs: string
+          year_ad: number
+          year_bs: number
+          is_public_holiday: boolean
+          summary: string
+          description: string | null
+          travel_impact: string | null
+          recommended_destinations: string[]
+          featured: boolean
+          public_visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          nepali_title?: string | null
+          event_type: 'festival' | 'public_holiday' | 'cultural_event' | 'travel_season' | 'national_day'
+          start_date_ad: string
+          end_date_ad: string
+          start_date_bs: string
+          end_date_bs: string
+          year_ad: number
+          year_bs: number
+          is_public_holiday?: boolean
+          summary: string
+          description?: string | null
+          travel_impact?: string | null
+          recommended_destinations?: string[]
+          featured?: boolean
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          nepali_title?: string | null
+          event_type?: 'festival' | 'public_holiday' | 'cultural_event' | 'travel_season' | 'national_day'
+          start_date_ad?: string
+          end_date_ad?: string
+          start_date_bs?: string
+          end_date_bs?: string
+          year_ad?: number
+          year_bs?: number
+          is_public_holiday?: boolean
+          summary?: string
+          description?: string | null
+          travel_impact?: string | null
+          recommended_destinations?: string[]
+          featured?: boolean
+          public_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+
       // ── accommodations ───────────────────────────────────
 
       accommodations: {
@@ -996,6 +1149,15 @@ export type SiteSettingUpdate = Database['public']['Tables']['site_settings']['U
 export type ContactInquiry       = Database['public']['Tables']['contact_inquiries']['Row']
 export type ContactInquiryInsert = Database['public']['Tables']['contact_inquiries']['Insert']
 export type ContactInquiryUpdate = Database['public']['Tables']['contact_inquiries']['Update']
+
+export type SharedTrip       = Database['public']['Tables']['shared_trips']['Row']
+export type SharedTripInsert = Database['public']['Tables']['shared_trips']['Insert']
+export type SharedTripUpdate = Database['public']['Tables']['shared_trips']['Update']
+
+export type CalendarEvent       = Database['public']['Tables']['calendar_events']['Row']
+export type CalendarEventInsert = Database['public']['Tables']['calendar_events']['Insert']
+export type CalendarEventUpdate = Database['public']['Tables']['calendar_events']['Update']
+export type CalendarEventType   = CalendarEvent['event_type']
 
 export type Accommodation       = Database['public']['Tables']['accommodations']['Row']
 export type AccommodationInsert = Database['public']['Tables']['accommodations']['Insert']

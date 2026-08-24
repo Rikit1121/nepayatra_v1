@@ -1,4 +1,7 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { PageHero } from '@/components/public/page-hero'
 import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { SearchInput } from '@/components/public/search-input'
@@ -15,9 +18,9 @@ import { buildPageMetadata } from '@/lib/seo'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'Destinations in Nepal for Indian Travelers',
+  title: 'Destinations in Nepal — Explore & Plan Itineraries',
   description:
-    'Browse Nepal destinations by category and province — Kathmandu, Pokhara, Chitwan, Lumbini, trekking regions and Himalayan viewpoints. Practical guides for Indian tourists.',
+    'Browse Nepal destinations by category and province — Kathmandu, Pokhara, Chitwan, Lumbini, trekking bases and Himalayan viewpoints. Plan sensible routes and estimated budgets.',
   path: '/destinations',
 })
 
@@ -82,6 +85,21 @@ export default async function DestinationsPage({ searchParams }: PageProps) {
         imageClassName="opacity-30 saturate-[0.75]"
       >
         <div className="container py-8">
+          {/* Planner banner */}
+          <div className="mb-8 flex flex-col gap-3 rounded-xl border border-[hsl(var(--atlas-blue))]/25 bg-[hsl(var(--atlas-blue))]/5 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+            <div>
+              <p className="font-display font-bold text-foreground">Planning a multi-destination journey?</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Connect destinations into an optimized route with automatic travel sequence, day allocations, and estimated budget.
+              </p>
+            </div>
+            <Button asChild size="sm" className="shrink-0 shadow-sm">
+              <Link href="/route-planner">
+                Open Trip Planner <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
+
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="flex-1">
               <SearchInput placeholder="Search destinations…" />

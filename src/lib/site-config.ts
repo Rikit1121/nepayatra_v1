@@ -21,9 +21,9 @@ function resolveSiteUrl(): string {
 
 export const SITE = {
   name: 'NepaYatra',
-  identity: "Explorer's Companion",
+  identity: 'Trip Planner',
   description:
-    'Plan your Nepal trip from India — borders, destinations, routes, and real answers to the questions Indian travelers actually ask.',
+    'Plan your Nepal trip your way — build a personalized itinerary around your destinations, travel days, and estimated budget.',
   url: resolveSiteUrl(),
   locale: 'en_IN',
 } as const
@@ -38,12 +38,13 @@ export const FOOTER_CONTACT = {
 
 export const MAIN_NAV: { label: string; href: string }[] = [
   { label: 'Home', href: '/' },
+  { label: 'Trip Planner', href: '/route-planner' },
+  { label: 'Calendar', href: '/calendar' },
   { label: 'Destinations', href: '/destinations' },
   { label: 'Map', href: '/map' },
   { label: 'Border Crossings', href: '/border-crossings' },
-  { label: 'Route Planner', href: '/route-planner' },
+  { label: 'Suggested Trips', href: '/packages' },
   { label: 'Travel Guides', href: '/guides' },
-  { label: 'Packages', href: '/packages' },
   { label: 'FAQ', href: '/faq' },
 ]
 

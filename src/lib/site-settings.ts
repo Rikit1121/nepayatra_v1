@@ -24,10 +24,10 @@ export interface SiteSettingsMap {
 
 const DEFAULTS: SiteSettingsMap = {
   site_name: 'NepaYatra',
-  site_tagline: 'Plan your Nepal trip from India',
-  homepage_hero_headline: 'Plan Your Nepal Trip — Step by Step',
+  site_tagline: 'Plan Nepal your way',
+  homepage_hero_headline: 'Plan Your Nepal Trip',
   homepage_hero_subheadline:
-    'From which border to cross, to how many days in Pokhara — everything a first-time Indian traveler needs to know.',
+    'Plan Nepal your way — build a personalized itinerary around your destinations, travel days, and estimated budget. Starting overland from India, flying in internationally, or exploring from within Nepal.',
   homepage_hero_image_url: '/images/sarangkot.webp',
   homepage_featured_destinations_count: 6,
   homepage_featured_packages_count: 3,
