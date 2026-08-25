@@ -53,6 +53,7 @@ export function organizationJsonLd() {
     '@type': 'Organization',
     name: SITE.name,
     url: SITE.url,
+    logo: `${SITE.url}/images/logo.png`,
     description: SITE.description,
     email: FOOTER_CONTACT.email,
     sameAs: [FOOTER_CONTACT.instagram, FOOTER_CONTACT.facebook],

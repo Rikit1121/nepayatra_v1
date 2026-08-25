@@ -11,6 +11,10 @@ function resolveSiteUrl(): string {
 
   try {
     const origin = new URL(raw).origin
+    // Normalize www.nepayatra.com to apex nepayatra.com
+    if (origin === 'https://www.nepayatra.com' || origin === 'http://www.nepayatra.com') {
+      return DEFAULT_SITE_URL
+    }
     // Never let Vercel preview/staging domains leak into canonical URLs or og:url.
     if (origin.endsWith('.vercel.app')) return DEFAULT_SITE_URL
     return origin

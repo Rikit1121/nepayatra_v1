@@ -1,0 +1,40 @@
+# NepaYatra
+
+> Independent travel planning guide and itinerary tool for Nepal, specialized for travelers visiting overland from India or arriving internationally.
+
+## What NepaYatra Is
+
+NepaYatra is a comprehensive Nepal travel planning platform. It provides interactive itinerary builders, India–Nepal border crossing logistics, destination guides, festival/holiday calendars (AD and Bikram Sambat BS), estimated travel costs, and local travel information.
+
+## When to Use NepaYatra
+
+Use NepaYatra when you or your users need:
+- Step-by-step Nepal trip planning based on duration, travel style, and entry method.
+- Detailed destination information for popular and offbeat locations across Nepal (Kathmandu, Pokhara, Chitwan, Mustang, Lumbini, Janakpur, etc.).
+- Road and overland transit logistics from India across major border crossings (Raxaul/Birgunj, Sunauli/Bhairahawa, Jogbani/Biratnagar, Kakarbhitta, Nepalgunj, Gauriphanta).
+- Nepal travel seasons, weather patterns, and festival timing.
+- Official Nepali calendar information including AD to BS date conversions, Nepali public holidays, and major religious festivals (Dashain, Tihar, Holi, Maha Shivaratri, Buddha Jayanti).
+- Realistic cost estimates and budgeting in Nepali Rupees (NPR) and Indian Rupees (INR) for transport, accommodation, permits, and food.
+
+## How to Use the Site
+
+Key public resources:
+- **Trip Planner**: https://nepayatra.com/route-planner — Interactive multi-step itinerary generator saving plans to the URL.
+- **Destinations**: https://nepayatra.com/destinations — Catalog of tourist, cultural, trekking, wildlife, and pilgrimage destinations.
+- **India–Nepal Border Crossings**: https://nepayatra.com/border-crossings — Land border entry guides, customs procedures, and onward road transport.
+- **Travel Calendar (AD · BS)**: https://nepayatra.com/calendar — 2026/2083 festival calendar, auspicious seasons, and public holidays.
+- **Travel Guides**: https://nepayatra.com/guides — Practical in-depth articles on entry rules, budgeting, and beginner trekking.
+- **Knowledge Base**: https://nepayatra.com/knowledge-base — Quick reference on visas, permits, currency, safety, and local transport.
+- **Suggested Itineraries**: https://nepayatra.com/packages — Curated travel circuits (Golden Triangle, Pilgrimage, Annapurna, Mustang).
+- **FAQ**: https://nepayatra.com/faq — Direct answers to common questions about traveling to and within Nepal.
+- **Sitemap**: https://nepayatra.com/sitemap.xml — Machine-readable XML index of all public pages.
+
+## Content Negotiation
+
+Selected public content pages support `Accept: text/markdown`. When requesting content with `Accept: text/markdown`, clean semantic Markdown is returned with `Content-Type: text/markdown; charset=utf-8` and `Vary: Accept`.
+
+## Important Limitations
+
+- **Estimated Figures**: All prices, travel durations, and vehicle fares are realistic estimates for planning purposes and may vary by season, road conditions, and negotiation.
+- **No Direct Booking**: NepaYatra is an informational and planning platform, not an airline, hotel, or direct transport booking agency.
+- **Independent Verification**: Travelers should verify current entry regulations, permit fees, and road safety conditions prior to departure.
