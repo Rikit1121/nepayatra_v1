@@ -75,6 +75,7 @@ export function selectAccommodationForDestination({
       totalCostNpr,
       notes: chosen.notes,
       imageUrl: chosen.image_url,
+      images: Array.isArray(chosen.images) ? chosen.images : undefined,
       websiteUrl: chosen.website_url,
       isFallback: false,
     }

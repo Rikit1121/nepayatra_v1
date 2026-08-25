@@ -21,7 +21,7 @@ export default async function AccommodationsPage({ searchParams }: PageProps) {
   let query = supabase
     .from('accommodations')
     .select(
-      `id, name, tier, estimated_price_min, estimated_price_max, currency, source, public_visible, created_at,
+      `id, name, tier, estimated_price_min, estimated_price_max, currency, source, image_url, images, public_visible, created_at,
        destination:destinations!accommodations_destination_id_fkey(name)`,
       { count: 'exact' }
     )

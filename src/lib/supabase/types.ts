@@ -101,6 +101,13 @@ export type ActivityCategory =
   | 'nature'
   | 'other'
 
+export interface AccommodationImage {
+  url: string
+  caption?: string | null
+  sort_order: number
+  is_primary: boolean
+}
+
 // ─────────────────────────────────────────────────────────────
 // FULL DATABASE TYPE (Supabase Client Generic)
 // ─────────────────────────────────────────────────────────────
@@ -742,6 +749,7 @@ export interface Database {
           source_date: string | null
           notes: string | null
           image_url: string | null
+          images: AccommodationImage[]
           website_url: string | null
           public_visible: boolean
           created_at: string
@@ -759,6 +767,7 @@ export interface Database {
           source_date?: string | null
           notes?: string | null
           image_url?: string | null
+          images?: AccommodationImage[] | Json
           website_url?: string | null
           public_visible?: boolean
           created_at?: string
@@ -776,6 +785,7 @@ export interface Database {
           source_date?: string | null
           notes?: string | null
           image_url?: string | null
+          images?: AccommodationImage[] | Json
           website_url?: string | null
           public_visible?: boolean
           created_at?: string

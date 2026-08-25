@@ -8,7 +8,7 @@ import { FeaturedToggle } from '@/components/admin/featured-toggle'
 import { DeleteDialog } from '@/components/admin/delete-dialog'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Pencil } from 'lucide-react'
+import { Pencil, Building, ImageIcon } from 'lucide-react'
 import {
   toggleAccommodationVisibility,
   deleteAccommodation,
@@ -25,6 +25,8 @@ export type AccommodationRow = Pick<
   | 'estimated_price_max'
   | 'currency'
   | 'source'
+  | 'image_url'
+  | 'images'
   | 'public_visible'
   | 'created_at'
 > & {
@@ -44,14 +46,45 @@ export function AccommodationsTable({
     {
       accessorKey: 'name',
       header: 'Accommodation',
-      cell: ({ row }) => (
-        <div>
-          <p className="font-medium">{row.original.name}</p>
-          <p className="text-xs text-muted-foreground">
-            {row.original.destination?.name ?? 'Unknown destination'}
-          </p>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const primaryImage =
+          row.original.image_url ||
+          (Array.isArray(row.original.images) && row.original.images.length > 0
+            ? row.original.images[0]?.url
+            : null)
+        const photoCount = Array.isArray(row.original.images) ? row.original.images.length : (primaryImage ? 1 : 0)
+
+        return (
+          <div className="flex items-center gap-3">
+            <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md border border-border/50 bg-muted/30">
+              {primaryImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={primaryImage}
+                  alt={row.original.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                  <Building className="h-4 w-4 opacity-50" />
+                </div>
+              )}
+              {photoCount > 1 && (
+                <span className="absolute bottom-0.5 right-0.5 rounded bg-black/70 px-1 text-[9px] font-bold text-white leading-tight">
+                  {photoCount}
+                </span>
+              )}
+            </div>
+
+            <div>
+              <p className="font-medium text-foreground">{row.original.name}</p>
+              <p className="text-xs text-muted-foreground">
+                {row.original.destination?.name ?? 'Unknown destination'}
+              </p>
+            </div>
+          </div>
+        )
+      },
     },
     {
       accessorKey: 'tier',

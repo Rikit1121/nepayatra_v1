@@ -685,8 +685,17 @@ export const updateContactInquirySchema = z.object({
 export type UpdateContactInquiryFormValues = z.infer<typeof updateContactInquirySchema>
 
 // ─────────────────────────────────────────────────────────────
-// 11. ACCOMMODATIONS SCHEMA (Phase 2A)
+// 11. ACCOMMODATIONS SCHEMA (Phase 2A & V2 Multi-Images)
 // ─────────────────────────────────────────────────────────────
+
+export const accommodationImageSchema = z.object({
+  url: z.string().min(1, 'Image URL is required'),
+  caption: z.string().max(150, 'Caption must be under 150 characters').optional().nullable(),
+  sort_order: z.number().int().default(0),
+  is_primary: z.boolean().default(false),
+})
+
+export type AccommodationImageFormValue = z.infer<typeof accommodationImageSchema>
 
 export const createAccommodationSchema = z
   .object({
@@ -705,6 +714,7 @@ export const createAccommodationSchema = z
     source_date: z.string().optional().nullable(),
     notes: z.string().optional().nullable(),
     image_url: imageUrlSchema,
+    images: z.array(accommodationImageSchema).default([]),
     website_url: urlSchema,
     public_visible: z.boolean().default(true),
   })

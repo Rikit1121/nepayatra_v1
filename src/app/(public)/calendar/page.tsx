@@ -15,6 +15,7 @@ import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { PageHero } from '@/components/public/page-hero'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { CompactTravelAlert } from '@/components/public/compact-travel-alert'
 import { CalendarGrid } from '@/features/calendar/calendar-grid'
 import { AdBsConverterWidget } from '@/features/calendar/ad-bs-converter-widget'
 import { getCalendarEvents, getActiveTravelAlerts } from '@/lib/supabase/queries'
@@ -57,39 +58,19 @@ export default async function CalendarPage() {
       </PageHero>
 
       <main className="container py-8 sm:py-12">
-        {/* ── TRAVEL ALERTS BANNER ── */}
-        {alerts.length > 0 && (
-          <div className="mb-8 space-y-3">
-            {alerts.map((alert) => (
-              <div
-                key={alert.id}
-                className={cn(
-                  'rounded-xl border p-4 text-xs leading-relaxed',
-                  alert.severity === 'danger'
-                    ? 'border-rose-500/40 bg-rose-500/10 text-rose-900 dark:text-rose-200'
-                    : 'border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200'
-                )}
-              >
-                <div className="flex items-start gap-2.5">
-                  <ShieldAlert className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-                  <div>
-                    <span className="font-bold">Active Travel Alert: </span>
-                    <span>{alert.title} — {alert.message}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
         <div className="grid gap-8 lg:grid-cols-12">
           {/* ── LEFT: INTERACTIVE CALENDAR & FESTIVALS (8 cols) ── */}
           <div className="space-y-8 lg:col-span-8">
             {/* Interactive Grid */}
             <CalendarGrid initialYear={2026} initialMonth={10} events={events} />
 
+            {/* Compact Travel Alert (Placed below Calendar controls/grid) */}
+            {alerts.length > 0 && (
+              <CompactTravelAlert alerts={alerts} />
+            )}
+
             {/* Major Festivals of Nepal */}
-            <section className="space-y-4 pt-4">
+            <section className="space-y-4 pt-2">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className={cn(atlasDisplayMd, 'text-foreground')}>

@@ -1,6 +1,7 @@
 import type {
   AccommodationTier,
   DailyCostTier,
+  AccommodationImage,
 } from '@/lib/supabase/types'
 import type {
   TravelBudgetStyle,
@@ -22,6 +23,7 @@ export interface SelectedAccommodation {
   totalCostNpr: number
   notes?: string | null
   imageUrl?: string | null
+  images?: AccommodationImage[]
   websiteUrl?: string | null
   isFallback: boolean
 }

@@ -12,6 +12,7 @@ import {
   Compass,
   ArrowRight,
   Info,
+  Flame,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -22,6 +23,7 @@ import {
   toDevanagariDigits,
   type CalendarDayItem,
 } from '@/lib/calendar/nepali-date'
+import { getSeasonForMonth } from '@/lib/calendar/seasons'
 import { atlasCardPlanner } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import type { CalendarEvent } from '@/lib/supabase/types'
@@ -41,7 +43,7 @@ const WEEKDAYS = [
   { en: 'Wed', np: 'बुध', isWeekend: false },
   { en: 'Thu', np: 'बिही', isWeekend: false },
   { en: 'Fri', np: 'शुक्र', isWeekend: false },
-  { en: 'Sat', np: 'शनि', isWeekend: true }, // Nepal official weekly holiday
+  { en: 'Sat', np: 'शनि', isWeekend: true }, // Nepal official weekly public holiday
 ]
 
 export function CalendarGrid({
@@ -53,6 +55,7 @@ export function CalendarGrid({
 }: CalendarGridProps) {
   const [year, setYear] = React.useState(initialYear)
   const [month, setMonth] = React.useState(initialMonth) // 1..12
+  const [systemMode, setSystemMode] = React.useState<'ad' | 'bs'>('ad')
   const [selectedDay, setSelectedDay] = React.useState<CalendarDayItem | null>(null)
 
   const days = React.useMemo(() => {
@@ -60,6 +63,7 @@ export function CalendarGrid({
   }, [year, month])
 
   const currentMonthMeta = GREGORIAN_MONTHS[month - 1] ?? GREGORIAN_MONTHS[0]
+  const seasonInfo = React.useMemo(() => getSeasonForMonth(month), [month])
 
   // Determine BS months spanned in this Gregorian month
   const bsMonthSummary = React.useMemo(() => {
@@ -101,46 +105,126 @@ export function CalendarGrid({
     setSelectedDay(null)
   }
 
-  // Find events matching a specific date string
+  // Find discrete events matching a specific date string (exclude multi-month broad travel season spans from cell overcrowding)
   const getEventsForDate = (dateStr: string): CalendarEvent[] => {
-    return events.filter((e) => {
-      if (e.start_date_ad === dateStr || e.end_date_ad === dateStr) return true
-      if (e.start_date_ad <= dateStr && e.end_date_ad >= dateStr) return true
-      return false
-    })
+    return events
+      .filter((e) => e.event_type !== 'travel_season')
+      .filter((e) => {
+        if (e.start_date_ad === dateStr || e.end_date_ad === dateStr) return true
+        if (e.start_date_ad <= dateStr && e.end_date_ad >= dateStr) return true
+        return false
+      })
   }
 
   const selectedDayEvents = selectedDay ? getEventsForDate(selectedDay.dateAd) : []
 
   return (
     <div className={cn('space-y-4', className)}>
-      {/* ── HEADER CONTROLS ── */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-card p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="font-display text-xl font-bold text-foreground sm:text-2xl">
-              {currentMonthMeta.name} {year}
-            </h2>
-            {showMonthLink && (
-              <Button asChild size="sm" variant="ghost" className="h-7 text-xs text-[hsl(var(--atlas-blue))]">
-                <Link href={`/calendar/${year}/${currentMonthMeta.slug}`}>
-                  Month Guide →
-                </Link>
-              </Button>
+      {/* ── HEADER CONTROLS & AD/BS SYSTEM TOGGLE ── */}
+      <div className="flex flex-col gap-4 rounded-2xl border border-border/50 bg-card p-4 sm:p-5 shadow-xs">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/30 pb-3.5">
+          {/* Primary & Secondary Month Titles according to System Mode */}
+          <div>
+            {systemMode === 'ad' ? (
+              <>
+                <div className="flex items-center gap-2.5">
+                  <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                    {currentMonthMeta.name} {year}
+                  </h2>
+                  <Badge variant="outline" className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+                    AD View
+                  </Badge>
+                  {showMonthLink && (
+                    <Button asChild size="sm" variant="ghost" className="h-7 text-xs text-[hsl(var(--atlas-blue))]">
+                      <Link href={`/calendar/${year}/${currentMonthMeta.slug}`}>
+                        Guide →
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+                <p className="mt-1 text-xs font-semibold text-[hsl(var(--atlas-saffron))]">
+                  Bikram Sambat: {bsMonthSummary}
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2.5">
+                  <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                    {bsMonthSummary}
+                  </h2>
+                  <Badge variant="outline" className="text-[10px] font-semibold tracking-wider text-[hsl(var(--atlas-saffron))] uppercase">
+                    BS View
+                  </Badge>
+                  {showMonthLink && (
+                    <Button asChild size="sm" variant="ghost" className="h-7 text-xs text-[hsl(var(--atlas-blue))]">
+                      <Link href={`/calendar/${year}/${currentMonthMeta.slug}`}>
+                        Guide →
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+                <p className="mt-1 text-xs font-medium text-muted-foreground">
+                  Gregorian Equivalent: <span className="font-semibold text-foreground">{currentMonthMeta.name} {year}</span>
+                </p>
+              </>
             )}
           </div>
-          <p className="mt-0.5 text-xs font-semibold text-[hsl(var(--atlas-saffron))]">
-            {bsMonthSummary}
-          </p>
+
+          {/* AD ↔ BS Selector & Today Button */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Mode Switcher */}
+            <div className="flex rounded-lg border border-border/60 bg-muted/30 p-0.5 text-xs">
+              <button
+                type="button"
+                onClick={() => setSystemMode('ad')}
+                className={cn(
+                  'rounded-md px-3 py-1 font-semibold transition-all',
+                  systemMode === 'ad'
+                    ? 'bg-primary text-primary-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                AD (Gregorian)
+              </button>
+              <button
+                type="button"
+                onClick={() => setSystemMode('bs')}
+                className={cn(
+                  'rounded-md px-3 py-1 font-semibold transition-all',
+                  systemMode === 'bs'
+                    ? 'bg-[hsl(var(--atlas-saffron))] text-white shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                BS (विक्रम संवत्)
+              </button>
+            </div>
+
+            <Button size="sm" variant="outline" onClick={jumpToToday} className="h-8 text-xs font-semibold">
+              Today
+            </Button>
+          </div>
         </div>
 
-        {/* Navigation buttons */}
-        <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" onClick={jumpToToday} className="h-8 text-xs font-semibold">
-            Today
-          </Button>
+        {/* Month Stepper & Seasonal Indicator Banner */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="font-medium text-foreground">Season:</span>
+            <Badge
+              variant="secondary"
+              className={cn(
+                'text-[11px] font-semibold gap-1',
+                seasonInfo.trekkingCondition === 'Optimal'
+                  ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                  : 'bg-blue-500/10 text-blue-700 dark:text-blue-300'
+              )}
+            >
+              <Sparkles className="h-3 w-3" /> {seasonInfo.name} ({seasonInfo.trekkingCondition} Trekking)
+            </Badge>
+          </div>
 
-          <div className="flex items-center rounded-lg border border-border/50 bg-muted/20">
+          {/* Stepper */}
+          <div className="flex items-center self-end sm:self-auto rounded-lg border border-border/50 bg-muted/20">
             <Button
               size="icon"
               variant="ghost"
@@ -150,7 +234,7 @@ export function CalendarGrid({
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <span className="px-2 font-mono text-xs font-bold text-muted-foreground">
+            <span className="px-2.5 font-mono text-xs font-bold text-muted-foreground">
               {String(month).padStart(2, '0')} / {year}
             </span>
             <Button
@@ -167,7 +251,7 @@ export function CalendarGrid({
       </div>
 
       {/* ── CALENDAR GRID ── */}
-      <div className="overflow-hidden rounded-2xl border border-border/40 bg-card shadow-xs">
+      <div className="overflow-hidden rounded-2xl border border-border/50 bg-card shadow-xs">
         {/* Weekday headers */}
         <div className="grid grid-cols-7 border-b border-border/40 bg-muted/30 text-center text-xs font-semibold">
           {WEEKDAYS.map((wd) => (
@@ -179,7 +263,7 @@ export function CalendarGrid({
               )}
             >
               <span className="block font-display">{wd.en}</span>
-              <span className="block text-[10px] font-normal text-muted-foreground/70">{wd.np}</span>
+              <span className="block text-[10px] font-normal opacity-70">{wd.np}</span>
             </div>
           ))}
         </div>
@@ -189,9 +273,13 @@ export function CalendarGrid({
           {days.map((item, idx) => {
             const dayEvents = getEventsForDate(item.dateAd)
             const hasHoliday = dayEvents.some((e) => e.is_public_holiday)
-            const hasFestival = dayEvents.length > 0
+            const hasFestival = dayEvents.some((e) => e.event_type === 'festival' || e.event_type === 'cultural_event')
             const isSaturday = item.dayOfWeek === 6
             const isSelected = selectedDay?.dateAd === item.dateAd
+
+            // Primary vs Secondary numbers depending on systemMode
+            const primaryNumber = systemMode === 'ad' ? item.dayAd : toDevanagariDigits(item.bs.day)
+            const secondaryPillText = systemMode === 'ad' ? toDevanagariDigits(item.bs.day) : String(item.dayAd)
 
             return (
               <button
@@ -199,62 +287,82 @@ export function CalendarGrid({
                 type="button"
                 onClick={() => setSelectedDay(item)}
                 className={cn(
-                  'group relative min-h-[72px] sm:min-h-[88px] p-1.5 sm:p-2 text-left transition-colors flex flex-col justify-between',
+                  'group relative min-h-[76px] sm:min-h-[92px] p-1.5 sm:p-2 text-left transition-all flex flex-col justify-between',
                   !item.isCurrentMonth && 'bg-muted/15 opacity-40',
                   item.isCurrentMonth && 'hover:bg-accent/40',
-                  item.isToday && 'bg-[hsl(var(--atlas-blue))]/[0.04]',
+                  item.isToday && 'bg-[hsl(var(--atlas-blue))]/[0.05]',
                   isSelected && 'ring-2 ring-inset ring-[hsl(var(--atlas-blue))] bg-[hsl(var(--atlas-blue))]/[0.08]',
-                  isSaturday && item.isCurrentMonth && 'bg-rose-500/[0.02]'
+                  isSaturday && item.isCurrentMonth && 'bg-rose-500/[0.02]',
+                  // Highlight festival/holiday dates cleanly
+                  hasFestival && item.isCurrentMonth && 'bg-amber-500/[0.04] border-amber-500/20',
+                  hasHoliday && item.isCurrentMonth && 'bg-rose-500/[0.03]'
                 )}
               >
-                {/* Top: AD day + BS day */}
-                <div className="flex items-start justify-between">
+                {/* Top: Primary Number (Large) & Secondary Number (Subtle Pill) */}
+                <div className="flex items-start justify-between gap-1">
                   <span
                     className={cn(
-                      'font-display text-sm sm:text-base font-bold',
+                      'font-display text-sm sm:text-base font-bold transition-colors',
                       item.isToday
-                        ? 'flex h-6 w-6 items-center justify-center rounded-full bg-[hsl(var(--atlas-blue))] text-white'
-                        : isSaturday
+                        ? 'flex h-6 w-6 items-center justify-center rounded-full bg-[hsl(var(--atlas-blue))] text-white text-xs'
+                        : isSaturday || hasHoliday
                         ? 'text-rose-600 dark:text-rose-400'
                         : 'text-foreground'
                     )}
                   >
-                    {item.dayAd}
+                    {primaryNumber}
                   </span>
 
-                  {/* BS date pill */}
+                  {/* Secondary Date Pill */}
                   <span
                     className={cn(
-                      'font-mono text-[10px] sm:text-[11px] font-semibold px-1 rounded',
+                      'font-mono text-[9px] sm:text-[10px] font-semibold px-1 rounded transition-colors',
                       hasHoliday
-                        ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300'
-                        : 'text-[hsl(var(--atlas-saffron))] bg-[hsl(var(--atlas-saffron))]/10'
+                        ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300'
+                        : hasFestival
+                        ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300'
+                        : 'text-muted-foreground bg-muted/60'
                     )}
-                    title={`BS: ${item.bs.formattedEn} (${item.bs.formattedNp})`}
+                    title={
+                      systemMode === 'ad'
+                        ? `BS: ${item.bs.formattedEn} (${item.bs.formattedNp})`
+                        : `AD: ${item.dateAd}`
+                    }
                   >
-                    {item.bs.day}
+                    {secondaryPillText}
                   </span>
                 </div>
 
-                {/* Bottom: Event indicators */}
+                {/* Bottom: Verified Discrete Festival / Holiday Badges */}
                 <div className="mt-1 space-y-0.5 overflow-hidden">
-                  {dayEvents.slice(0, 1).map((ev) => (
-                    <div
-                      key={ev.id}
-                      className={cn(
-                        'truncate rounded px-1 py-0.5 text-[9px] sm:text-[10px] font-medium leading-tight',
-                        ev.is_public_holiday
-                          ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300 font-semibold'
-                          : 'bg-[hsl(var(--atlas-blue))]/10 text-[hsl(var(--atlas-blue))]'
-                      )}
-                      title={ev.title}
-                    >
-                      {ev.title.replace(/\s*202[0-9]/, '')}
-                    </div>
-                  ))}
+                  {dayEvents.slice(0, 1).map((ev) => {
+                    const isPubHoliday = ev.is_public_holiday
+                    const isFest = ev.event_type === 'festival' || ev.event_type === 'cultural_event'
+
+                    return (
+                      <div
+                        key={ev.id}
+                        className={cn(
+                          'truncate rounded px-1 py-0.5 text-[9px] sm:text-[10px] font-medium leading-tight flex items-center gap-1',
+                          isPubHoliday
+                            ? 'bg-rose-500/15 text-rose-800 dark:text-rose-300 font-semibold border border-rose-500/20'
+                            : isFest
+                            ? 'bg-amber-500/15 text-amber-900 dark:text-amber-200 font-semibold border border-amber-500/30'
+                            : 'bg-blue-500/10 text-blue-700 dark:text-blue-300'
+                        )}
+                        title={`${ev.title} (${isPubHoliday ? 'Public Holiday' : ev.event_type.replace('_', ' ')})`}
+                      >
+                        {isFest && <Flame className="h-2.5 w-2.5 shrink-0 text-amber-600 dark:text-amber-400" />}
+                        <span className="truncate">
+                          {ev.title.replace(/\s*202[0-9]/, '')}
+                        </span>
+                      </div>
+                    )
+                  })}
+
                   {dayEvents.length > 1 && (
-                    <span className="text-[9px] text-muted-foreground">
-                      +{dayEvents.length - 1} more
+                    <span className="block text-[9px] font-medium text-muted-foreground/80 pl-0.5">
+                      +{dayEvents.length - 1} more event
                     </span>
                   )}
                 </div>
@@ -266,55 +374,85 @@ export function CalendarGrid({
 
       {/* ── SELECTED DAY DETAILS DRAWER ── */}
       {selectedDay && (
-        <article className={cn(atlasCardPlanner, 'p-4 bg-card border-[hsl(var(--atlas-blue))]/30')}>
+        <article className={cn(atlasCardPlanner, 'p-4 sm:p-5 bg-card border-[hsl(var(--atlas-blue))]/30 transition-all shadow-xs')}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/40 pb-3">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-[hsl(var(--atlas-blue))]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--atlas-blue))]">
                 Selected Date Details
               </p>
-              <h3 className="font-display text-lg font-bold text-foreground">
-                {selectedDay.dateAd} (AD) · {selectedDay.bs.formattedEn} (BS)
-              </h3>
-              <p className="text-xs font-semibold text-[hsl(var(--atlas-saffron))]">
-                {selectedDay.bs.formattedNp}
-              </p>
+
+              {systemMode === 'ad' ? (
+                <>
+                  <h3 className="font-display text-xl font-bold text-foreground sm:text-2xl mt-0.5">
+                    {selectedDay.dateAd} (AD)
+                  </h3>
+                  <p className="text-xs font-semibold text-[hsl(var(--atlas-saffron))] mt-0.5">
+                    Bikram Sambat: {selectedDay.bs.formattedNp} · {selectedDay.bs.formattedEn}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h3 className="font-display text-xl font-bold text-foreground sm:text-2xl mt-0.5">
+                    {selectedDay.bs.formattedNp} · {selectedDay.bs.formattedEn} (BS)
+                  </h3>
+                  <p className="text-xs font-medium text-muted-foreground mt-0.5">
+                    Gregorian (AD): <span className="font-semibold text-foreground">{selectedDay.dateAd}</span>
+                  </p>
+                </>
+              )}
             </div>
 
-            <Button asChild size="sm" className="shadow-xs">
-              <Link href="/route-planner">
-                Plan Trip for This Period <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            <Button asChild size="sm" className="shadow-xs self-start sm:self-auto">
+              <Link href={`/route-planner`}>
+                Plan Trip for This Period <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Link>
             </Button>
           </div>
 
           {selectedDayEvents.length > 0 ? (
-            <div className="mt-3 space-y-2">
+            <div className="mt-3.5 space-y-2.5">
               {selectedDayEvents.map((ev) => (
-                <div key={ev.id} className="rounded-xl border border-border/40 bg-muted/20 p-3">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-display text-sm font-bold text-foreground">
-                      {ev.title}
-                    </h4>
-                    {ev.is_public_holiday && (
-                      <Badge variant="destructive" className="text-[10px]">
-                        Public Holiday
+                <div key={ev.id} className="rounded-xl border border-border/50 bg-muted/20 p-3.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-display text-sm font-bold text-foreground">
+                        {ev.title}
+                      </h4>
+                      {ev.nepali_title && (
+                        <span className="font-display text-xs text-[hsl(var(--atlas-saffron))]">
+                          ({ev.nepali_title})
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <Badge variant="outline" className="text-[10px] uppercase font-semibold">
+                        {ev.event_type.replace('_', ' ')}
                       </Badge>
-                    )}
+                      {ev.is_public_holiday && (
+                        <Badge variant="destructive" className="text-[10px] font-bold">
+                          Official Public Holiday
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+
+                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
                     {ev.summary}
                   </p>
+
                   {ev.travel_impact && (
-                    <p className="mt-1 text-[11px] font-medium text-amber-700 dark:text-amber-300">
-                      Travel note: {ev.travel_impact}
-                    </p>
+                    <div className="mt-2 rounded-lg bg-amber-500/10 border border-amber-500/20 p-2 text-[11px] font-medium text-amber-900 dark:text-amber-200">
+                      <span className="font-bold">Travel Advisory: </span>
+                      {ev.travel_impact}
+                    </div>
                   )}
                 </div>
               ))}
             </div>
           ) : (
             <p className="mt-3 text-xs text-muted-foreground">
-              No major public holiday or national festival recorded on this specific date. Regular travel and transport operations.
+              No major national festival or official public holiday recorded on this date. Regular public transportation and trekking permits operate normally.
             </p>
           )}
         </article>

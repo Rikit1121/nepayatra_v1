@@ -31,10 +31,18 @@ export async function createAccommodation(
     }
   }
 
+  const payload = { ...parsed.data }
+  if (Array.isArray(payload.images) && payload.images.length > 0) {
+    const primary = payload.images.find((img) => img.is_primary) ?? payload.images[0]
+    if (primary?.url && !payload.image_url) {
+      payload.image_url = primary.url
+    }
+  }
+
   const supabase = await createServerClient()
   const { data, error } = await supabase
     .from('accommodations')
-    .insert(parsed.data)
+    .insert(payload)
     .select('id')
     .single()
 
@@ -66,11 +74,19 @@ export async function updateAccommodation(
   }
 
   const { id, ...fields } = parsed.data
+  const payload = { ...fields }
+  if (Array.isArray(payload.images) && payload.images.length > 0) {
+    const primary = payload.images.find((img) => img.is_primary) ?? payload.images[0]
+    if (primary?.url && !payload.image_url) {
+      payload.image_url = primary.url
+    }
+  }
+
   const supabase = await createServerClient()
 
   const { data, error } = await supabase
     .from('accommodations')
-    .update(fields)
+    .update(payload)
     .eq('id', id)
     .select('id')
     .single()

@@ -20,7 +20,7 @@ export default async function RoutePlannerPage() {
   const data = await getRoutePlannerData()
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+    <div className="flex min-h-screen flex-col bg-background">
       <div className={cn('shrink-0 border-b px-4 py-4 sm:container sm:py-5', atlasHeroGradient)}>
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Route Planner' }]} />
         <p className={cn(atlasSectionEyebrow, 'mt-2')}>Trip planner</p>
@@ -32,7 +32,7 @@ export default async function RoutePlannerPage() {
         </p>
       </div>
 
-      <div className="relative min-h-0 flex-1 overflow-hidden">
+      <div className="relative min-h-0 flex-1">
         <Suspense fallback={<MapSkeleton className="min-h-[60vh] flex-1" />}>
           <RoutePlannerExperience data={data} />
         </Suspense>

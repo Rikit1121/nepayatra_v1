@@ -13,19 +13,20 @@ import {
   SelectField,
   SwitchField,
 } from '@/components/admin/form-field'
-import { ImageUploadField } from '@/components/admin/image-upload-field'
+import { MultiImageUploadField } from '@/components/admin/multi-image-upload-field'
 import {
   createAccommodationSchema,
   updateAccommodationSchema,
   ACCOMMODATION_TIERS,
   type CreateAccommodationFormValues,
   type UpdateAccommodationFormValues,
+  type AccommodationImageFormValue,
 } from '@/lib/validations/admin'
 import {
   createAccommodation,
   updateAccommodation,
 } from '@/lib/actions/accommodations'
-import type { Database } from '@/lib/supabase/types'
+import type { Database, AccommodationImage } from '@/lib/supabase/types'
 
 type Accommodation = Database['public']['Tables']['accommodations']['Row']
 type DestinationOption = { id: string; name: string }
@@ -48,6 +49,31 @@ export function AccommodationForm({
 
   type FormValues = CreateAccommodationFormValues | UpdateAccommodationFormValues
 
+  // Prepare initial images: if accommodation.images array exists use it;
+  // otherwise fallback to accommodation.image_url if present
+  const initialImages: AccommodationImageFormValue[] = React.useMemo(() => {
+    if (!accommodation) return []
+    if (Array.isArray(accommodation.images) && accommodation.images.length > 0) {
+      return (accommodation.images as unknown as AccommodationImageFormValue[]).map((img, idx) => ({
+        url: img.url,
+        caption: img.caption ?? '',
+        sort_order: img.sort_order ?? idx,
+        is_primary: img.is_primary ?? idx === 0,
+      }))
+    }
+    if (accommodation.image_url) {
+      return [
+        {
+          url: accommodation.image_url,
+          caption: '',
+          sort_order: 0,
+          is_primary: true,
+        },
+      ]
+    }
+    return []
+  }, [accommodation])
+
   const form = useForm<FormValues>({
     resolver: zodResolver(isEditing ? updateAccommodationSchema : createAccommodationSchema),
     defaultValues: accommodation
@@ -57,6 +83,7 @@ export function AccommodationForm({
           source_date: accommodation.source_date ?? '',
           notes: accommodation.notes ?? '',
           image_url: accommodation.image_url ?? '',
+          images: initialImages,
           website_url: accommodation.website_url ?? '',
           public_visible: accommodation.public_visible !== false,
         }
@@ -71,6 +98,7 @@ export function AccommodationForm({
           source_date: '',
           notes: '',
           image_url: '',
+          images: [],
           website_url: '',
           public_visible: true,
         },
@@ -147,11 +175,13 @@ export function AccommodationForm({
           />
         </div>
 
+        {/* Data Source & Date */}
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField<FormValues>
             name="source"
-            label="Source / Provenance"
-            placeholder="e.g. Nepal Travel Budget Guide 2026"
+            label="Data Source"
+            description="Where did this price or accommodation information come from?"
+            placeholder="e.g. Nepal Travel Budget Guide 2026, Hotel tariff card"
           />
           <TextField<FormValues>
             name="source_date"
@@ -160,17 +190,25 @@ export function AccommodationForm({
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        {/* Website / Booking URL */}
+        <div>
           <TextField<FormValues>
             name="website_url"
             label="Website / Booking URL (Optional)"
             placeholder="https://..."
+            description="Official direct hotel booking or inquiry link. Displayed as 'Enquire / Book' to visitors."
           />
-          <ImageUploadField
-            fieldName="image_url"
-            label="Featured Image (Optional)"
+        </div>
+
+        {/* Multi-Photo Accommodation Gallery */}
+        <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
+          <MultiImageUploadField
+            fieldName="images"
+            primaryUrlFieldName="image_url"
             bucket="site-assets"
             pathPrefix="accommodations/"
+            label="Accommodation Photos"
+            description="Upload multiple photos (JPG, PNG, WebP ≤ 5MB). Designate one as Primary to be shown first."
           />
         </div>
 

@@ -4,6 +4,7 @@ import * as React from 'react'
 import type { GeneratedRoute } from '@/lib/route-planner/types'
 import type { BudgetResult } from '@/lib/route-planner/budget'
 import { DESTINATION_CATEGORY_LABELS } from '@/lib/site-config'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { atlasCardPlanner } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
@@ -27,6 +28,8 @@ import {
 } from 'lucide-react'
 
 import { ShareTripControls } from '@/features/trips/share-trip-controls'
+import { AccommodationDetailDialog } from '@/components/public/accommodation-detail-dialog'
+import type { SelectedAccommodation } from '@/lib/route-planner/budget/types'
 
 interface RouteResultsProps {
   route: GeneratedRoute
@@ -48,6 +51,7 @@ export function RouteResults({
   tripTitle,
 }: RouteResultsProps) {
   const [showAllDays, setShowAllDays] = React.useState(false)
+  const [selectedAccommodation, setSelectedAccommodation] = React.useState<SelectedAccommodation | null>(null)
 
   const displayedDays = React.useMemo(() => {
     if (!budgetResult?.dailyItinerary) return []
@@ -351,19 +355,35 @@ export function RouteResults({
 
                   {/* Lodging */}
                   {day.accommodation && (
-                    <div className="flex items-start gap-2">
-                      <Building className="h-3.5 w-3.5 text-[hsl(var(--atlas-blue))] shrink-0 mt-0.5" />
-                      <div>
-                        <span className="font-medium text-foreground">
-                          {day.accommodation.name}
-                        </span>{' '}
-                        ({day.accommodation.tier.replace(/_/g, ' ')})
-                        {' · '}
-                        <span className="font-semibold text-foreground">
-                          NPR {day.accommodation.totalCostNpr.toLocaleString('en-IN')}
-                        </span>{' '}
-                        ({day.accommodation.rooms} room{day.accommodation.rooms !== 1 ? 's' : ''})
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-start gap-2">
+                        <Building className="h-3.5 w-3.5 text-[hsl(var(--atlas-blue))] shrink-0 mt-0.5" />
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedAccommodation(day.accommodation!)}
+                            className="font-medium text-foreground hover:text-primary text-left underline-offset-2 hover:underline inline-flex items-center gap-1"
+                          >
+                            {day.accommodation.name}
+                            <span className="text-[10px] text-muted-foreground">↗</span>
+                          </button>{' '}
+                          <span className="text-muted-foreground">({day.accommodation.tier.replace(/_/g, ' ')})</span>
+                          {' · '}
+                          <span className="font-semibold text-foreground">
+                            ~NPR {day.accommodation.priceRange ? `${day.accommodation.priceRange.min.toLocaleString('en-IN')}–${day.accommodation.priceRange.max.toLocaleString('en-IN')}` : day.accommodation.totalCostNpr.toLocaleString('en-IN')}
+                          </span>{' '}
+                          <span className="text-muted-foreground">({day.accommodation.rooms} room{day.accommodation.rooms !== 1 ? 's' : ''})</span>
+                        </div>
                       </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 text-[10px] px-2 text-[hsl(var(--atlas-blue))] shrink-0"
+                        onClick={() => setSelectedAccommodation(day.accommodation!)}
+                      >
+                        Details
+                      </Button>
                     </div>
                   )}
 
@@ -544,6 +564,13 @@ export function RouteResults({
           })}
         </div>
       </article>
+
+      {/* ── ACCOMMODATION DETAIL & BOOKING MODAL ── */}
+      <AccommodationDetailDialog
+        accommodation={selectedAccommodation}
+        open={!!selectedAccommodation}
+        onOpenChange={(open) => !open && setSelectedAccommodation(null)}
+      />
     </div>
   )
 }

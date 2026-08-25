@@ -327,7 +327,9 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
     if (
       state.travelMode === 'road' &&
       border?.latitude != null &&
-      border?.longitude != null
+      border?.longitude != null &&
+      Number.isFinite(border.latitude) &&
+      Number.isFinite(border.longitude)
     ) {
       points.push({
         longitude: border.longitude,
@@ -336,11 +338,18 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
       })
     }
     for (const stop of generatedRoute.orderedStops) {
-      points.push({
-        longitude: stop.longitude,
-        latitude: stop.latitude,
-        label: stop.name,
-      })
+      if (
+        stop.longitude != null &&
+        stop.latitude != null &&
+        Number.isFinite(stop.longitude) &&
+        Number.isFinite(stop.latitude)
+      ) {
+        points.push({
+          longitude: stop.longitude,
+          latitude: stop.latitude,
+          label: stop.name,
+        })
+      }
     }
     if (points.length < 2) return null
     return buildRoutePreview(points)
@@ -350,14 +359,23 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
     if (!generatedRoute) return []
     let n = 1
     return generatedRoute.orderedStops
-      .filter((s) => validDestinationSlugs.includes(s.slug))
+      .filter(
+        (s) =>
+          s.latitude != null &&
+          s.longitude != null &&
+          Number.isFinite(s.latitude) &&
+          Number.isFinite(s.longitude)
+      )
       .map((s) => ({
+        id: s.id,
+        slug: s.slug,
         longitude: s.longitude,
         latitude: s.latitude,
         label: s.name,
         number: n++,
+        category: s.category,
       }))
-  }, [generatedRoute, validDestinationSlugs])
+  }, [generatedRoute])
 
   const toggleDestination = (slug: string) => {
     update((current) => {
@@ -471,35 +489,14 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
 
       {/* Step body */}
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
-        {state.generated && generatedRoute ? (
-          <div className="space-y-6">
-            <RouteResults
-              route={generatedRoute}
-              totalTripDays={state.days}
-              budgetResult={budgetResult}
-              shareId={shareId}
-              isSavingTrip={isSavingTrip}
-              saveTripError={saveTripError}
-              tripTitle={tripTitle}
-            />
-            <Button
-              className="w-full shadow-sm"
-              onClick={() => update({ generated: false, step: effectiveStepCount - 1 })}
-            >
-              Adjust Destinations & Duration
-            </Button>
-            <AdvisorHandoff advisors={data.advisors} message={whatsappMessage} />
-          </div>
-        ) : (
-          <>
-            {/* Compact trip context — shown from dates step onward (not on origin/entry/review) */}
-            {currentStepId !== 'origin' &&
-              currentStepId !== 'entry' &&
-              currentStepId !== 'review' && (
-                <TripContextStrip
-                  state={state}
-                  selectedDestinations={selectedDestinations}
-                  borderName={border?.crossing_name ?? null}
+        {/* Compact trip context — shown from dates step onward (not on origin/entry/review) */}
+        {currentStepId !== 'origin' &&
+          currentStepId !== 'entry' &&
+          currentStepId !== 'review' && (
+            <TripContextStrip
+              state={state}
+              selectedDestinations={selectedDestinations}
+              borderName={border?.crossing_name ?? null}
                 />
               )}
 
@@ -631,8 +628,6 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
                 }}
               />
             )}
-          </>
-        )}
       </div>
 
       {/* Bottom nav — back / next */}
@@ -702,42 +697,100 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
     />
   )
 
+  if (state.generated && generatedRoute) {
+    return (
+      <div className="w-full bg-background pb-16">
+        {/* Top contextual bar */}
+        <div className="border-b bg-card/60 px-4 py-3.5 sm:px-6">
+          <div className="container mx-auto flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className={atlasSectionEyebrow}>Your Generated Nepal Itinerary</p>
+              <h2 className="font-display text-lg sm:text-xl font-bold text-foreground">
+                {tripTitle}
+              </h2>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="self-start sm:self-auto font-semibold border-[hsl(var(--atlas-blue))]/30 text-xs gap-1.5"
+              onClick={() => update({ generated: false, step: effectiveStepCount - 1 })}
+            >
+              <ChevronLeft className="h-3.5 w-3.5" /> Adjust Destinations & Duration
+            </Button>
+          </div>
+        </div>
+
+        {/* Main Content: Route Results & Map Companion */}
+        <div className="container mx-auto px-4 py-6 sm:py-8">
+          <div className="grid gap-8 lg:grid-cols-12">
+            {/* LEFT COLUMN: ROUTE / ITINERARY (7 cols) */}
+            <div className="space-y-6 lg:col-span-7">
+              <RouteResults
+                route={generatedRoute}
+                totalTripDays={state.days}
+                budgetResult={budgetResult}
+                shareId={shareId}
+                isSavingTrip={isSavingTrip}
+                saveTripError={saveTripError}
+                tripTitle={tripTitle}
+              />
+
+              <Button
+                className="w-full shadow-sm font-semibold"
+                variant="outline"
+                onClick={() => update({ generated: false, step: effectiveStepCount - 1 })}
+              >
+                Adjust Destinations & Duration
+              </Button>
+
+              <AdvisorHandoff advisors={data.advisors} message={whatsappMessage} />
+            </div>
+
+            {/* RIGHT COLUMN: MAP COMPANION & STOPS (5 cols) */}
+            <div className="space-y-6 lg:col-span-5">
+              <div className="lg:sticky lg:top-24 space-y-4">
+                <div className="h-[360px] sm:h-[420px] lg:h-[480px] w-full rounded-2xl overflow-hidden border border-border/50 shadow-sm bg-card">
+                  {mapPanel}
+                </div>
+
+                {/* Planned Destination Sequence Card */}
+                <article className={cn(atlasCardPlanner, 'p-4 bg-card')}>
+                  <h4 className="font-display text-sm font-bold text-foreground">
+                    Planned Destination Sequence
+                  </h4>
+                  <div className="mt-3 space-y-2">
+                    {generatedRoute.orderedStops.map((stop, idx) => (
+                      <div
+                        key={`${stop.slug}-${idx}`}
+                        className="flex items-center justify-between rounded-lg border border-border/30 bg-muted/20 px-3 py-2 text-xs"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#1e3a5f] text-[10px] font-bold text-white">
+                            {idx + 1}
+                          </span>
+                          <span className="font-semibold text-foreground">{stop.name}</span>
+                        </div>
+                        <Badge variant="outline" className="text-[10px] border-border/60">
+                          {DESTINATION_CATEGORY_LABELS[stop.category] ?? stop.category}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex h-full min-h-0 flex-col lg:flex-row">
-      {/* Mobile tabs when route generated */}
-      {state.generated && (
-        <div className="flex shrink-0 border-b lg:hidden">
-          <button
-            type="button"
-            className={cn(
-              'flex-1 min-h-[44px] py-3 text-sm font-medium',
-              mobileTab === 'plan' &&
-                'border-b-2 border-[hsl(var(--atlas-blue))] font-semibold text-[hsl(var(--atlas-blue))]'
-            )}
-            onClick={() => setMobileTab('plan')}
-          >
-            Your trip
-          </button>
-          <button
-            type="button"
-            className={cn(
-              'flex flex-1 min-h-[44px] items-center justify-center gap-1 py-3 text-sm font-medium',
-              mobileTab === 'map' &&
-                'border-b-2 border-[hsl(var(--atlas-blue))] font-semibold text-[hsl(var(--atlas-blue))]'
-            )}
-            onClick={() => setMobileTab('map')}
-          >
-            <MapIcon className="h-4 w-4" />
-            Map
-          </button>
-        </div>
-      )}
-
       {/* Planner panel — 40% desktop */}
       <div
         className={cn(
           'flex min-h-0 w-full flex-col lg:h-full lg:w-[40%] lg:max-w-xl lg:border-r',
-          state.generated && mobileTab === 'map' && 'hidden lg:flex',
           currentStepId === 'destinations' && !state.generated && 'max-h-[58dvh] flex-1 lg:max-h-none'
         )}
       >
@@ -756,9 +809,8 @@ export function RoutePlannerClient({ data }: RoutePlannerClientProps) {
         className={cn(
           'w-full min-h-0 flex-1 lg:h-full lg:w-[60%]',
           showInspiration && 'hidden lg:flex',
-          !showInspiration && currentStepId !== 'destinations' && !state.generated && 'hidden lg:block',
-          state.generated && mobileTab === 'plan' && 'hidden lg:block',
-          currentStepId === 'destinations' && !state.generated && 'min-h-[32dvh] shrink-0 lg:min-h-0 lg:shrink'
+          !showInspiration && currentStepId !== 'destinations' && 'hidden lg:block',
+          currentStepId === 'destinations' && 'min-h-[32dvh] shrink-0 lg:min-h-0 lg:shrink'
         )}
       >
         {showInspiration ? inspirationPanel : mapPanel}
