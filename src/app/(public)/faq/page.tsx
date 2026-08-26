@@ -10,9 +10,9 @@ import { buildPageMetadata } from '@/lib/seo'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'Nepal Travel FAQ for Indian Tourists — Visa, UPI, Safety & Transport',
+  title: 'Nepal Travel FAQ: Visa Rules, Currency, Safety & Transport',
   description:
-    'Answers Indian travelers ask about Nepal — passport rules, visa-free entry, currency, UPI, SIM cards, safety, transport and border crossings.',
+    'Common questions answered for traveling to Nepal — passport rules, visa-free entry, currency exchange, SIM cards, transport options, and border crossings.',
   path: '/faq',
 })
 

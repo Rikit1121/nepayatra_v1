@@ -12,19 +12,16 @@ import { getKnowledgeBaseArticles } from '@/lib/supabase/queries'
 import { KB_CATEGORY_LABELS, SITE } from '@/lib/site-config'
 import type { KnowledgeBaseArticle } from '@/lib/supabase/types'
 
+import { buildPageMetadata } from '@/lib/seo'
+
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Knowledge Base',
+export const metadata = buildPageMetadata({
+  title: 'Nepal Travel Knowledge Base: Practical Advice & FAQs',
   description:
-    'Everything Indian travelers need to know about Nepal — entry requirements, currency and UPI, SIM cards, transport, safety, culture and trekking.',
-  alternates: { canonical: `${SITE.url}/knowledge-base` },
-  openGraph: {
-    title: 'Knowledge Base · NepaYatra',
-    description: 'Everything Indian travelers need to know about visiting Nepal.',
-    url: `${SITE.url}/knowledge-base`,
-  },
-}
+    'Essential reference guide for traveling to Nepal — entry requirements, currency rules, local transport, safety advice, and trekking regulations.',
+  path: '/knowledge-base',
+})
 
 export default async function KnowledgeBasePage() {
   const articles = await getKnowledgeBaseArticles()

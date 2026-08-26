@@ -10,19 +10,16 @@ import { AdvisorCta } from '@/components/public/advisor-cta'
 import { getKnowledgeBaseArticles } from '@/lib/supabase/queries'
 import { KB_CATEGORY_LABELS, SITE } from '@/lib/site-config'
 
+import { buildPageMetadata } from '@/lib/seo'
+
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Nepal Travel Guides',
+export const metadata = buildPageMetadata({
+  title: 'Nepal Travel Guides: Entry Rules, Budgets & Trekking Advice',
   description:
-    'Practical Nepal travel guides for Indian travelers — entry rules, currency and UPI, SIM cards, transport, safety and seasons.',
-  alternates: { canonical: `${SITE.url}/guides` },
-  openGraph: {
-    title: 'Nepal Travel Guides · NepaYatra',
-    description: 'Practical Nepal travel guides for Indian travelers.',
-    url: `${SITE.url}/guides`,
-  },
-}
+    'Practical Nepal travel guides covering entry documents for Indian citizens, INR budgeting, trekking permits, overland transport, and trip planning.',
+  path: '/guides',
+})
 
 const CATEGORY_OPTIONS = Object.entries(KB_CATEGORY_LABELS).map(([value, label]) => ({
   value,

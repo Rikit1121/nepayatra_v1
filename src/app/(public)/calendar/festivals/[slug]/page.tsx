@@ -17,10 +17,12 @@ import { Breadcrumbs } from '@/components/public/breadcrumbs'
 import { PageHero } from '@/components/public/page-hero'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { JsonLd } from '@/components/public/json-ld'
 import { FESTIVAL_GUIDES, getFestivalGuideBySlug } from '@/lib/calendar/events-data'
 import { SITE } from '@/lib/site-config'
 import { atlasCardPlanner, atlasDisplayMd } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { eventJsonLd, faqPageJsonLd } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -62,8 +64,23 @@ export default async function FestivalDetailPage({ params }: PageProps) {
     notFound()
   }
 
+  const structuredDataList: Record<string, unknown>[] = [
+    eventJsonLd({
+      name: `${festival.name} Nepal 2026`,
+      description: festival.tagline,
+      url: `${SITE.url}/calendar/festivals/${slug}`,
+      locationName: 'Nepal',
+    }),
+  ]
+
+  if (festival.faqs && festival.faqs.length > 0) {
+    structuredDataList.push(faqPageJsonLd(festival.faqs))
+  }
+
   return (
     <div className="min-h-screen bg-background pb-16">
+      <JsonLd data={structuredDataList} />
+
       {/* ── HERO ── */}
       <PageHero
         eyebrow="Nepal Festival Guide"

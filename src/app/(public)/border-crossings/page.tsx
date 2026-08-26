@@ -13,9 +13,9 @@ import { buildPageMetadata } from '@/lib/seo'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'India–Nepal Border Crossings — Raxaul, Sunauli, Jogbani & More',
+  title: 'India–Nepal Border Crossings: Road Entry Points & Transit Guide',
   description:
-    'Compare India–Nepal road borders for Indian travelers — Raxaul–Birgunj, Sunauli–Bhairahawa, Jogbani–Biratnagar, Panitanki–Kakarbhitta. Documents, routes and which crossing to choose.',
+    'Compare major India–Nepal overland border crossings: Raxaul–Birgunj, Sunauli–Bhairahawa, Panitanki–Kakarbhitta, Jogbani, and Banbasa. Documents, customs, timings, and onward routes.',
   path: '/border-crossings',
 })
 

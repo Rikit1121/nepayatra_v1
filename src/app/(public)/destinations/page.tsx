@@ -18,9 +18,9 @@ import { buildPageMetadata } from '@/lib/seo'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'Destinations in Nepal — Explore & Plan Itineraries',
+  title: 'Nepal Destinations Guide: Cultural, Trekking & Pilgrimage Places',
   description:
-    'Browse Nepal destinations by category and province — Kathmandu, Pokhara, Chitwan, Lumbini, trekking bases and Himalayan viewpoints. Plan sensible routes and estimated budgets.',
+    'Explore top destinations across Nepal — Kathmandu, Pokhara, Ghandruk, Lumbini, Chitwan, Mustang, and Himalayan viewpoints with practical access and route connections.',
   path: '/destinations',
 })
 

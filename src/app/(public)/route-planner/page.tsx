@@ -10,9 +10,9 @@ import { cn } from '@/lib/utils'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'Nepal Trip Planner — Build Your Itinerary Step by Step',
+  title: 'Nepal Trip & Route Planner: Custom Day-by-Day Itineraries',
   description:
-    'Plan your Nepal trip from India or anywhere in the world. Pick your entry method, dates, destinations, travel style and budget. Free trip planner that saves in the URL.',
+    'Plan your Nepal journey step by step — select India–Nepal borders or flights, choose destinations, travel days, pace, and calculate realistic budget estimates.',
   path: '/route-planner',
 })
 

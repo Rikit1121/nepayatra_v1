@@ -76,29 +76,171 @@ export function websiteJsonLd() {
   }
 }
 
-export function travelGuideJsonLd({
-  title,
+export function breadcrumbJsonLd(items: { label: string; href?: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.label,
+      ...(item.href
+        ? { item: item.href.startsWith('http') ? item.href : `${SITE.url}${item.href}` }
+        : {}),
+    })),
+  }
+}
+
+export function faqPageJsonLd(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+}
+
+export function eventJsonLd({
+  name,
   description,
+  startDate,
+  endDate,
   url,
-  dateModified,
+  locationName = 'Nepal',
 }: {
-  title: string
+  name: string
   description: string
+  startDate?: string
+  endDate?: string
   url: string
-  dateModified?: string
+  locationName?: string
 }) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'TravelGuide',
-    name: title,
+    '@type': 'Event',
+    name,
     description,
     url,
     inLanguage: 'en-IN',
-    ...(dateModified ? { dateModified } : {}),
-    publisher: {
+    ...(startDate ? { startDate } : {}),
+    ...(endDate ? { endDate } : {}),
+    location: {
+      '@type': 'Place',
+      name: locationName,
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'NP',
+      },
+    },
+    organizer: {
       '@type': 'Organization',
       name: SITE.name,
       url: SITE.url,
     },
   }
 }
+
+export function touristDestinationJsonLd({
+  name,
+  description,
+  url,
+  imageUrl,
+  latitude,
+  longitude,
+  province,
+  containedInPlace = 'Nepal',
+}: {
+  name: string
+  description: string
+  url: string
+  imageUrl?: string
+  latitude?: number
+  longitude?: number
+  province?: string
+  containedInPlace?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TouristDestination',
+    name,
+    description,
+    url,
+    ...(imageUrl ? { image: imageUrl } : {}),
+    ...(latitude != null && longitude != null
+      ? {
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude,
+            longitude,
+          },
+        }
+      : {}),
+    ...(province
+      ? {
+          address: {
+            '@type': 'PostalAddress',
+            addressRegion: `${province} Province`,
+            addressCountry: 'NP',
+          },
+        }
+      : {
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NP',
+          },
+        }),
+    containedInPlace: {
+      '@type': 'Place',
+      name: containedInPlace,
+    },
+  }
+}
+
+export function touristTripJsonLd({
+  name,
+  description,
+  url,
+  imageUrl,
+  durationDays,
+  estimatedCostInr,
+}: {
+  name: string
+  description?: string
+  url: string
+  imageUrl?: string
+  durationDays?: number
+  estimatedCostInr?: number
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TouristTrip',
+    name,
+    description,
+    url,
+    ...(imageUrl ? { image: imageUrl } : {}),
+    ...(durationDays ? { itinerary: { '@type': 'ItemList', numberOfItems: durationDays } } : {}),
+    ...(estimatedCostInr
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: estimatedCostInr,
+            priceCurrency: 'INR',
+            availability: 'https://schema.org/InStock',
+            validFrom: '2026-01-01',
+          },
+        }
+      : {}),
+    provider: {
+      '@type': 'Organization',
+      name: SITE.name,
+      url: SITE.url,
+    },
+  }
+}
+

@@ -44,9 +44,9 @@ import { buildPageMetadata } from '@/lib/seo'
 export const revalidate = 3600
 
 export const metadata = buildPageMetadata({
-  title: 'Plan Your Nepal Trip — Borders, Destinations, Itineraries & Budget',
+  title: 'NepaYatra: Plan Your Nepal Trip — Borders, Routes & Budget',
   description:
-    'NepaYatra helps travelers plan Nepal trips step by step — interactive route planner, India–Nepal border crossings, destinations, visa-free guides, and reference budget estimates.',
+    'Plan your Nepal journey step by step — interactive itinerary builder, India–Nepal border crossings, destination guides, festival calendar, and realistic reference budgets.',
   path: '/',
 })
 

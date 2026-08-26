@@ -14,19 +14,16 @@ import { getPackages } from '@/lib/supabase/queries'
 import { PACKAGE_DIFFICULTY_LABELS, SITE } from '@/lib/site-config'
 import { SITE_BACKGROUNDS } from '@/lib/site-backgrounds'
 
+import { buildPageMetadata } from '@/lib/seo'
+
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Suggested Trips & Curated Itineraries',
+export const metadata = buildPageMetadata({
+  title: 'Nepal Tour Packages & Suggested Itineraries',
   description:
-    'Sample Nepal itineraries you can follow as-is or open in the Trip Planner to customize destinations, duration, and budget.',
-  alternates: { canonical: `${SITE.url}/packages` },
-  openGraph: {
-    title: 'Suggested Trips · NepaYatra',
-    description: 'Sample Nepal itineraries you can follow as-is or customize in the Trip Planner.',
-    url: `${SITE.url}/packages`,
-  },
-}
+    'Explore curated Nepal travel itineraries — Golden Triangle (Kathmandu–Pokhara–Chitwan), Annapurna Base Camp Trek, Pilgrimage Circuit, and Upper Mustang.',
+  path: '/packages',
+})
 
 const DIFFICULTY_OPTIONS = Object.entries(PACKAGE_DIFFICULTY_LABELS).map(([value, label]) => ({
   value,
