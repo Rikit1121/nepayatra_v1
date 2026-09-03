@@ -39,9 +39,11 @@ export const MAX_ZOOM = 18
 export const CLUSTER_RADIUS = 48
 export const CLUSTER_MAX_ZOOM = 12
 
-// ── Base style ────────────────────────────────────────────────
+// ── Multi-Style Basemaps ──────────────────────────────────────
 
-// CARTO Voyager: clean, tourism-friendly OSM-based raster basemap (no API key).
+export type MapStyleId = 'travel' | 'topo' | 'satellite'
+
+// 1. CARTO Voyager: clean, tourism-friendly OSM raster basemap (no API key).
 const VOYAGER_TILE_URLS = [
   'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
   'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
@@ -49,7 +51,7 @@ const VOYAGER_TILE_URLS = [
   'https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
 ]
 
-const TRAVEL_RASTER_STYLE: StyleSpecification = {
+export const TRAVEL_RASTER_STYLE: StyleSpecification = {
   version: 8,
   sources: {
     'carto-voyager': {
@@ -62,7 +64,6 @@ const TRAVEL_RASTER_STYLE: StyleSpecification = {
     },
   },
   layers: [
-    // Soft background so panning past tiles still looks intentional.
     {
       id: 'background',
       type: 'background',
@@ -76,8 +77,108 @@ const TRAVEL_RASTER_STYLE: StyleSpecification = {
   ],
 }
 
-/** Returns the map style: a custom style URL when configured, otherwise the travel raster style. */
-export function getMapStyle(): string | StyleSpecification {
+// 2. OpenTopoMap: topographic contours, elevation shading, and mountain terrain relief.
+const TOPO_TILE_URLS = [
+  'https://a.tile.opentopomap.org/{z}/{x}/{y}.png',
+  'https://b.tile.opentopomap.org/{z}/{x}/{y}.png',
+  'https://c.tile.opentopomap.org/{z}/{x}/{y}.png',
+]
+
+export const TOPO_RASTER_STYLE: StyleSpecification = {
+  version: 8,
+  sources: {
+    'opentopo-source': {
+      type: 'raster',
+      tiles: TOPO_TILE_URLS,
+      tileSize: 256,
+      maxzoom: 17,
+      attribution:
+        'Map data: © <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM | Map style: © <a href="https://opentopomap.org">OpenTopoMap</a>',
+    },
+  },
+  layers: [
+    {
+      id: 'background',
+      type: 'background',
+      paint: { 'background-color': '#e6ece2' },
+    },
+    {
+      id: 'opentopo-layer',
+      type: 'raster',
+      source: 'opentopo-source',
+    },
+  ],
+}
+
+// 3. ESRI World Imagery: high-resolution satellite photography showing real Himalayan snow peaks & valleys.
+const SATELLITE_TILE_URLS = [
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+]
+
+export const SATELLITE_RASTER_STYLE: StyleSpecification = {
+  version: 8,
+  sources: {
+    'esri-satellite-source': {
+      type: 'raster',
+      tiles: SATELLITE_TILE_URLS,
+      tileSize: 256,
+      maxzoom: 19,
+      attribution:
+        'Tiles © <a href="https://www.esri.com/">Esri</a> — Source: Esri, Maxar, Earthstar Geographics',
+    },
+  },
+  layers: [
+    {
+      id: 'background',
+      type: 'background',
+      paint: { 'background-color': '#060c14' },
+    },
+    {
+      id: 'esri-satellite-layer',
+      type: 'raster',
+      source: 'esri-satellite-source',
+    },
+  ],
+}
+
+export const MAP_STYLES: Record<
+  MapStyleId,
+  {
+    id: MapStyleId
+    name: string
+    icon: string
+    description: string
+    spec: StyleSpecification
+  }
+> = {
+  travel: {
+    id: 'travel',
+    name: 'Travel',
+    icon: '🗺️',
+    description: 'Clean roads & tourism landmarks',
+    spec: TRAVEL_RASTER_STYLE,
+  },
+  topo: {
+    id: 'topo',
+    name: 'Topo',
+    icon: '🏔️',
+    description: 'Mountain contours & relief',
+    spec: TOPO_RASTER_STYLE,
+  },
+  satellite: {
+    id: 'satellite',
+    name: 'Satellite',
+    icon: '🛰️',
+    description: 'Real snow peaks from space',
+    spec: SATELLITE_RASTER_STYLE,
+  },
+}
+
+/** Returns the map style specification: supports custom URL or one of the 3 built-in styles. */
+export function getMapStyle(styleId: MapStyleId = 'travel'): string | StyleSpecification {
   const url = process.env.NEXT_PUBLIC_MAP_STYLE_URL
-  return url && url.length > 0 ? url : TRAVEL_RASTER_STYLE
+  if (url && url.length > 0 && styleId === 'travel') {
+    return url
+  }
+  return MAP_STYLES[styleId]?.spec ?? TRAVEL_RASTER_STYLE
 }

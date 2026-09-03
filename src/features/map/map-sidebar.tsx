@@ -27,10 +27,10 @@ const TOGGLES: {
   icon: typeof MapPin
   countKey?: keyof MapSidebarProps['counts']
 }[] = [
-  { id: 'destinations', label: 'Destinations', icon: MapPin, countKey: 'destinations' },
-  { id: 'borders', label: 'Border crossings', icon: Milestone, countKey: 'borders' },
-  { id: 'alerts', label: 'Travel alerts', icon: TriangleAlert, countKey: 'alerts' },
-]
+    { id: 'destinations', label: 'Destinations', icon: MapPin, countKey: 'destinations' },
+    { id: 'borders', label: 'Border crossings', icon: Milestone, countKey: 'borders' },
+    { id: 'alerts', label: 'Travel alerts', icon: TriangleAlert, countKey: 'alerts' },
+  ]
 
 export function MapSidebar({ layers, onToggle, counts, hasRoute }: MapSidebarProps) {
   const [open, setOpen] = React.useState(true)

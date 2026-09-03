@@ -6,7 +6,7 @@ export const atlasSectionEyebrow =
 
 /** Subtle hero / page header background. */
 export const atlasHeroGradient =
-  'bg-gradient-to-b from-[hsl(var(--atlas-mist))] to-[hsl(var(--atlas-snow))]'
+  'bg-gradient-to-b from-muted/60 via-card/80 to-background border-b border-border/50 text-foreground'
 
 /** Image-first destination card shell. */
 export const atlasCardDestination = cn(

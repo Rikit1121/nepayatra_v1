@@ -7,8 +7,10 @@ import {
   DestinationLayer,
   BorderLayer,
   AlertLayer,
+  ProvinceLayer,
   RoutePreviewLayer,
   MarkerDetailCard,
+  StyleSwitcher,
 } from '@/components/map'
 import { useMapState } from '@/hooks/map/use-map-state'
 import { Button } from '@/components/ui/button'
@@ -19,6 +21,7 @@ import {
   type DestinationMapMarker,
   type BorderCrossingMapMarker,
   type AlertMapMarker,
+  type MapStyleId,
 } from '@/lib/map'
 import { MapSidebar } from './map-sidebar'
 
@@ -26,12 +29,26 @@ interface FullMapProps {
   data: MapData
 }
 
-/** The full interactive /map experience: clustered markers, layer toggles, detail cards. */
+/** The full interactive /map experience: multi-style basemaps, 3D tilt, province glow, clustered markers, layer toggles. */
 export function FullMap({ data }: FullMapProps) {
   const mapRef = React.useRef<MapRef | null>(null)
+  const [currentStyle, setCurrentStyle] = React.useState<MapStyleId>('travel')
+  const [is3D, setIs3D] = React.useState(false)
 
   const { viewState, setViewState, layers, toggleLayer, selected, select, clearSelection } =
-    useMapState({ initialLayers: { route: Boolean(data.route) } })
+    useMapState({ initialLayers: { route: Boolean(data.route), provinces: true } })
+
+  const toggle3D = React.useCallback(() => {
+    setIs3D((prev) => {
+      const next = !prev
+      if (next) {
+        mapRef.current?.getMap().easeTo({ pitch: 48, bearing: -12, duration: 600 })
+      } else {
+        mapRef.current?.getMap().easeTo({ pitch: 0, bearing: 0, duration: 600 })
+      }
+      return next
+    })
+  }, [])
 
   const flyTo = React.useCallback((lng: number, lat: number) => {
     mapRef.current?.getMap().easeTo({ center: [lng, lat], duration: 500 })
@@ -91,14 +108,23 @@ export function FullMap({ data }: FullMapProps) {
         hasRoute={Boolean(data.route)}
       />
 
+      <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
+        <StyleSwitcher
+          currentStyle={currentStyle}
+          onSelectStyle={setCurrentStyle}
+          is3D={is3D}
+          onToggle3D={toggle3D}
+        />
+      </div>
+
       <Button
         type="button"
         variant="secondary"
         size="sm"
         onClick={fitToNepal}
-        className="absolute bottom-8 right-3 z-10 shadow-md"
+        className="absolute bottom-8 right-3 z-10 rounded-xl border border-black/10 bg-white/90 px-3 shadow-lg backdrop-blur-md hover:bg-white dark:border-white/15 dark:bg-zinc-900/90"
       >
-        <Maximize2 className="h-4 w-4" />
+        <Maximize2 className="h-4 w-4 mr-1.5" />
         Fit to Nepal
       </Button>
 
@@ -109,7 +135,9 @@ export function FullMap({ data }: FullMapProps) {
           viewState={viewState}
           onMove={onMove}
           onClick={onClick}
+          styleId={currentStyle}
         >
+          <ProvinceLayer visible={layers.provinces} />
           <DestinationLayer
             destinations={data.destinations}
             visible={layers.destinations}

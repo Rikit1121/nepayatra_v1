@@ -7,7 +7,7 @@ import type {
 export type { DestinationMapMarker, BorderCrossingMapMarker }
 
 /** Toggleable map layers. */
-export type MapLayerId = 'destinations' | 'borders' | 'alerts' | 'route'
+export type MapLayerId = 'destinations' | 'borders' | 'alerts' | 'route' | 'provinces'
 
 export type LayerVisibility = Record<MapLayerId, boolean>
 
@@ -16,6 +16,7 @@ export const DEFAULT_LAYER_VISIBILITY: LayerVisibility = {
   borders: true,
   alerts: true,
   route: false,
+  provinces: true,
 }
 
 /** A travel alert positioned on the map at the centroid of an affected region. */

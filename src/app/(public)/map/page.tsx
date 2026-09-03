@@ -3,7 +3,13 @@ import {
   getBorderMapMarkers,
   getActiveTravelAlerts,
 } from '@/lib/supabase/queries'
-import { buildAlertMarkers, type MapData } from '@/lib/map'
+import {
+  buildAlertMarkers,
+  FALLBACK_DESTINATIONS,
+  FALLBACK_BORDER_CROSSINGS,
+  FALLBACK_ALERTS,
+  type MapData,
+} from '@/lib/map'
 import { MapExperience } from '@/features/map'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -23,10 +29,12 @@ export default async function MapPage() {
     getActiveTravelAlerts(),
   ])
 
+  const alertMarkers = alerts && alerts.length > 0 ? buildAlertMarkers(alerts) : FALLBACK_ALERTS
+
   const data: MapData = {
-    destinations,
-    borders,
-    alerts: buildAlertMarkers(alerts),
+    destinations: destinations && destinations.length > 0 ? destinations : FALLBACK_DESTINATIONS,
+    borders: borders && borders.length > 0 ? borders : FALLBACK_BORDER_CROSSINGS,
+    alerts: alertMarkers,
   }
 
   return (

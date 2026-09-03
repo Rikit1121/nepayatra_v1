@@ -11,6 +11,7 @@
 import 'server-only'
 import { createPublicClient } from './public-client'
 import { slugify } from '@/lib/utils'
+import { FALLBACK_DESTINATIONS, FALLBACK_BORDER_CROSSINGS } from '@/lib/map'
 import type {
   Destination,
   BorderCrossing,
@@ -159,12 +160,19 @@ export async function getSuggestedRoutesFrom(destinationId: string): Promise<Sug
 
 /** Lightweight destination markers for the map (only fields needed for rendering). */
 export async function getDestinationMapMarkers(): Promise<DestinationMapMarker[]> {
-  const supabase = createPublicClient()
-  const { data, error } = await supabase
-    .from('destinations')
-    .select('id, name, slug, latitude, longitude, category, province, featured, short_description')
-  logQueryError('getDestinationMapMarkers', error)
-  return (data ?? []) as DestinationMapMarker[]
+  try {
+    const supabase = createPublicClient()
+    const { data, error } = await supabase
+      .from('destinations')
+      .select('id, name, slug, latitude, longitude, category, province, featured, short_description')
+    logQueryError('getDestinationMapMarkers', error)
+    if (data && data.length > 0) {
+      return data as DestinationMapMarker[]
+    }
+  } catch (err) {
+    console.warn('[queries] getDestinationMapMarkers falling back to verified dataset:', err)
+  }
+  return FALLBACK_DESTINATIONS
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -173,14 +181,22 @@ export async function getDestinationMapMarkers(): Promise<DestinationMapMarker[]
 
 /** Lightweight border crossing markers for the map. */
 export async function getBorderMapMarkers(): Promise<BorderCrossingMapMarker[]> {
-  const supabase = createPublicClient()
-  const { data, error } = await supabase
-    .from('border_crossings')
-    .select('id, crossing_name, india_side, nepal_side, latitude, longitude, featured, description')
-  logQueryError('getBorderMapMarkers', error)
-  return ((data ?? []) as BorderCrossingMapMarker[]).filter(
-    (b) => b.latitude != null && b.longitude != null
-  )
+  try {
+    const supabase = createPublicClient()
+    const { data, error } = await supabase
+      .from('border_crossings')
+      .select('id, crossing_name, india_side, nepal_side, latitude, longitude, featured, description')
+    logQueryError('getBorderMapMarkers', error)
+    const valid = ((data ?? []) as BorderCrossingMapMarker[]).filter(
+      (b) => b.latitude != null && b.longitude != null
+    )
+    if (valid.length > 0) {
+      return valid
+    }
+  } catch (err) {
+    console.warn('[queries] getBorderMapMarkers falling back to verified dataset:', err)
+  }
+  return FALLBACK_BORDER_CROSSINGS
 }
 
 export async function getBorderCrossings(search?: string): Promise<BorderCrossing[]> {

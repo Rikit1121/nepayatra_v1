@@ -12,7 +12,7 @@ import type { Database } from './types'
  */
 
 /** Hard cap on any single request so an unreachable backend can't hang a render/build. */
-const REQUEST_TIMEOUT_MS = 10000
+const REQUEST_TIMEOUT_MS = 4000
 
 function fetchWithTimeout(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   const controller = new AbortController()
@@ -35,8 +35,8 @@ export function createPublicClient() {
   if (!url || !anonKey) {
     throw new Error(
       'Missing Supabase env vars: set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY ' +
-        'in .env.local (local) or your host dashboard (Vercel → Settings → Environment Variables). ' +
-        'Both are required at build time for static page generation.'
+      'in .env.local (local) or your host dashboard (Vercel → Settings → Environment Variables). ' +
+      'Both are required at build time for static page generation.'
     )
   }
 

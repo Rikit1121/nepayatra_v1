@@ -41,15 +41,12 @@ export const FOOTER_CONTACT = {
 } as const
 
 export const MAIN_NAV: { label: string; href: string }[] = [
-  { label: 'Home', href: '/' },
   { label: 'Trip Planner', href: '/route-planner' },
-  { label: 'Calendar', href: '/calendar' },
   { label: 'Destinations', href: '/destinations' },
   { label: 'Map', href: '/map' },
   { label: 'Border Crossings', href: '/border-crossings' },
   { label: 'Suggested Trips', href: '/packages' },
   { label: 'Travel Guides', href: '/guides' },
-  { label: 'FAQ', href: '/faq' },
 ]
 
 export const TRAVEL_STYLES: {

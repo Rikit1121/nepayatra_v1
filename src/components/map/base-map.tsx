@@ -12,12 +12,13 @@ import Map, {
 } from 'react-map-gl/maplibre'
 import type { MapLibreEvent } from 'maplibre-gl'
 import type { LngLatBoundsLike } from 'maplibre-gl'
-import { getMapStyle, MIN_ZOOM, MAX_ZOOM, NEPAL_MAX_BOUNDS } from '@/lib/map'
+import { getMapStyle, MIN_ZOOM, MAX_ZOOM, NEPAL_MAX_BOUNDS, type MapStyleId } from '@/lib/map'
 import { cn } from '@/lib/utils'
 
 interface BaseMapProps {
   viewState: ViewState
   onMove?: (evt: ViewStateChangeEvent) => void
+  styleId?: MapStyleId
   interactiveLayerIds?: string[]
   onClick?: (evt: MapLayerMouseEvent) => void
   onMouseMove?: (evt: MapLayerMouseEvent) => void
@@ -31,6 +32,7 @@ interface BaseMapProps {
   className?: string
   children?: React.ReactNode
   cursor?: string
+  cooperativeGestures?: boolean
 }
 
 /** Camera props only — never pass width/height back into Map (breaks rendering). */
@@ -53,6 +55,7 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
   {
     viewState,
     onMove,
+    styleId = 'travel',
     interactiveLayerIds,
     onClick,
     onMouseMove,
@@ -64,6 +67,7 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
     className,
     children,
     cursor,
+    cooperativeGestures = false,
   },
   ref
 ) {
@@ -108,7 +112,7 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
         ref={ref}
         {...camera}
         onMove={onMove}
-        mapStyle={getMapStyle()}
+        mapStyle={getMapStyle(styleId)}
         minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}
         maxBounds={maxBounds ?? undefined}
@@ -120,6 +124,7 @@ export const BaseMap = React.forwardRef<MapRef, BaseMapProps>(function BaseMap(
         onLoad={handleLoad}
         onIdle={handleIdle}
         cursor={cursor}
+        cooperativeGestures={cooperativeGestures}
         attributionControl={{ compact: false }}
         reuseMaps={false}
         style={{ width: '100%', height: '100%' }}

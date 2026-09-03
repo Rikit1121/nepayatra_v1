@@ -54,6 +54,7 @@ create index if not exists idx_accommodations_public_visible
   on public.accommodations (public_visible)
   where public_visible = true;
 
+drop trigger if exists trg_accommodations_updated_at on public.accommodations;
 create trigger trg_accommodations_updated_at
   before update on public.accommodations
   for each row execute function public.set_updated_at();
@@ -107,6 +108,7 @@ create index if not exists idx_transport_options_public_visible
   on public.transport_options (public_visible)
   where public_visible = true;
 
+drop trigger if exists trg_transport_options_updated_at on public.transport_options;
 create trigger trg_transport_options_updated_at
   before update on public.transport_options
   for each row execute function public.set_updated_at();
@@ -158,6 +160,7 @@ create index if not exists idx_domestic_flights_public_visible
   on public.domestic_flights (public_visible)
   where public_visible = true;
 
+drop trigger if exists trg_domestic_flights_updated_at on public.domestic_flights;
 create trigger trg_domestic_flights_updated_at
   before update on public.domestic_flights
   for each row execute function public.set_updated_at();
@@ -200,6 +203,7 @@ create index if not exists idx_activities_public_visible
   on public.activities (public_visible)
   where public_visible = true;
 
+drop trigger if exists trg_activities_updated_at on public.activities;
 create trigger trg_activities_updated_at
   before update on public.activities
   for each row execute function public.set_updated_at();
@@ -244,180 +248,79 @@ create index if not exists idx_daily_cost_estimates_public_visible
   on public.daily_cost_estimates (public_visible)
   where public_visible = true;
 
+drop trigger if exists trg_daily_cost_estimates_updated_at on public.daily_cost_estimates;
 create trigger trg_daily_cost_estimates_updated_at
   before update on public.daily_cost_estimates
   for each row execute function public.set_updated_at();
 
 -- ============================================================
--- ROW LEVEL SECURITY (RLS) POLICIES
+-- ROW LEVEL SECURITY (RLS) POLICIES (Idempotent with DROP IF EXISTS)
 -- ============================================================
 
 -- accommodations
 alter table public.accommodations enable row level security;
-
-create policy "accommodations: public read"
-  on public.accommodations
-  for select
-  to anon
-  using (public_visible = true);
-
-create policy "accommodations: admin select"
-  on public.accommodations
-  for select
-  to authenticated
-  using (true);
-
-create policy "accommodations: admin insert"
-  on public.accommodations
-  for insert
-  to authenticated
-  with check (true);
-
-create policy "accommodations: admin update"
-  on public.accommodations
-  for update
-  to authenticated
-  using (true)
-  with check (true);
-
-create policy "accommodations: admin delete"
-  on public.accommodations
-  for delete
-  to authenticated
-  using (true);
+drop policy if exists "accommodations: public read" on public.accommodations;
+create policy "accommodations: public read" on public.accommodations for select to anon using (public_visible = true);
+drop policy if exists "accommodations: admin select" on public.accommodations;
+create policy "accommodations: admin select" on public.accommodations for select to authenticated using (true);
+drop policy if exists "accommodations: admin insert" on public.accommodations;
+create policy "accommodations: admin insert" on public.accommodations for insert to authenticated with check (true);
+drop policy if exists "accommodations: admin update" on public.accommodations;
+create policy "accommodations: admin update" on public.accommodations for update to authenticated using (true) with check (true);
+drop policy if exists "accommodations: admin delete" on public.accommodations;
+create policy "accommodations: admin delete" on public.accommodations for delete to authenticated using (true);
 
 -- transport_options
 alter table public.transport_options enable row level security;
-
-create policy "transport_options: public read"
-  on public.transport_options
-  for select
-  to anon
-  using (public_visible = true);
-
-create policy "transport_options: admin select"
-  on public.transport_options
-  for select
-  to authenticated
-  using (true);
-
-create policy "transport_options: admin insert"
-  on public.transport_options
-  for insert
-  to authenticated
-  with check (true);
-
-create policy "transport_options: admin update"
-  on public.transport_options
-  for update
-  to authenticated
-  using (true)
-  with check (true);
-
-create policy "transport_options: admin delete"
-  on public.transport_options
-  for delete
-  to authenticated
-  using (true);
+drop policy if exists "transport_options: public read" on public.transport_options;
+create policy "transport_options: public read" on public.transport_options for select to anon using (public_visible = true);
+drop policy if exists "transport_options: admin select" on public.transport_options;
+create policy "transport_options: admin select" on public.transport_options for select to authenticated using (true);
+drop policy if exists "transport_options: admin insert" on public.transport_options;
+create policy "transport_options: admin insert" on public.transport_options for insert to authenticated with check (true);
+drop policy if exists "transport_options: admin update" on public.transport_options;
+create policy "transport_options: admin update" on public.transport_options for update to authenticated using (true) with check (true);
+drop policy if exists "transport_options: admin delete" on public.transport_options;
+create policy "transport_options: admin delete" on public.transport_options for delete to authenticated using (true);
 
 -- domestic_flights
 alter table public.domestic_flights enable row level security;
-
-create policy "domestic_flights: public read"
-  on public.domestic_flights
-  for select
-  to anon
-  using (public_visible = true);
-
-create policy "domestic_flights: admin select"
-  on public.domestic_flights
-  for select
-  to authenticated
-  using (true);
-
-create policy "domestic_flights: admin insert"
-  on public.domestic_flights
-  for insert
-  to authenticated
-  with check (true);
-
-create policy "domestic_flights: admin update"
-  on public.domestic_flights
-  for update
-  to authenticated
-  using (true)
-  with check (true);
-
-create policy "domestic_flights: admin delete"
-  on public.domestic_flights
-  for delete
-  to authenticated
-  using (true);
+drop policy if exists "domestic_flights: public read" on public.domestic_flights;
+create policy "domestic_flights: public read" on public.domestic_flights for select to anon using (public_visible = true);
+drop policy if exists "domestic_flights: admin select" on public.domestic_flights;
+create policy "domestic_flights: admin select" on public.domestic_flights for select to authenticated using (true);
+drop policy if exists "domestic_flights: admin insert" on public.domestic_flights;
+create policy "domestic_flights: admin insert" on public.domestic_flights for insert to authenticated with check (true);
+drop policy if exists "domestic_flights: admin update" on public.domestic_flights;
+create policy "domestic_flights: admin update" on public.domestic_flights for update to authenticated using (true) with check (true);
+drop policy if exists "domestic_flights: admin delete" on public.domestic_flights;
+create policy "domestic_flights: admin delete" on public.domestic_flights for delete to authenticated using (true);
 
 -- activities
 alter table public.activities enable row level security;
-
-create policy "activities: public read"
-  on public.activities
-  for select
-  to anon
-  using (public_visible = true);
-
-create policy "activities: admin select"
-  on public.activities
-  for select
-  to authenticated
-  using (true);
-
-create policy "activities: admin insert"
-  on public.activities
-  for insert
-  to authenticated
-  with check (true);
-
-create policy "activities: admin update"
-  on public.activities
-  for update
-  to authenticated
-  using (true)
-  with check (true);
-
-create policy "activities: admin delete"
-  on public.activities
-  for delete
-  to authenticated
-  using (true);
+drop policy if exists "activities: public read" on public.activities;
+create policy "activities: public read" on public.activities for select to anon using (public_visible = true);
+drop policy if exists "activities: admin select" on public.activities;
+create policy "activities: admin select" on public.activities for select to authenticated using (true);
+drop policy if exists "activities: admin insert" on public.activities;
+create policy "activities: admin insert" on public.activities for insert to authenticated with check (true);
+drop policy if exists "activities: admin update" on public.activities;
+create policy "activities: admin update" on public.activities for update to authenticated using (true) with check (true);
+drop policy if exists "activities: admin delete" on public.activities;
+create policy "activities: admin delete" on public.activities for delete to authenticated using (true);
 
 -- daily_cost_estimates
 alter table public.daily_cost_estimates enable row level security;
+drop policy if exists "daily_cost_estimates: public read" on public.daily_cost_estimates;
+create policy "daily_cost_estimates: public read" on public.daily_cost_estimates for select to anon using (public_visible = true);
+drop policy if exists "daily_cost_estimates: admin select" on public.daily_cost_estimates;
+create policy "daily_cost_estimates: admin select" on public.daily_cost_estimates for select to authenticated using (true);
+drop policy if exists "daily_cost_estimates: admin insert" on public.daily_cost_estimates;
+create policy "daily_cost_estimates: admin insert" on public.daily_cost_estimates for insert to authenticated with check (true);
+drop policy if exists "daily_cost_estimates: admin update" on public.daily_cost_estimates;
+create policy "daily_cost_estimates: admin update" on public.daily_cost_estimates for update to authenticated using (true) with check (true);
+drop policy if exists "daily_cost_estimates: admin delete" on public.daily_cost_estimates;
+create policy "daily_cost_estimates: admin delete" on public.daily_cost_estimates for delete to authenticated using (true);
 
-create policy "daily_cost_estimates: public read"
-  on public.daily_cost_estimates
-  for select
-  to anon
-  using (public_visible = true);
-
-create policy "daily_cost_estimates: admin select"
-  on public.daily_cost_estimates
-  for select
-  to authenticated
-  using (true);
-
-create policy "daily_cost_estimates: admin insert"
-  on public.daily_cost_estimates
-  for insert
-  to authenticated
-  with check (true);
-
-create policy "daily_cost_estimates: admin update"
-  on public.daily_cost_estimates
-  for update
-  to authenticated
-  using (true)
-  with check (true);
-
-create policy "daily_cost_estimates: admin delete"
-  on public.daily_cost_estimates
-  for delete
-  to authenticated
-  using (true);
+-- Notify PostgREST to reload schema cache
+notify pgrst, 'reload schema';
